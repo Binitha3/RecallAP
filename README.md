@@ -1,23 +1,137 @@
-# RecallAP
+# RecallAP — Accounts Payable Exception Agent
 
-## Hindsight notes
+RecallAP compares invoices with purchase orders (POs), goods receipt notes (GRNs), and vendor records. Plain Python detects exceptions. Hindsight retrieves relevant vendor knowledge and past decisions. Groq proposes an action, and deterministic policy checks decide whether it can proceed or must go to a human.
 
-Checked against the official Hindsight documentation on 2026-11-06:
+This repository contains Member 1's backend and agent work. It does not include the teammate-owned frontend UI, dataset generator, or experiment runner. OCR, login, ERP integration, payments, and email sending are out of scope.
 
-- **Client and Cloud authentication:** the Python client is `hindsight-client`; it accepts `Hindsight(base_url=..., api_key=...)`. The Hindsight Cloud Python guide documents `https://api.hindsight.vectorize.io` as the base URL and `HINDSIGHT_API_KEY` as the environment variable.
-- **Bank creation:** Hindsight Cloud documentation says banks are created automatically on first use. The API changelog specifically says a first `retain` creates a missing bank. The smoke script intentionally retains into a fresh, unique bank without calling `create_bank()` to confirm behavior with the configured account.
-- **Batch retain:** the Python client docs show `client.retain_batch(bank_id=..., items=[...])`. The smoke script checks whether the installed client exposes it and, if so, tries it in a second throwaway bank.
-- **Reflect response:** the Python SDK examples read `response.text`; the API reference documents `text` as the primary reflect output. The smoke script also prints the actual response class and public attribute names.
-- **Observed Cloud smoke runs (2026-11-06):** Retaining the three seeds into a new bank without `create_bank()` succeeded in both runs. The latest three retains took 3.516s, 3.691s, and 2.818s (10.025s total). Immediate recall returned 9 facts; recall after 10 seconds returned 13. The price precedent was available immediately. Batch retain succeeded in a separate throwaway bank. Reflect returned a `ReflectResponse` with `text`, `based_on`, `structured_output`, `structured_output_error`, `trace`, and `usage` attributes.
-- **Verified case-ID channel:** Hindsight's extracted fact text includes the exact phrase `up to 5%`, but omits `CASE-0001`. With `metadata={"case_id": "CASE-0001"}` on retain, recall results include that metadata. With `include_chunks=True`, the associated source chunk preserves the complete retained case, including both `CASE-0001` and `up to 5%`, verbatim and untruncated on immediate and delayed recall. The memory adapter should take the ID from metadata (with a source-chunk regex fallback) and use the source chunk as the case text; it should not parse citations from extracted fact text alone.
+## Setup and run
 
-Run `python scripts/smoke_hindsight.py` after putting your real `HINDSIGHT_BASE_URL` and `HINDSIGHT_API_KEY` in `.env`. It creates uniquely named throwaway banks and leaves them in Hindsight for inspection.
+Use Python 3.11. From the repository root in PowerShell:
 
-### References
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+Copy-Item .env.example .env
+```
 
-- [Hindsight Python client](https://hindsight.vectorize.io/sdks/python)
-- [Hindsight retain API](https://hindsight.vectorize.io/developer/api/retain)
-- [Hindsight reflect API](https://hindsight.vectorize.io/developer/api/reflect)
-- [Hindsight Cloud Python SDK guide](https://docs.hindsight.vectorize.io/cloud/python-sdk/)
-- [Hindsight Cloud integration notes](https://docs.dev.hindsight.vectorize.io/cloud/integrations/)
-- [Hindsight retain bank creation change](https://hindsight.vectorize.io/blog/2026/04/28/version-0-5-5)
+Edit `.env` and add your own keys. Keep `.env` private; it is ignored by Git.
+
+```dotenv
+GROQ_API_KEY=your_groq_key
+GROQ_MODEL_PRIMARY=openai/gpt-oss-120b
+GROQ_MODEL_FALLBACK=qwen/qwen3.8-27b
+HINDSIGHT_BASE_URL=https://api.hindsight.vectorize.io
+HINDSIGHT_API_KEY=your_hindsight_key
+BANK_ID=recallap-demo
+RETAIN_AGENT_DECISIONS=false
+```
+
+Run the API and open the interactive API page at `http://127.0.0.1:8000/docs`:
+
+```powershell
+python -m uvicorn backend.main:app --reload
+```
+
+The app reads invoice data from `data/` when teammate-provided JSON files exist, otherwise it uses `data/stub/`. Start with `GET /api/invoices` and `GET /api/invoices/INV-2025-0731`. To run the deterministic D1–D7 walkthrough without calling Groq or Hindsight:
+
+```powershell
+python scripts\walking_skeleton.py
+```
+
+To run the real Hindsight smoke check (it creates uniquely named throwaway banks):
+
+```powershell
+python scripts\smoke_hindsight.py
+```
+
+To run the test suite:
+
+```powershell
+python -m pytest --basetemp=logs\pytest-tmp
+```
+
+## Architecture
+
+```text
+Invoice JSON → deterministic detectors → Hindsight recall (optional)
+             → Groq proposal → Python guardrails → status / human review
+                                             ↘ retain human resolution
+```
+
+- `backend/store.py` loads and validates JSON fixtures, masks bank-account numbers, protects state with a lock, allocates per-bank case IDs, and snapshots local decisions.
+- `backend/detectors.py` checks price, quantity, PO, GSTIN, tax-rate, currency, duplicate-invoice, and bank-detail exceptions.
+- `backend/memory.py` adapts Hindsight retain, recall, search, and reflect calls. External memory failures fail soft where a decision can still be escalated safely.
+- `backend/llm.py` sends an evidence-only proposal request to Groq, validates the response with Pydantic, and returns an escalation if every model attempt fails.
+- `backend/policy.py` checks citations and precedent applicability after the model. Model output cannot bypass these checks.
+- `backend/agent.py` connects the steps and writes each decision to `logs/decisions.jsonl` (one JSON object per line). Snapshot files and logs are ignored by Git.
+- `backend/main.py` exposes the FastAPI API and serves `frontend/` at `/` when frontend files are supplied.
+
+## API
+
+- `GET /api/health` reports API liveness plus live Hindsight and Groq connectivity booleans.
+- `GET /api/invoices?status=...` lists invoice summaries; `GET /api/invoices/{id}` returns invoice, PO, GRN, vendor, and detected exceptions.
+- `POST /api/invoices/{id}/process?memory=on|off&bank=...` runs the agent. `memory=off` skips recall while preserving the rest of the pipeline.
+- `POST /api/invoices/{id}/resolve?bank=...` accepts `{ "action": "APPROVE", "note": "...", "approver": "..." }`, records the human outcome, and attempts to retain it.
+- `GET /api/memory/search?q=...&bank=...` searches a bank; `GET /api/vendors/{id}/briefing` returns a Hindsight reflect summary.
+- `GET /api/metrics?memory=on|off` reads the corresponding experiment series from `data/experiment_results.json`; it returns empty points and a zeroed summary when that file is absent.
+- `POST /api/demo/reset` accepts `{ "clear_memory": true|false }`. It clears local demo state. When `clear_memory` is true, it rotates to a new bank ID so the next request starts with an empty bank.
+
+Decision responses include the invoice ID, exceptions, recalled memories, model proposal, guardrail result, final status, and latency. Final statuses are `AUTO_RESOLVED`, `VENDOR_QUERY`, `REJECTED`, `NEEDS_REVIEW`, and `CLEAN`.
+
+## Groq decision ladder
+
+The model proposes one of `AUTO_APPROVE`, `AUTO_APPROVE_WITH_NOTE`, `REQUEST_VENDOR_INFO`, `REJECT`, or `ESCALATE`. Its system prompt limits it to supplied invoice facts and recalled memories and asks it to cite only recalled case IDs.
+
+1. Call the primary model with a forced `propose_resolution` tool call at temperature 0.1.
+2. If Groq returns HTTP 429, wait briefly and retry the primary request once.
+3. Try the fallback model with the same forced tool schema.
+4. Try the fallback model without tools, request JSON only, remove any `<think>...</think>` text, extract the first JSON object, and validate it.
+5. If there is still no valid proposal, return `ESCALATE` with confidence 0 and `Agent unavailable; routed to human review.`
+
+The configured primary is `openai/gpt-oss-120b`. The prior `qwen/qwen3-32b` fallback was shut down for standard developer-tier requests on July 17, 2026, so the default is its current supported Qwen successor, `qwen/qwen3.8-27b`. The fallback is configurable through `GROQ_MODEL_FALLBACK`. Groq supports forced tool choice in its OpenAI-compatible API, and its current model page lists tool use for Qwen 3.8 27B. [Groq tool-use docs](https://console.groq.com/docs/tool-use/local-tool-calling) · [model deprecations](https://console.groq.com/docs/deprecations) · [Qwen 3.8 27B](https://console.groq.com/docs/model/qwen/qwen3.8-27b)
+
+## Deterministic guardrails
+
+The policy layer checks every proposal in Python:
+
+- Changed bank details always escalate.
+- A non-escalation action needs a cited, recalled, human-decided case for the same vendor and exception type. Agent-decided cases alone do not count. Rejecting a pure duplicate invoice is the exception.
+- The invoice must stay within a precedent's stated percent or rupee range. If no range can be parsed, a percent variance may differ by at most one percentage point from the precedent.
+- Invoice totals above Rs. 2,50,000 escalate. Confidence below 0.80 escalates.
+- Citations not found in recall are stripped. If several exception types are present and only some have human precedent, the decision escalates.
+- An unavailable or invalid model response escalates for human review.
+
+The final decision action is converted into `AUTO_RESOLVED`, `VENDOR_QUERY`, `REJECTED`, or `NEEDS_REVIEW`. No detector, range check, citation check, or guardrail is delegated to the LLM.
+
+## Hindsight memory format and flow
+
+Memory uses three Hindsight contexts: `vendor_profile`, `resolution_case`, and `approver_preference`. Each operation receives an explicit bank ID. A resolution is retained as one self-contained record that includes its `CASE-####` ID, vendor name and ID, exception type, reason, applicability range, and `Decided by: human|agent` marker.
+
+For an invoice exception, RecallAP asks Hindsight three focused questions: for a matching precedent, vendor quirks and payment terms, and approver preferences. Results are deduplicated and limited to six records. Memory-off mode skips those questions but still runs detectors, the model, guardrails, and logging. Human resolutions are retained back to Hindsight so later invoices can use them as precedent. Touchless agent decisions are retained only when `RETAIN_AGENT_DECISIONS=true`.
+
+### How RecallAP uses Hindsight memory
+
+RecallAP sends the vendor, detected exception, and invoice detail to the Hindsight bank. Hindsight returns extracted facts that can be easier to search, but an extracted fact may omit exact wording such as a case number. The adapter therefore reads the `case_id` metadata and requests source chunks; for case memories it uses the original retained chunk as the citation text. If the metadata is missing, it looks for the ID in that source chunk. The policy layer then checks the case ID, vendor, exception, decision-maker marker, and range before allowing the LLM's recommendation.
+
+The bank ID is not hard-coded into the Hindsight client. `BANK_ID` selects the default bank, API routes can accept a bank override where specified, and demo reset rotates to a fresh bank instead of assuming a bank-delete API.
+
+## Hindsight verification notes
+
+Checked against the official Hindsight documentation on 2026-11-06 and confirmed with the smoke script:
+
+- The Python package is `hindsight-client`; the Cloud client accepts `Hindsight(base_url=..., api_key=...)`. The Cloud base URL is `https://api.hindsight.vectorize.io`.
+- Cloud creates a bank on first retain. Batch retain is available in the installed client. The smoke script probes these behaviors in throwaway banks.
+- Reflect returns its answer in `.text`.
+- Two real Cloud smoke runs successfully retained three seed memories without an explicit create-bank call. The latest three retains took 3.516s, 3.691s, and 2.818s (10.025s total). Immediate recall returned 9 facts; recall after 10 seconds returned 13. The precedent was available immediately. Batch retain succeeded.
+- In both recalls, extracted fact text included `up to 5%` but omitted `CASE-0001`. With `metadata={"case_id":"CASE-0001"}`, the ID appeared in result metadata. With `include_chunks=True`, the source chunk preserved the entire case verbatim and untruncated, including both values.
+- `/api/health` checks Hindsight's documented `/health/ready` endpoint and Groq's models-list endpoint, each with a short timeout. [Hindsight API readiness](https://hindsight.vectorize.io/api-reference)
+
+### Hindsight references
+
+- [Python client](https://hindsight.vectorize.io/sdks/python)
+- [Retain API](https://hindsight.vectorize.io/developer/api/retain)
+- [Reflect API](https://hindsight.vectorize.io/developer/api/reflect)
+- [Cloud Python SDK guide](https://docs.hindsight.vectorize.io/cloud/python-sdk/)
+- [Cloud API integration](https://docs.hindsight.vectorize.io/cloud/api-integration/)
+- [Bank creation change](https://hindsight.vectorize.io/blog/2026/04/28/version-0-5-5)
