@@ -7,7 +7,7 @@ from backend.models import DecisionAction
 
 
 def test_clean_invoice_short_circuits_memory_and_llm(monkeypatch: Any) -> None:
-    invoice, po, grn, vendor = agent.store.load_context("INV-2025-0731")
+    invoice, po, grn, vendor = agent.store.load_context("INV-2025-7301")
     invoice = invoice.model_copy(update={"total": 100_000})
     monkeypatch.setattr(agent.memory, "recall_for", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("should not recall")))
     monkeypatch.setattr(agent.llm, "decide", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("should not call LLM")))
@@ -21,7 +21,7 @@ def test_clean_invoice_short_circuits_memory_and_llm(monkeypatch: Any) -> None:
 
 
 def test_memory_off_skips_recall_but_keeps_pipeline(monkeypatch: Any) -> None:
-    invoice, po, grn, vendor = agent.store.load_context("INV-2025-0731")
+    invoice, po, grn, vendor = agent.store.load_context("INV-2025-7301")
     monkeypatch.setattr(agent.memory, "recall_for", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("memory off must skip recall")))
     monkeypatch.setattr(
         agent.llm,
@@ -48,7 +48,7 @@ def test_human_resolution_retains_human_tag_and_case_id(monkeypatch: Any) -> Non
     monkeypatch.setattr(agent.memory, "retain_case", lambda bank_id, text, **kwargs: captured.append({"text": text, **kwargs}) or True)
 
     result = agent.resolve_invoice(
-        "INV-2025-0731",
+        "INV-2025-7301",
         "APPROVE",
         "Fuel surcharge is covered; up to 5% is acceptable.",
         "Priya Nair",

@@ -27,16 +27,17 @@ def test_openapi_and_static_mount_are_registered() -> None:
 def test_invoice_routes_return_contract_shapes() -> None:
     """The invoice list and detail functions expose the frozen response models."""
     rows = list_invoices().root
-    detail = get_invoice("INV-2025-0731")
+    detail = get_invoice("INV-2025-7301")
 
-    assert len(rows) == 3
-    assert rows[0].vendor_name == "Deccan Freight Lines"
-    assert rows[0].exception_types == ["PRICE_MISMATCH"]
+    assert len(rows) == 60
+    deccan_row = next(row for row in rows if row.id == "INV-2025-7301")
+    assert deccan_row.vendor_name == "Deccan Freight Lines"
+    assert deccan_row.exception_types == ["PRICE_MISMATCH"]
     assert detail.invoice.total == 104000
     assert detail.po is not None and detail.po.total == 100000
     assert detail.vendor.bank_account == "XXXX4821"
-    missing_po = get_invoice("INV-2025-0801")
-    assert [exception.type for exception in missing_po.exceptions] == ["MISSING_PO"]
+    missing_po = get_invoice("INV-2025-7314")
+    assert "MISSING_PO" in [exception.type for exception in missing_po.exceptions]
 
 
 def test_invoice_route_filters_and_returns_clean_not_found() -> None:

@@ -31,8 +31,8 @@ def _case(case_id: str, variance: float) -> RecalledMemory:
 
 
 def main() -> None:
-    base, base_po, base_grn, deccan = store.load_context("INV-2025-0731")
-    godavari_invoice, godavari_po, godavari_grn, godavari = store.load_context("INV-2025-0801")
+    base, base_po, base_grn, deccan = store.load_context("INV-2025-7301")
+    godavari_invoice, godavari_po, godavari_grn, godavari = store.load_context("INV-2025-7314")
     human_cases: list[RecalledMemory] = []
 
     def recall(bank_id: str, vendor_name: str, exc_type: str, detail: str, limit: int = 6) -> list[RecalledMemory]:

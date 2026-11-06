@@ -1,0 +1,110 @@
+[
+  {
+    "id": "V-1001",
+    "name": "Charminar Office Supplies",
+    "gstin": "36AABCC1001F1Z5",
+    "bank_account": "XXXX1001",
+    "payment_terms": "Net 30",
+    "category": "Stationery",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1002",
+    "name": "Godavari IT Services",
+    "gstin": "36AABCG1002F1Z5",
+    "bank_account": "XXXX1002",
+    "payment_terms": "Net 30",
+    "category": "IT services",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1003",
+    "name": "Hitech City Facilities Pvt Ltd",
+    "gstin": "36AABCH1003F1Z5",
+    "bank_account": "XXXX1003",
+    "payment_terms": "Net 30",
+    "category": "Facilities",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1004",
+    "name": "Deccan Freight Lines",
+    "gstin": "36ABCDE1234F1Z5",
+    "bank_account": "XXXX4821",
+    "payment_terms": "Net 30",
+    "category": "Logistics",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1005",
+    "name": "Sri Lakshmi Packaging",
+    "gstin": "29AABCS1005F1Z5",
+    "bank_account": "XXXX1005",
+    "payment_terms": "Net 45",
+    "category": "Packaging",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1006",
+    "name": "Krishna Components",
+    "gstin": "29AABCK1006F1Z5",
+    "bank_account": "XXXX1006",
+    "payment_terms": "Net 30",
+    "category": "Components",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1007",
+    "name": "Banjara Cloud Hosting",
+    "gstin": "36AABCB1007F1Z5",
+    "bank_account": "XXXX1007",
+    "payment_terms": "Net 30",
+    "category": "Cloud",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1008",
+    "name": "Nizam Catering Co",
+    "gstin": "36AABCN1008F1Z5",
+    "bank_account": "XXXX1008",
+    "payment_terms": "Net 15",
+    "category": "Catering",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1009",
+    "name": "Telangana Steel Traders",
+    "gstin": "36AABCT1009F1Z5",
+    "bank_account": "XXXX1009",
+    "payment_terms": "Net 30",
+    "category": "Raw material",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1010",
+    "name": "Pearl City Print Works",
+    "gstin": "36AABCP1010F1Z5",
+    "bank_account": "XXXX1010",
+    "payment_terms": "Net 30",
+    "category": "Printing",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1011",
+    "name": "Mehdipatnam Security Services",
+    "gstin": "36AABCM1011F1Z5",
+    "bank_account": "XXXX1011",
+    "payment_terms": "Net 30",
+    "category": "Security",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1012",
+    "name": "Musi Chemicals",
+    "gstin": "36AABCM1012F1Z5",
+    "bank_account": "XXXX1012",
+    "payment_terms": "Net 45",
+    "category": "Chemicals",
+    "currency": "INR"
+  }
+]

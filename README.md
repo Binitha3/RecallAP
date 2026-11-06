@@ -33,7 +33,7 @@ Run the API and open the interactive API page at `http://127.0.0.1:8000/docs`:
 python -m uvicorn backend.main:app --reload
 ```
 
-The app reads invoice data from `data/` when teammate-provided JSON files exist, otherwise it uses `data/stub/`. Start with `GET /api/invoices` and `GET /api/invoices/INV-2025-0731`. To run the deterministic D1–D7 walkthrough without calling Groq or Hindsight:
+The app now uses Member 3's verified dataset in `data/` (60 invoices, 12 purchase orders, 12 GRNs, and 12 vendors). It falls back to `data/stub/` if those files are removed. Start with `GET /api/invoices` and `GET /api/invoices/INV-2025-7301`. To run the deterministic D1–D7 walkthrough without calling Groq or Hindsight:
 
 ```powershell
 python scripts\walking_skeleton.py
