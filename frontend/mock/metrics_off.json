@@ -1,0 +1,11 @@
+{
+  "sample": true,
+  "memory": "off",
+  "points": [
+    {"n": 1, "rolling_rate": 0.00, "auto_correct": 0, "human_touch": 1},
+    {"n": 2, "rolling_rate": 0.00, "auto_correct": 0, "human_touch": 1},
+    {"n": 3, "rolling_rate": 0.00, "auto_correct": 0, "human_touch": 1},
+    {"n": 4, "rolling_rate": 0.00, "auto_correct": 0, "human_touch": 1}
+  ],
+  "summary": {"processed": 4, "touchless": 0, "human_touch": 4, "auto_correct": 0.00}
+}

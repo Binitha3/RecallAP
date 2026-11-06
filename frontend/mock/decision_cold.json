@@ -1,0 +1,16 @@
+{
+  "invoice_id": "INV-2025-0731",
+  "memory_used": false,
+  "exceptions": [{"type": "PRICE_MISMATCH", "detail": "Invoice is 4.0% above the PO total.", "severity": "low", "variance_pct": 4.0}],
+  "recalled": [],
+  "decision": {
+    "action": "ESCALATE",
+    "confidence": 0.0,
+    "rationale": "No precedent was recalled for this vendor and exception. Route the invoice to a human reviewer.",
+    "cited_case_ids": [],
+    "draft_message": ""
+  },
+  "guardrails": {"passed": true, "triggered": [], "downgraded_from": null},
+  "final_status": "NEEDS_REVIEW",
+  "latency_ms": 84
+}

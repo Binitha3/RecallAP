@@ -1,0 +1,26 @@
+[
+  {
+    "id": "INV-2025-0731",
+    "vendor_name": "Deccan Freight Lines",
+    "amount": 104000,
+    "currency": "INR",
+    "status": "NEEDS_REVIEW",
+    "exception_types": ["PRICE_MISMATCH"]
+  },
+  {
+    "id": "INV-2025-0732",
+    "vendor_name": "Deccan Freight Lines",
+    "amount": 103200,
+    "currency": "INR",
+    "status": "NEEDS_REVIEW",
+    "exception_types": ["PRICE_MISMATCH"]
+  },
+  {
+    "id": "INV-2025-0801",
+    "vendor_name": "Godavari IT",
+    "amount": 32000,
+    "currency": "INR",
+    "status": "NEEDS_REVIEW",
+    "exception_types": ["MISSING_PO"]
+  }
+]

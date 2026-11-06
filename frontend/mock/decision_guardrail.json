@@ -1,0 +1,19 @@
+{
+  "invoice_id": "INV-2025-0740",
+  "memory_used": true,
+  "exceptions": [{"type": "PRICE_MISMATCH", "detail": "Invoice is 9.0% above the PO total.", "severity": "medium", "variance_pct": 9.0}],
+  "recalled": [
+    {"case_id": "CASE-0001", "memory_type": "resolution_case", "text": "CASE-0001 | 2025-03-12 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Resolution approved for a price variance up to 5%. Decided by: human."},
+    {"case_id": "CASE-0003", "memory_type": "resolution_case", "text": "CASE-0003 | 2025-03-14 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Resolution approved for a price variance up to 5%. Decided by: human."}
+  ],
+  "decision": {
+    "action": "ESCALATE",
+    "confidence": 0.91,
+    "rationale": "The model recommendation was downgraded because the 9.0% variance exceeds the recalled cases' up to 5% allowance.",
+    "cited_case_ids": ["CASE-0001", "CASE-0003"],
+    "draft_message": ""
+  },
+  "guardrails": {"passed": false, "triggered": ["G3: variance exceeds precedent range"], "downgraded_from": "AUTO_APPROVE_WITH_NOTE"},
+  "final_status": "NEEDS_REVIEW",
+  "latency_ms": 298
+}
