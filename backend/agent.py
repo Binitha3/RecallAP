@@ -28,7 +28,7 @@ from backend.models import (
     Vendor,
     GuardrailResult,
 )
-from backend.policy import apply_guardrails
+from backend.policy import apply_guardrails, decision_from_precedents
 from backend.store import store
 
 TOUCHLESS_STATUSES = {"AUTO_RESOLVED", "VENDOR_QUERY", "REJECTED"}
@@ -138,7 +138,11 @@ def process_context(
         "vendor": vendor.model_dump(mode="json"),
         "exceptions": [item.model_dump(mode="json") for item in exceptions],
     }
-    decision = llm.decide(facts, [item.model_dump(mode="json") for item in recalled])
+    decision = decision_from_precedents(
+        exceptions, recalled, vendor.name, invoice.total
+    )
+    if decision is None:
+        decision = llm.decide(facts, [item.model_dump(mode="json") for item in recalled])
     decision, guardrails = apply_guardrails(decision, exceptions, recalled, vendor.name, invoice.total)
     final_status = _status_for(decision.action)
 

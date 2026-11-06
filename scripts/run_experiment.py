@@ -336,6 +336,7 @@ def build_metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
     touchless_correct = sum(
         1 for row in rows if row["touchless"] and row["correct"]
     )
+    touchless_decisions = sum(1 for row in rows if row["touchless"])
     unsafe = sum(1 for row in rows if row["unsafe"])
     human_touches = sum(1 for row in rows if row["human_touch"])
     final_rate = (
@@ -348,6 +349,11 @@ def build_metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "summary": {
             "final_rate": round(final_rate, 4),
             "touchless_correct": touchless_correct,
+            "touchless_decisions": touchless_decisions,
+            "touchless_precision": round(
+                touchless_correct / touchless_decisions if touchless_decisions else 0.0,
+                4,
+            ),
             "unsafe": unsafe,
             "human_touches": human_touches,
             "invoices": total,

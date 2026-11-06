@@ -53,7 +53,7 @@ $env:RECALLAP_API_URL = "http://127.0.0.1:8000"
 python scripts\run_experiment.py
 ```
 
-The experiment processes all 60 invoices with memory on and off. It writes the summary to `data/experiment_results.json`, per-invoice decisions to `data/experiment_decisions.csv`, and an audit trail to `data/experiment_debug.jsonl`. A correct touchless rate is the number of correct automatic decisions divided by all invoices; clean invoices count as correct touchless decisions, while human-reviewed invoices do not. Unsafe touchless decisions are reported separately.
+The experiment processes all 60 invoices with memory on and off. It writes the summary to `data/experiment_results.json`, per-invoice decisions to `data/experiment_decisions.csv`, and an audit trail to `data/experiment_debug.jsonl`. The correct touchless rate is correct automatic decisions divided by all invoices; clean invoices count as correct touchless decisions, while human-reviewed invoices do not. Touchless precision is reported separately as correct automatic decisions divided by all automatic decisions. Unsafe decisions are reported separately.
 
 To prepare a separate live-demo bank with the three Appendix A seed memories, run:
 
@@ -63,9 +63,9 @@ python scripts\seed_demo_memory.py
 
 The script creates a fresh bank, stores its ID and seed case IDs in the ignored local manifest `data/snapshots/demo_bank.json`, and prints the bank ID. Put that value in `.env` as `BANK_ID=...` and restart the API. This keeps demo seeds separate from the experiment banks; the seed case uses `CASE-9001` to avoid collisions with runtime case numbers.
 
-### Latest benchmark (2026-11-06)
+### Last completed full benchmark (2026-11-06)
 
-Using the verified 60-invoice set, the memory-on run achieved a **23.33% correct touchless rate (14/60)**, including 4 clean invoices and 10 correct automatic exception resolutions. It sent 46 invoices to human review and made **0 unsafe touchless decisions**. Memory-off achieved **6.67% (4/60)**, all from clean invoices, with 56 human reviews and 0 unsafe touchless decisions. The memory-on run improved the correct touchless rate by 16.66 percentage points. These figures use the runner's all-invoice denominator; they are not a claim that every invoice was automatically resolved.
+On the verified 60-invoice set, the completed memory-on run scored **23.33% correct touchless (14/60)**, with **100% precision across 14 automatic decisions**: 4 clean invoices and 10 exception resolutions. It sent 46 invoices to human review and made **0 unsafe touchless decisions**. Memory-off scored **6.67% (4/60)**, all clean invoices, with 56 human reviews and 0 unsafe decisions. The ON/OFF difference was 16.66 percentage points. These are the last completed full-run figures, before the latest deterministic precedent, duplicate-rejection, and quota-retry improvements. A rerun with those changes is pending because the configured Groq key reached its daily token cap. The JSON and CSV in `data/` are the last completed run; refresh them before presenting results for the updated code.
 
 To run the test suite:
 
@@ -105,11 +105,12 @@ Decision responses include the invoice ID, exceptions, recalled memories, model 
 
 The model proposes one of `AUTO_APPROVE`, `AUTO_APPROVE_WITH_NOTE`, `REQUEST_VENDOR_INFO`, `REJECT`, or `ESCALATE`. Its system prompt limits it to supplied invoice facts and recalled memories and asks it to cite only recalled case IDs.
 
-1. Call the primary model with a forced `propose_resolution` tool call at temperature 0.1.
-2. If Groq returns HTTP 429, wait briefly and retry the primary request once.
-3. Try the fallback model with the same forced tool schema.
-4. Try the fallback model without tools, request JSON only, remove any `<think>...</think>` text, extract the first JSON object, and validate it.
-5. If there is still no valid proposal, return `ESCALATE` with confidence 0 and `Agent unavailable; routed to human review.`
+1. Use a unanimous action from at least two matching reusable human precedents when available; exact duplicate detections can be rejected by deterministic rule, with bank-change and amount guardrails still applied.
+2. Otherwise call the primary model with a forced `propose_resolution` tool call at temperature 0.1.
+3. For a temporary HTTP 429, honor Groq's retry hint and retry the primary request once. A daily token cap skips futile retries.
+4. Try the fallback model with the same forced tool schema.
+5. Try the fallback model without tools, request JSON only, remove any `<think>...</think>` text, extract the first JSON object, and validate it.
+6. If there is still no valid proposal, return `ESCALATE` with confidence 0 and `Agent unavailable; routed to human review.`
 
 The configured primary is `openai/gpt-oss-120b`. The prior `qwen/qwen3-32b` fallback was shut down for standard developer-tier requests on July 17, 2026, so the default is its current supported Qwen successor, `qwen/qwen3.8-27b`. The fallback is configurable through `GROQ_MODEL_FALLBACK`. Groq supports forced tool choice in its OpenAI-compatible API, and its current model page lists tool use for Qwen 3.8 27B. [Groq tool-use docs](https://console.groq.com/docs/tool-use/local-tool-calling) · [model deprecations](https://console.groq.com/docs/deprecations) · [Qwen 3.8 27B](https://console.groq.com/docs/model/qwen/qwen3.8-27b)
 
@@ -118,7 +119,7 @@ The configured primary is `openai/gpt-oss-120b`. The prior `qwen/qwen3-32b` fall
 The policy layer checks every proposal in Python:
 
 - Changed bank details always escalate.
-- A non-escalation action needs at least two distinct cited, recalled, human-decided, reusable cases for each exception type, matching the same vendor and exception. One-off manual approvals can be retained for audit but are marked manual-only and cannot justify automation. Agent-decided cases alone do not count. Rejecting a pure duplicate invoice is the exception.
+- A non-escalation action needs at least two distinct cited, recalled, human-decided, reusable cases for each exception type, matching the same vendor and exception. One-off manual approvals can be retained for audit but are marked manual-only and cannot justify automation. Agent-decided cases alone do not count. An exact detected duplicate can be rejected even when another exception is present; bank-change and amount guardrails still apply.
 - The invoice must stay within a precedent's stated percent or rupee range. If no range can be parsed, a percent variance may differ by at most one percentage point from the precedent.
 - Invoice totals above Rs. 2,50,000 escalate. Confidence below 0.80 escalates.
 - Citations not found in recall are stripped. If several exception types are present and only some have human precedent, the decision escalates.

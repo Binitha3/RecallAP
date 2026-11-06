@@ -367,7 +367,9 @@
       "touchless_correct": 14,
       "unsafe": 0,
       "human_touches": 46,
-      "invoices": 60
+      "invoices": 60,
+      "touchless_decisions": 14,
+      "touchless_precision": 1.0
     }
   },
   "off": {
@@ -738,7 +740,9 @@
       "touchless_correct": 4,
       "unsafe": 0,
       "human_touches": 56,
-      "invoices": 60
+      "invoices": 60,
+      "touchless_decisions": 4,
+      "touchless_precision": 1.0
     }
   },
   "generated_at": "2026-11-06T17:46:14.748384+00:00"

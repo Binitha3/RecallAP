@@ -9,7 +9,7 @@ from backend.models import (
     ProposedDecision,
     RecalledMemory,
 )
-from backend.policy import apply_guardrails
+from backend.policy import apply_guardrails, decision_from_precedents
 
 
 VENDOR = "Deccan Freight Lines (V-1004)"
@@ -67,6 +67,8 @@ def proposal(
         ([exception(), exception("MISSING_PO", None)], [memory()], ["CASE-0001"], 10_000, 0.95, "G7", "only some exception types"),
         ([exception(), exception("MISSING_PO", None)], [memory(), memory(case_id="CASE-0002", kind="MISSING_PO")], ["CASE-0001", "CASE-0002"], 10_000, 0.95, "G2", "fewer than two cited human precedents"),
         ([exception("DUPLICATE_INVOICE", None)], [], [], 10_000, 0.95, None, None),
+        ([exception("DUPLICATE_INVOICE", None), exception("TAX_RATE_MISMATCH", None)], [], [], 10_000, 0.95, None, None),
+        ([exception("DUPLICATE_INVOICE", None), exception("BANK_DETAILS_CHANGED", None)], [], [], 10_000, 0.95, "G1", "bank details changed"),
     ],
 )
 def test_guardrail_table(
@@ -132,6 +134,38 @@ def test_manual_only_approval_is_not_reusable_as_precedent() -> None:
     )
     assert final.action == DecisionAction.ESCALATE
     assert any("fewer than two cited human precedents" in entry for entry in result.triggered)
+
+
+def test_reusable_precedents_can_resolve_without_a_model_call() -> None:
+    memories = [
+        RecalledMemory(
+            case_id=f"CASE-{number:04d}",
+            memory_type="resolution_case",
+            text=(
+                f"CASE-{number:04d} | Vendor: {VENDOR} | Exception: PRICE_MISMATCH. "
+                "Resolution: APPROVED. Applies to: price variance up to 5%. "
+                "Decided by: human."
+            ),
+        )
+        for number in (1, 2)
+    ]
+    decision = decision_from_precedents(
+        [exception(variance=4.9)], memories, VENDOR, 10_000
+    )
+    assert decision is not None
+    assert decision.action == DecisionAction.AUTO_APPROVE_WITH_NOTE
+    assert decision.cited_case_ids == ["CASE-0001", "CASE-0002"]
+
+
+def test_duplicate_invoice_can_be_rejected_from_deterministic_detection() -> None:
+    decision = decision_from_precedents(
+        [exception("DUPLICATE_INVOICE", None), exception("TAX_RATE_MISMATCH", None)],
+        [],
+        VENDOR,
+        10_000,
+    )
+    assert decision is not None
+    assert decision.action == DecisionAction.REJECT
 
 
 def test_g8_unavailable_model_is_explicit() -> None:

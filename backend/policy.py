@@ -23,6 +23,10 @@ AMOUNT_LIMIT_RE = re.compile(
 VARIANCE_RE = re.compile(r"\(([+-]?\d+(?:\.\d+)?)\s*%\)")
 HUMAN_RE = re.compile(r"Decided\s+by\s*:\s*human\b", re.IGNORECASE)
 MANUAL_ONLY_RE = re.compile(r"Automation\s+eligibility\s*:\s*manual-only\b", re.IGNORECASE)
+RESOLUTION_RE = re.compile(
+    r"\bResolution:\s*(APPROVED|AUTO_APPROVE(?:_WITH_NOTE)?|REQUEST_VENDOR_INFO|REJECT|ESCALATE)\b",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -85,6 +89,74 @@ def _range_violation(precedent: Precedent, exception: InvoiceException, invoice_
     return False
 
 
+def decision_from_precedents(
+    exceptions: list[InvoiceException],
+    recalled: list[RecalledMemory],
+    vendor: str,
+    invoice_total: float,
+) -> ProposedDecision | None:
+    """Apply a unanimous action only when two reusable human cases support each exception."""
+    if not exceptions:
+        return None
+    if any(item.type == "DUPLICATE_INVOICE" for item in exceptions):
+        return ProposedDecision(
+            action=DecisionAction.REJECT,
+            confidence=0.99,
+            rationale="The deterministic duplicate detector found an exact prior invoice match.",
+            cited_case_ids=[],
+        )
+
+    parsed = [_parse_precedent(item, vendor) for item in recalled]
+    precedents = [
+        item for item in parsed
+        if item is not None and item.human_decided and item.reusable
+    ]
+    actions: list[DecisionAction] = []
+    citations: list[str] = []
+
+    for exception in exceptions:
+        matching: list[tuple[Precedent, DecisionAction]] = []
+        for precedent in precedents:
+            if precedent.exception_type != exception.type:
+                continue
+            resolution = RESOLUTION_RE.search(precedent.memory.text)
+            if not resolution or _range_violation(precedent, exception, invoice_total):
+                continue
+            label = resolution.group(1).upper()
+            action = {
+                "APPROVED": DecisionAction.AUTO_APPROVE_WITH_NOTE,
+                "AUTO_APPROVE": DecisionAction.AUTO_APPROVE,
+                "AUTO_APPROVE_WITH_NOTE": DecisionAction.AUTO_APPROVE_WITH_NOTE,
+                "REQUEST_VENDOR_INFO": DecisionAction.REQUEST_VENDOR_INFO,
+                "REJECT": DecisionAction.REJECT,
+            }.get(label)
+            if action is not None:
+                matching.append((precedent, action))
+
+        if len({item.case_id for item, _ in matching}) < 2:
+            return None
+        matching_actions = {action for _, action in matching}
+        if len(matching_actions) != 1:
+            return None
+        actions.append(next(iter(matching_actions)))
+        for precedent, _ in matching[:2]:
+            if precedent.case_id not in citations:
+                citations.append(precedent.case_id)
+
+    if not actions or len(set(actions)) != 1:
+        return None
+    return ProposedDecision(
+        action=actions[0],
+        confidence=0.95,
+        rationale=(
+            "Using two or more matching, reusable human resolutions for each exception: "
+            + ", ".join(citations)
+            + "."
+        ),
+        cited_case_ids=citations,
+    )
+
+
 def _add(triggered: list[str], message: str) -> None:
     if message not in triggered:
         triggered.append(message)
@@ -121,7 +193,7 @@ def apply_guardrails(
     ]
 
     if proposed_action != DecisionAction.ESCALATE:
-        if exceptions and all(exception.type == "DUPLICATE_INVOICE" for exception in exceptions) and proposed_action == DecisionAction.REJECT:
+        if exceptions and any(exception.type == "DUPLICATE_INVOICE" for exception in exceptions) and proposed_action == DecisionAction.REJECT:
             pass
         else:
             for exception in exceptions:
@@ -134,7 +206,11 @@ def apply_guardrails(
                         f"G2: fewer than two cited human precedents for {exception.type}",
                     )
 
-    if len({exception.type for exception in exceptions}) > 1:
+    duplicate_rejection = (
+        proposed_action == DecisionAction.REJECT
+        and any(exception.type == "DUPLICATE_INVOICE" for exception in exceptions)
+    )
+    if len({exception.type for exception in exceptions}) > 1 and not duplicate_rejection:
         covered = {
             exception.type
             for exception in exceptions

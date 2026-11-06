@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 _client: OpenAI | None = None
 _JSON_OBJECT_RE = re.compile(r"\{.*\}", re.DOTALL)
 _THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
+_RETRY_SECONDS_RE = re.compile(r"try again in\s+([0-9]+(?:\.[0-9]+)?)\s*s", re.IGNORECASE)
 
 
 def _get_client() -> OpenAI:
@@ -37,6 +38,27 @@ def _get_client() -> OpenAI:
 
 def _is_rate_limit(error: Exception) -> bool:
     return getattr(error, "status_code", None) == 429 or error.__class__.__name__ == "RateLimitError"
+
+
+def _is_daily_rate_limit(error: Exception) -> bool:
+    message = str(error).casefold()
+    return "tokens per day" in message or "daily token limit" in message
+
+
+def _retry_delay(error: Exception) -> float:
+    """Honor provider retry hints while bounding a single wait to 15 seconds."""
+    response = getattr(error, "response", None)
+    headers = getattr(response, "headers", {}) or {}
+    retry_after = headers.get("retry-after") if hasattr(headers, "get") else None
+    if retry_after is not None:
+        try:
+            return min(15.0, max(0.25, float(retry_after)))
+        except (TypeError, ValueError):
+            pass
+    match = _RETRY_SECONDS_RE.search(str(error))
+    if match:
+        return min(15.0, max(0.25, float(match.group(1))))
+    return 2.0
 
 
 def _failure() -> ProposedDecision:
@@ -105,12 +127,15 @@ def decide(facts: Any, recalled: Any) -> ProposedDecision:
             return _tool_proposal(response)
         except Exception as error:
             if _is_rate_limit(error):
-                time.sleep(0.25)
-                try:
-                    response = _chat(client, settings.groq_model_primary, primary_messages, use_tool=True)
-                    return _tool_proposal(response)
-                except Exception as retry_error:
-                    logger.warning("Primary Groq retry failed: %s", retry_error)
+                if not _is_daily_rate_limit(error):
+                    time.sleep(_retry_delay(error))
+                    try:
+                        response = _chat(client, settings.groq_model_primary, primary_messages, use_tool=True)
+                        return _tool_proposal(response)
+                    except Exception as retry_error:
+                        logger.warning("Primary Groq retry failed: %s", retry_error)
+                else:
+                    logger.warning("Primary Groq daily token limit reached; trying fallback once")
             else:
                 logger.warning("Primary Groq tool call failed: %s", error)
 
@@ -119,15 +144,41 @@ def decide(facts: Any, recalled: Any) -> ProposedDecision:
             response = _chat(client, settings.groq_model_fallback, fallback_messages, use_tool=True)
             return _tool_proposal(response)
         except Exception as error:
-            logger.warning("Fallback Groq tool call failed: %s", error)
+            if _is_rate_limit(error):
+                if _is_daily_rate_limit(error):
+                    logger.warning("Fallback Groq daily token limit reached")
+                    return _failure()
+                time.sleep(_retry_delay(error))
+                try:
+                    response = _chat(client, settings.groq_model_fallback, fallback_messages, use_tool=True)
+                    return _tool_proposal(response)
+                except Exception as retry_error:
+                    logger.warning("Fallback Groq retry failed: %s", retry_error)
+            else:
+                logger.warning("Fallback Groq tool call failed: %s", error)
 
         try:
-            response = _chat(
-                client,
-                settings.groq_model_fallback,
-                build_messages(facts, recalled, return_json=True),
-                use_tool=False,
-            )
+            json_messages = build_messages(facts, recalled, return_json=True)
+            try:
+                response = _chat(
+                    client,
+                    settings.groq_model_fallback,
+                    json_messages,
+                    use_tool=False,
+                )
+            except Exception as error:
+                if not _is_rate_limit(error):
+                    raise
+                if _is_daily_rate_limit(error):
+                    logger.warning("Fallback Groq daily token limit reached in JSON mode")
+                    return _failure()
+                time.sleep(_retry_delay(error))
+                response = _chat(
+                    client,
+                    settings.groq_model_fallback,
+                    json_messages,
+                    use_tool=False,
+                )
             return _json_proposal(response)
         except Exception as error:
             logger.warning("Fallback Groq JSON call failed: %s", error)

@@ -159,6 +159,8 @@ class MetricPoint(APIModel):
 class MetricSummary(APIModel):
     final_rate: float = 0
     touchless_correct: int = 0
+    touchless_decisions: int = 0
+    touchless_precision: float = 0
     unsafe: int = 0
     human_touches: int = 0
     invoices: int = 0

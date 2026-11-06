@@ -62,6 +62,38 @@ def test_primary_429_retries_once_then_returns_tool_result(monkeypatch: Any) -> 
     assert client.calls[0]["tool_choice"]["function"]["name"] == "propose_resolution"
 
 
+def test_fallback_429_honors_retry_hint(monkeypatch: Any) -> None:
+    client = SequenceClient([
+        ValueError("primary tool unavailable"),
+        RateLimitError("rate limited; try again in 0.8s"),
+        tool_response(GOOD),
+    ])
+    delays: list[float] = []
+    monkeypatch.setattr(llm, "_get_client", lambda: client)
+    monkeypatch.setattr(llm.time, "sleep", delays.append)
+
+    result = llm.decide({"invoice": "x"}, [])
+
+    assert result.action == DecisionAction.ESCALATE
+    assert len(client.calls) == 3
+    assert delays == [0.8]
+
+
+def test_daily_token_cap_skips_retries_and_fails_closed(monkeypatch: Any) -> None:
+    daily_limit = RateLimitError("Rate limit reached on tokens per day (TPD). Try again in 5m.")
+    client = SequenceClient([daily_limit, daily_limit])
+    delays: list[float] = []
+    monkeypatch.setattr(llm, "_get_client", lambda: client)
+    monkeypatch.setattr(llm.time, "sleep", delays.append)
+
+    result = llm.decide({"invoice": "x"}, [])
+
+    assert result.action == DecisionAction.ESCALATE
+    assert result.confidence == 0
+    assert len(client.calls) == 2
+    assert delays == []
+
+
 def test_missing_primary_tool_call_falls_back_to_fallback_model(monkeypatch: Any) -> None:
     no_tool = text_response("I cannot call the tool")
     client = SequenceClient([no_tool, tool_response(GOOD)])
