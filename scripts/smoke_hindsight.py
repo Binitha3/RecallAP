@@ -63,18 +63,42 @@ def result_items(response: Any) -> Iterable[Any]:
     return results if isinstance(results, (list, tuple)) else ()
 
 
-def print_recalled(label: str, response: Any) -> list[str]:
-    """Print the unmodified recalled record text and return it for checks."""
+def print_recalled(label: str, response: Any) -> tuple[list[str], list[str], list[str]]:
+    """Print fact text, source chunks, and case metadata for exactness checks."""
     print(f"\n{label}")
     texts: list[str] = []
+    chunks: list[str] = []
+    case_metadata: list[str] = []
+    source_chunks = getattr(response, "chunks", None) or {}
     for index, record in enumerate(result_items(response), start=1):
         text = str(getattr(record, "text", ""))
         texts.append(text)
         print(f"[{index}] type={getattr(record, 'type', 'unknown')} id={getattr(record, 'id', 'unknown')}")
         print(text if text else "<record has no text attribute>")
+        metadata = getattr(record, "metadata", None) or {}
+        if isinstance(metadata, dict):
+            case_id = metadata.get("case_id")
+            if case_id:
+                case_metadata.append(str(case_id))
+            print(f"    metadata={json.dumps(metadata, ensure_ascii=False)}")
+        chunk_id = getattr(record, "chunk_id", None)
+        chunk = source_chunks.get(chunk_id) if isinstance(source_chunks, dict) and chunk_id else None
+        chunk_text = str(getattr(chunk, "text", "")) if chunk is not None else ""
+        if chunk_text:
+            chunks.append(chunk_text)
+            print(f"    source chunk (truncated={getattr(chunk, 'truncated', False)}): {chunk_text}")
     if not texts:
         print("<no recalled records>")
-    return texts
+    return texts, chunks, case_metadata
+
+
+def report_survival(label: str, facts: list[str], chunks: list[str], metadata_ids: list[str]) -> None:
+    """Report each identifier and wording probe independently."""
+    print(f"{label} - CASE-0001 in fact text: {any('CASE-0001' in text for text in facts)}")
+    print(f"{label} - 'up to 5%' in fact text: {any('up to 5%' in text for text in facts)}")
+    print(f"{label} - CASE-0001 in source chunk: {any('CASE-0001' in text for text in chunks)}")
+    print(f"{label} - 'up to 5%' in source chunk: {any('up to 5%' in text for text in chunks)}")
+    print(f"{label} - CASE-0001 in metadata: {'CASE-0001' in metadata_ids}")
 
 
 def main() -> int:
@@ -102,7 +126,15 @@ def main() -> int:
     try:
         for context, content in SEEDS:
             started = time.perf_counter()
-            response = client.retain(bank_id=bank_id, content=content, context=context)
+            retain_options: dict[str, Any] = {}
+            if context == "resolution_case":
+                retain_options["metadata"] = {"case_id": "CASE-0001"}
+            response = client.retain(
+                bank_id=bank_id,
+                content=content,
+                context=context,
+                **retain_options,
+            )
             elapsed = time.perf_counter() - started
             retain_durations.append(elapsed)
             print(f"retain context={context}: {elapsed:.3f}s; response={type(response).__name__}")
@@ -112,28 +144,27 @@ def main() -> int:
 
         query = "CASE-0001 Deccan Freight Lines PRICE_MISMATCH price variance up to 5%"
         try:
-            immediate = client.recall(bank_id=bank_id, query=query)
-            immediate_texts = print_recalled("Immediate recall (right after retain):", immediate)
-            immediate_survives = any(
-                "CASE-0001" in text and "up to 5%" in text for text in immediate_texts
+            immediate = client.recall(bank_id=bank_id, query=query, include_chunks=True)
+            immediate_texts, immediate_chunks, immediate_metadata = print_recalled(
+                "Immediate recall (right after retain):", immediate
             )
+            report_survival("Immediate recall", immediate_texts, immediate_chunks, immediate_metadata)
             print(f"Immediate recall returned {len(immediate_texts)} records.")
-            print(f"CASE-0001 and 'up to 5%' both survive verbatim immediately: {immediate_survives}")
         except Exception as exc:  # print a clean diagnostic, not an SDK traceback
             immediate_texts = []
-            immediate_survives = False
+            immediate_chunks = []
+            immediate_metadata = []
             print(f"Immediate recall failed: {type(exc).__name__}: {exc}")
 
         wait_seconds = 10
         print(f"Waiting {wait_seconds}s before the second recall...")
         time.sleep(wait_seconds)
-        delayed = client.recall(bank_id=bank_id, query=query)
-        delayed_texts = print_recalled("Recall after wait:", delayed)
-        delayed_survives = any(
-            "CASE-0001" in text and "up to 5%" in text for text in delayed_texts
+        delayed = client.recall(bank_id=bank_id, query=query, include_chunks=True)
+        delayed_texts, delayed_chunks, delayed_metadata = print_recalled(
+            "Recall after wait:", delayed
         )
+        report_survival("Delayed recall", delayed_texts, delayed_chunks, delayed_metadata)
         print(f"Delayed recall returned {len(delayed_texts)} records.")
-        print(f"CASE-0001 and 'up to 5%' both survive verbatim after wait: {delayed_survives}")
 
         reflected = client.reflect(
             bank_id=bank_id,
