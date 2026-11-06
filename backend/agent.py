@@ -4,11 +4,15 @@ from __future__ import annotations
 
 import time
 import re
+import json
+import logging
+import threading
 from datetime import date
+from pathlib import Path
 from typing import Iterable
 
 from backend import llm, memory
-from backend.config import settings
+from backend.config import get_active_bank_id, settings
 from backend.detectors import run_all
 from backend.models import (
     DecisionAction,
@@ -27,6 +31,22 @@ from backend.policy import apply_guardrails
 from backend.store import store
 
 TOUCHLESS_STATUSES = {"AUTO_RESOLVED", "VENDOR_QUERY", "REJECTED"}
+APP_ROOT = Path(__file__).resolve().parents[1]
+_decision_log_lock = threading.Lock()
+logger = logging.getLogger(__name__)
+
+
+def _save_decision(bank_id: str, decision: dict) -> None:
+    """Persist one decision in the snapshot and append one JSONL record."""
+    store.save_decision(bank_id, decision)
+    try:
+        path = APP_ROOT / "logs" / "decisions.jsonl"
+        with _decision_log_lock:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps(decision, ensure_ascii=False, default=str) + "\n")
+    except OSError as exc:
+        logger.warning("Could not append decision log: %s", exc)
 
 
 def _status_for(action: DecisionAction) -> str:
@@ -80,7 +100,7 @@ def process_context(
     started = time.perf_counter()
     exceptions = run_all(invoice, po, grn, vendor, known_invoices)
     if not exceptions:
-        return DecisionResponse(
+        result = DecisionResponse(
             invoice_id=invoice.id,
             memory_used=False,
             exceptions=[],
@@ -94,8 +114,10 @@ def process_context(
             final_status="CLEAN",
             latency_ms=max(0, round((time.perf_counter() - started) * 1000)),
         )
+        _save_decision(bank_id or get_active_bank_id(), result.model_dump(mode="json"))
+        return result
 
-    active_bank = bank_id or settings.bank_id
+    active_bank = bank_id or get_active_bank_id()
     recalled: list[RecalledMemory] = []
     if memory_enabled:
         first = exceptions[0]
@@ -129,7 +151,7 @@ def process_context(
         final_status=final_status,
         latency_ms=max(0, round((time.perf_counter() - started) * 1000)),
     )
-    store.save_decision(active_bank, result.model_dump(mode="json"))
+    _save_decision(active_bank, result.model_dump(mode="json"))
     return result
 
 
@@ -153,7 +175,7 @@ def resolve_invoice(invoice_id: str, action: str, note: str, approver: str, bank
     exceptions = run_all(invoice, po, grn, vendor, store.all_invoices())
     if not exceptions:
         raise ValueError("Cannot resolve an invoice without an exception")
-    active_bank = bank_id or settings.bank_id
+    active_bank = bank_id or get_active_bank_id()
     normalized = action.strip().upper()
     action_map = {
         "APPROVE": DecisionAction.AUTO_APPROVE_WITH_NOTE,
@@ -177,7 +199,7 @@ def resolve_invoice(invoice_id: str, action: str, note: str, approver: str, bank
     case_text = _case_text(case_id, invoice, vendor, exceptions[0], decision, "human")
     retained = memory.retain_case(active_bank, case_text, context="resolution_case", timestamp=invoice.date)
     status = _status_for(resolved_action)
-    store.save_decision(
+    _save_decision(
         active_bank,
         {
             "invoice_id": invoice.id,

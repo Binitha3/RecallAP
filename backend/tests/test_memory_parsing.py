@@ -150,3 +150,16 @@ def test_reflect_returns_response_text(monkeypatch: Any) -> None:
 
     monkeypatch.setattr(memory, "_get_client", lambda: FakeClient())
     assert memory.reflect_vendor("bank-a", "Deccan Freight Lines") == "Net 30; fuel surcharge up to 5%."
+
+
+def test_search_memory_queries_and_caps_results(monkeypatch: Any) -> None:
+    class FakeClient:
+        def recall(self, **kwargs: Any) -> Any:
+            assert kwargs["bank_id"] == "bank-a"
+            assert kwargs["query"] == "fuel surcharge"
+            return fake_response([fake_result("A fact", metadata={"case_id": "CASE-0001"})])
+
+    monkeypatch.setattr(memory, "_get_client", lambda: FakeClient())
+    results = memory.search_memory("bank-a", " fuel surcharge ", limit=1)
+    assert len(results) == 1
+    assert results[0].case_id == "CASE-0001"

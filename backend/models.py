@@ -114,6 +114,14 @@ class HumanResolutionRequest(APIModel):
     note: str = ""
     approver: str
 
+    @field_validator("action", "approver")
+    @classmethod
+    def required_text(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("must not be empty")
+        return cleaned
+
 
 class HumanResolutionResponse(APIModel):
     case_id: str
@@ -123,6 +131,40 @@ class HumanResolutionResponse(APIModel):
 
 class DemoResetRequest(APIModel):
     clear_memory: bool = False
+
+
+class DemoResetResponse(APIModel):
+    ok: bool
+
+
+class MemorySearchResult(APIModel):
+    case_id: str | None = None
+    type: str
+    text: str
+
+
+class VendorBriefingResponse(APIModel):
+    vendor_id: str
+    briefing_text: str
+
+
+class MetricPoint(APIModel):
+    n: int
+    rolling_rate: float
+    auto_correct: float
+    human_touch: int
+
+
+class MetricSummary(APIModel):
+    processed: int = 0
+    touchless: int = 0
+    human_touch: int = 0
+    auto_correct: float = 0
+
+
+class MetricsResponse(APIModel):
+    points: list[MetricPoint] = Field(default_factory=list)
+    summary: MetricSummary = Field(default_factory=MetricSummary)
 
 
 class DecisionAction(StrEnum):

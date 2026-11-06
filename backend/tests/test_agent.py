@@ -11,6 +11,7 @@ def test_clean_invoice_short_circuits_memory_and_llm(monkeypatch: Any) -> None:
     invoice = invoice.model_copy(update={"total": 100_000})
     monkeypatch.setattr(agent.memory, "recall_for", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("should not recall")))
     monkeypatch.setattr(agent.llm, "decide", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("should not call LLM")))
+    monkeypatch.setattr(agent, "_save_decision", lambda *args, **kwargs: None)
 
     result = agent.process_context(invoice, po, grn, vendor, memory_enabled=True)
 

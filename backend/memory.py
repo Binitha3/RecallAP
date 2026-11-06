@@ -183,3 +183,34 @@ def reflect_vendor(bank_id: str, vendor_name: str) -> str:
     except Exception as exc:
         logger.warning("Hindsight reflect failed: %s", exc)
         return ""
+
+
+def search_memory(bank_id: str, query: str, limit: int = 20) -> list[RecalledMemory]:
+    """Search the active bank and return parsed, deduplicated memories."""
+    if not bank_id:
+        raise ValueError("bank_id is required")
+    cleaned_query = query.strip()
+    if not cleaned_query:
+        raise ValueError("q must not be empty")
+    try:
+        response = _get_client().recall(
+            bank_id=bank_id,
+            query=cleaned_query,
+            include_chunks=True,
+            max_tokens=4096,
+            max_chunk_tokens=4096,
+        )
+        output: list[RecalledMemory] = []
+        seen: set[tuple[str | None, str]] = set()
+        for item in _parse_recalled(response):
+            key = (item.case_id, item.text)
+            if key in seen:
+                continue
+            seen.add(key)
+            output.append(item)
+            if len(output) >= max(1, min(limit, 100)):
+                break
+        return output
+    except Exception as exc:
+        logger.warning("Hindsight search failed: %s", exc)
+        return []

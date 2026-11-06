@@ -107,14 +107,21 @@ class InMemoryStore:
             None,
         )
         grn = GoodsReceiptNote.model_validate(raw_grn) if raw_grn else None
+        try:
+            vendor = self.load_vendor(invoice.vendor_id)
+        except KeyError as exc:
+            raise KeyError(f"vendor {invoice.vendor_id} for invoice {invoice_id}") from exc
+        return invoice, po, grn, vendor
+
+    def load_vendor(self, vendor_id: str) -> Vendor:
+        """Return a validated vendor master record by ID."""
         raw_vendor = next(
-            (item for item in self._records("vendors.json") if item.get("id") == invoice.vendor_id),
+            (item for item in self._records("vendors.json") if item.get("id") == vendor_id),
             None,
         )
         if raw_vendor is None:
-            raise KeyError(f"vendor {invoice.vendor_id} for invoice {invoice_id}")
-        vendor = Vendor.model_validate(raw_vendor)
-        return invoice, po, grn, vendor
+            raise KeyError(vendor_id)
+        return Vendor.model_validate(raw_vendor)
 
     def next_case_id(self, bank_id: str) -> str:
         """Allocate a per-bank, thread-safe case number."""
@@ -136,6 +143,13 @@ class InMemoryStore:
             if bank_id is not None:
                 return list(self._decisions.get(bank_id, []))
             return [entry for entries in self._decisions.values() for entry in entries]
+
+    def clear_bank(self, bank_id: str) -> None:
+        """Clear local decisions and the case counter for one demo bank."""
+        with self.lock:
+            self._decisions.pop(bank_id, None)
+            self._case_counters.pop(bank_id, None)
+            self._write_snapshot_locked()
 
     def _write_snapshot_locked(self) -> None:
         """Write the current in-memory state while the caller holds the lock."""

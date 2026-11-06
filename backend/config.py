@@ -1,6 +1,7 @@
 """Application settings loaded from environment variables and .env."""
 
 import os
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -49,3 +50,18 @@ class Settings:
 
 
 settings = Settings.from_environment()
+_active_bank_id = settings.bank_id
+_active_bank_lock = threading.Lock()
+
+
+def get_active_bank_id() -> str:
+    """Return the current runtime bank, which may be rotated by demo reset."""
+    with _active_bank_lock:
+        return _active_bank_id
+
+
+def set_active_bank_id(bank_id: str) -> None:
+    """Set the current runtime bank safely for concurrent requests."""
+    global _active_bank_id
+    with _active_bank_lock:
+        _active_bank_id = bank_id
