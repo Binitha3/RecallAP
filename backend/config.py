@@ -27,7 +27,7 @@ class Settings:
 
     groq_api_key: str = ""
     groq_model_primary: str = "openai/gpt-oss-120b"
-    groq_model_fallback: str = "qwen/qwen3-32b"
+    groq_model_fallback: str = "qwen/qwen3.8-27b"
     hindsight_base_url: str = ""
     hindsight_api_key: str = ""
     bank_id: str = "recallap-demo"
@@ -40,7 +40,7 @@ class Settings:
         return cls(
             groq_api_key=os.getenv("GROQ_API_KEY", ""),
             groq_model_primary=os.getenv("GROQ_MODEL_PRIMARY", "openai/gpt-oss-120b"),
-            groq_model_fallback=os.getenv("GROQ_MODEL_FALLBACK", "qwen/qwen3-32b"),
+            groq_model_fallback=os.getenv("GROQ_MODEL_FALLBACK", "qwen/qwen3.8-27b"),
             hindsight_base_url=os.getenv("HINDSIGHT_BASE_URL", ""),
             hindsight_api_key=os.getenv("HINDSIGHT_API_KEY", ""),
             bank_id=os.getenv("BANK_ID", "recallap-demo"),
