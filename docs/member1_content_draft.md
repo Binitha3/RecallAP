@@ -1,6 +1,6 @@
 # Member 1 content drafts
 
-These are drafts for the Member 1 technical angle in the team playbook. The official Content Guide was not included with the supplied materials, so confirm its word counts, tags, hashtags, platform, and submission format before publishing. The figures below are from the last completed 60-invoice baseline on 2026-11-06, before the latest deterministic-decision and retry improvements. Refresh them from `data/experiment_results.json` after a full run with the updated code before publishing.
+These are drafts for the Member 1 technical angle in the team playbook. The official Content Guide was not included with the supplied materials, so confirm its word counts, tags, hashtags, platform, and submission format before publishing. The figures below are from the latest full 60-invoice run on 2026-11-07.
 
 ## Article draft
 
@@ -16,7 +16,7 @@ Each resolution case is stored as a compact record with a case ID, vendor, excep
 
 Memory does not get the final say. Changed bank details always require human review. Other automatic actions need at least two distinct, cited, human-approved and reusable precedents for every exception type, must remain within the precedent’s stated range, and must meet the confidence and invoice-amount limits. A one-off manual approval can still be retained for audit, but is marked manual-only so the agent does not generalize it into a standing approval rule. Agent-made decisions do not count as human precedents.
 
-In the last completed baseline, we ran the verified 60-invoice sequence with memory enabled and disabled. Memory-on produced a **23.33% correct touchless rate (14 of 60)**: four clean invoices and ten correct automatic exception resolutions. All 14 automatic decisions were correct; it sent 46 invoices to human review, with zero unsafe touchless decisions. Memory-off produced a **6.67% correct touchless rate (4 of 60)**, all clean invoices, with 56 human reviews and zero unsafe touchless decisions. The all-invoice denominator counts a human review as not touchless; the figure is not a claim that every invoice was automatically handled. The updated code still needs a full rerun before these figures are final.
+We ran the verified 60-invoice sequence with memory enabled and disabled. Memory-on produced a **36.67% correct touchless rate (22 of 60)**: four clean invoices and 18 correct automatic exception resolutions. All 22 automatic decisions were correct in this run; it sent 38 invoices to human review, with zero unsafe touchless decisions. Memory-off produced a **13.33% correct touchless rate (8 of 60)**: four clean invoices and four exact-duplicate rejections. It sent 52 invoices to human review, also with zero unsafe touchless decisions. The all-invoice denominator counts a human review as not touchless; the sample precision is not a guarantee of 100% accuracy beyond these cases. Memory improved correct touchless coverage by 23.34 percentage points.
 
 The result also changed how we think about learning. Retaining a human’s final action is not always enough: some approvals are exceptional, one-time decisions that should not become reusable policy. We added an explicit manual-only marker and tightened the guardrails to require multiple matching precedents. Groq rate limits can also reduce automation by sending more proposals to human review. A safe fallback is useful, but the next iteration should improve throughput without weakening the evidence checks.
 
@@ -32,7 +32,7 @@ RecallAP is still a prototype. The current demo uses structured JSON, synthetic 
 
 Most AP teams have someone who remembers how every unusual invoice was handled. We built RecallAP to make those decisions searchable and reusable, with Hindsight memory and safety checks in Python.
 
-On the last completed 60-invoice baseline, memory-on achieved a 23.33% correct touchless rate (14/60), compared with 6.67% (4/60) memory-off. Both runs had zero unsafe touchless decisions. Human-reviewed invoices are not counted as automatic successes, so the metric reflects our conservative policy as well as the model. Refresh these figures after the updated-code run.
+On our 60-invoice run, memory-on achieved a 36.67% correct touchless rate (22/60), compared with 13.33% (8/60) memory-off. Precision was 100% across the 22 automatic memory-on decisions in this sample, and both runs had zero unsafe touchless decisions. Human-reviewed invoices are not counted as automatic successes, so the metric reflects our conservative policy as well as the model.
 
 The agent cites prior cases, checks that each precedent applies, and escalates when evidence is weak. A manual-only approval stays in the audit trail without becoming a rule for future automation.
 
@@ -59,6 +59,6 @@ Team: [add teammates’ handles]
 “Safety stays in code. Changed bank details always go to a person. One-time manual approvals are kept for audit, but they cannot teach the agent to auto-approve later cases.”
 
 **1:10–1:25 — Show benchmark numbers and repo**
-“On our last completed 60-invoice baseline, memory-on reached 23.33% correct touchless decisions versus 6.67% memory-off, with zero unsafe touchless decisions. We’ve since improved repeat-case handling and are rerunning the updated version. Here are the code and run artifacts. Thanks to the Hindsight team and HackwithHyderabad.”
+“On our 60-invoice run, memory-on reached 36.67% correct touchless decisions versus 13.33% memory-off. All 22 automatic memory-on decisions were correct in this sample, with zero unsafe touchless decisions. Here are the code and run artifacts. Thanks to the Hindsight team and HackwithHyderabad.”
 
 Before publishing, replace the demo link and team handles, and align the article/post tags and video format with the official Content Guide.

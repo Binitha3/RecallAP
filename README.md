@@ -63,9 +63,9 @@ python scripts\seed_demo_memory.py
 
 The script creates a fresh bank, stores its ID and seed case IDs in the ignored local manifest `data/snapshots/demo_bank.json`, and prints the bank ID. Put that value in `.env` as `BANK_ID=...` and restart the API. This keeps demo seeds separate from the experiment banks; the seed case uses `CASE-9001` to avoid collisions with runtime case numbers.
 
-### Last completed full benchmark (2026-11-06)
+### Latest full benchmark (2026-11-07)
 
-On the verified 60-invoice set, the completed memory-on run scored **23.33% correct touchless (14/60)**, with **100% precision across 14 automatic decisions**: 4 clean invoices and 10 exception resolutions. It sent 46 invoices to human review and made **0 unsafe touchless decisions**. Memory-off scored **6.67% (4/60)**, all clean invoices, with 56 human reviews and 0 unsafe decisions. The ON/OFF difference was 16.66 percentage points. These are the last completed full-run figures, before the latest deterministic precedent, duplicate-rejection, and quota-retry improvements. A rerun with those changes is pending because the configured Groq key reached its daily token cap. The JSON and CSV in `data/` are the last completed run; refresh them before presenting results for the updated code.
+On the verified 60-invoice set, the latest memory-on run scored **36.67% correct touchless (22/60)**, with **100% precision across 22 automatic decisions**: 4 clean invoices and 18 correct exception resolutions. It sent 38 invoices to human review and made **0 unsafe touchless decisions**. Memory-off scored **13.33% (8/60)**, including 4 clean invoices and 4 exact-duplicate rejections, with 52 human reviews and 0 unsafe decisions. Memory-on improved correct touchless coverage by **23.34 percentage points** and produced 14 more correct automatic resolutions. The denominator is all 60 invoices; the 100% precision figure describes the 22 memory-on automatic decisions in this run and should not be read as 100% accuracy on all invoices or as a population-level guarantee.
 
 To run the test suite:
 

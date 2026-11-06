@@ -45,31 +45,31 @@
       },
       {
         "n": 8,
-        "rolling_rate": 0.0,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.2,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 9,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 10,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 11,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 12,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
@@ -135,31 +135,31 @@
       },
       {
         "n": 23,
+        "rolling_rate": 0.6,
+        "auto_correct": true,
+        "human_touch": false
+      },
+      {
+        "n": 24,
         "rolling_rate": 0.4,
         "auto_correct": false,
         "human_touch": true
       },
       {
-        "n": 24,
-        "rolling_rate": 0.2,
-        "auto_correct": false,
-        "human_touch": true
-      },
-      {
         "n": 25,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 26,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.4,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 27,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.4,
         "auto_correct": false,
         "human_touch": true
       },
@@ -177,61 +177,61 @@
       },
       {
         "n": 30,
-        "rolling_rate": 0.4,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.6,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 31,
-        "rolling_rate": 0.2,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.6,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 32,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.6,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 33,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.6,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 34,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.6,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 35,
-        "rolling_rate": 0.2,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.6,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 36,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.4,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 37,
-        "rolling_rate": 0.4,
+        "rolling_rate": 0.6,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 38,
-        "rolling_rate": 0.4,
+        "rolling_rate": 0.6,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 39,
-        "rolling_rate": 0.4,
+        "rolling_rate": 0.6,
         "auto_correct": true,
         "human_touch": false
       },
@@ -285,73 +285,73 @@
       },
       {
         "n": 48,
-        "rolling_rate": 0.4,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.6,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 49,
-        "rolling_rate": 0.4,
+        "rolling_rate": 0.6,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 50,
-        "rolling_rate": 0.6,
+        "rolling_rate": 0.8,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 51,
-        "rolling_rate": 0.6,
+        "rolling_rate": 0.8,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 52,
-        "rolling_rate": 0.6,
+        "rolling_rate": 0.8,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 53,
+        "rolling_rate": 0.8,
+        "auto_correct": true,
+        "human_touch": false
+      },
+      {
+        "n": 54,
         "rolling_rate": 0.6,
         "auto_correct": false,
         "human_touch": true
       },
       {
-        "n": 54,
-        "rolling_rate": 0.4,
-        "auto_correct": false,
-        "human_touch": true
-      },
-      {
         "n": 55,
-        "rolling_rate": 0.2,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.6,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 56,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.6,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 57,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.4,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 58,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 59,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
@@ -363,13 +363,13 @@
       }
     ],
     "summary": {
-      "final_rate": 0.2333,
-      "touchless_correct": 14,
+      "final_rate": 0.3667,
+      "touchless_correct": 22,
+      "touchless_decisions": 22,
+      "touchless_precision": 1.0,
       "unsafe": 0,
-      "human_touches": 46,
-      "invoices": 60,
-      "touchless_decisions": 14,
-      "touchless_precision": 1.0
+      "human_touches": 38,
+      "invoices": 60
     }
   },
   "off": {
@@ -418,31 +418,31 @@
       },
       {
         "n": 8,
-        "rolling_rate": 0.0,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.2,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 9,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 10,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 11,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 12,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
@@ -508,31 +508,31 @@
       },
       {
         "n": 23,
-        "rolling_rate": 0.2,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.4,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 24,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.4,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 25,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 26,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.4,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 27,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.4,
         "auto_correct": false,
         "human_touch": true
       },
@@ -580,31 +580,31 @@
       },
       {
         "n": 35,
-        "rolling_rate": 0.0,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.2,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 36,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 37,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 38,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 39,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.4,
         "auto_correct": true,
         "human_touch": false
       },
@@ -688,31 +688,31 @@
       },
       {
         "n": 53,
-        "rolling_rate": 0.0,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.2,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 54,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 55,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 56,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 57,
-        "rolling_rate": 0.0,
+        "rolling_rate": 0.2,
         "auto_correct": false,
         "human_touch": true
       },
@@ -736,14 +736,14 @@
       }
     ],
     "summary": {
-      "final_rate": 0.0667,
-      "touchless_correct": 4,
+      "final_rate": 0.1333,
+      "touchless_correct": 8,
+      "touchless_decisions": 8,
+      "touchless_precision": 1.0,
       "unsafe": 0,
-      "human_touches": 56,
-      "invoices": 60,
-      "touchless_decisions": 4,
-      "touchless_precision": 1.0
+      "human_touches": 52,
+      "invoices": 60
     }
   },
-  "generated_at": "2026-11-06T17:46:14.748384+00:00"
+  "generated_at": "2026-11-06T18:37:32.898164+00:00"
 }
