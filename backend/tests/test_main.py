@@ -28,9 +28,12 @@ def test_invoice_routes_return_contract_shapes() -> None:
 
     assert len(rows) == 3
     assert rows[0].vendor_name == "Deccan Freight Lines"
+    assert rows[0].exception_types == ["PRICE_MISMATCH"]
     assert detail.invoice.total == 104000
     assert detail.po is not None and detail.po.total == 100000
     assert detail.vendor.bank_account == "XXXX4821"
+    missing_po = get_invoice("INV-2025-0801")
+    assert [exception.type for exception in missing_po.exceptions] == ["MISSING_PO"]
 
 
 def test_invoice_route_filters_and_returns_clean_not_found() -> None:

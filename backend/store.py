@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import json
+import os
 import threading
+import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -57,6 +60,10 @@ class InMemoryStore:
             else:
                 value = list(value.values())
         return [item for item in value if isinstance(item, dict)] if isinstance(value, list) else []
+
+    def all_invoices(self) -> list[Invoice]:
+        """Return every invoice in the active dataset."""
+        return [Invoice.model_validate(item) for item in self._records("invoices.json")]
 
     def list_summaries(self, status: str | None = None) -> list[dict[str, Any]]:
         """Build invoice queue rows from the active dataset and vendor records."""
@@ -133,10 +140,31 @@ class InMemoryStore:
     def _write_snapshot_locked(self) -> None:
         """Write the current in-memory state while the caller holds the lock."""
         self.snapshot_path.parent.mkdir(parents=True, exist_ok=True)
-        temp_path = self.snapshot_path.with_suffix(self.snapshot_path.suffix + ".tmp")
         payload = {"decisions": self._decisions, "case_counters": self._case_counters}
-        temp_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        temp_path.replace(self.snapshot_path)
+        temp_name: str | None = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w",
+                encoding="utf-8",
+                dir=self.snapshot_path.parent,
+                prefix=f"{self.snapshot_path.name}.",
+                suffix=".tmp",
+                delete=False,
+            ) as stream:
+                temp_name = stream.name
+                json.dump(payload, stream, ensure_ascii=False, indent=2)
+            for attempt in range(5):
+                try:
+                    os.replace(temp_name, self.snapshot_path)
+                    temp_name = None
+                    break
+                except PermissionError:
+                    if attempt == 4:
+                        raise
+                    time.sleep(0.02 * (attempt + 1))
+        finally:
+            if temp_name is not None:
+                Path(temp_name).unlink(missing_ok=True)
 
 
 store = InMemoryStore()
