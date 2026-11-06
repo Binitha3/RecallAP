@@ -115,6 +115,12 @@ class HumanResolutionRequest(APIModel):
     approver: str
 
 
+class HumanResolutionResponse(APIModel):
+    case_id: str
+    status: str
+    retained: bool
+
+
 class DemoResetRequest(APIModel):
     clear_memory: bool = False
 
