@@ -39,6 +39,17 @@ def _get_client() -> Any:
         return _client
 
 
+def create_bank(bank_id: str) -> None:
+    """Provision an isolated Hindsight bank before the app starts using it."""
+    if not bank_id:
+        raise ValueError("bank_id is required")
+    _get_client().create_bank(
+        bank_id=bank_id,
+        name="RecallAP experiment",
+        background="Memory for invoice exception decisions and human-approved precedents.",
+    )
+
+
 def _metadata_case_id(record: Any) -> str | None:
     """Read a validated CASE ID from Hindsight's fact metadata, if present."""
     metadata = getattr(record, "metadata", None)

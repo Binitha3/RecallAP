@@ -7,13 +7,14 @@ import time
 import uuid
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 import httpx
 
 from backend import memory
 from backend.agent import process_invoice, resolve_invoice
-from backend.config import get_active_bank_id, set_active_bank_id, settings
+from backend.config import get_active_bank_id, new_bank_id, register_bank_id, resolve_bank_id, settings
 from backend.detectors import run_all
 from backend.metrics import get_metrics
 from backend.models import (
@@ -36,6 +37,12 @@ FRONTEND_DIR = APP_ROOT / "frontend"
 FRONTEND_DIR.mkdir(exist_ok=True)
 
 app = FastAPI(title="RecallAP", version="0.1.0")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 logger = logging.getLogger(__name__)
 
 
@@ -133,7 +140,14 @@ def resolve_invoice_route(
 ) -> HumanResolutionResponse:
     """Record a human decision and attempt to retain it in Hindsight."""
     try:
-        return HumanResolutionResponse(**resolve_invoice(invoice_id, body.action, body.note, body.approver, bank))
+        return HumanResolutionResponse(**resolve_invoice(
+            invoice_id,
+            body.action,
+            body.note,
+            body.approver,
+            bank,
+            reusable_precedent=body.reusable_precedent,
+        ))
     except KeyError as exc:
         raise HTTPException(status_code=404, detail="Invoice or vendor not found") from exc
     except ValueError as exc:
@@ -149,7 +163,7 @@ def search_memories(
     """Search a Hindsight bank for retained precedent and profile memories."""
     if not q.strip():
         raise HTTPException(status_code=422, detail="q must not be empty")
-    active_bank = bank or get_active_bank_id()
+    active_bank = resolve_bank_id(bank)
     results = memory.search_memory(active_bank, q, limit)
     return [
         MemorySearchResult(case_id=item.case_id, type=item.memory_type, text=item.text)
@@ -177,12 +191,23 @@ def metrics(memory: Literal["on", "off"] = Query("on")) -> MetricsResponse:
 
 
 @app.post("/api/demo/reset", response_model=DemoResetResponse)
-def reset_demo(body: DemoResetRequest) -> DemoResetResponse:
-    """Clear local demo state and rotate to a fresh Hindsight bank when requested."""
-    current_bank = get_active_bank_id()
-    store.clear_bank(current_bank)
+def reset_demo(
+    body: DemoResetRequest,
+    bank: str | None = Query(None, min_length=1, max_length=100),
+) -> DemoResetResponse:
+    """Clear local state and rotate the selected Hindsight bank when requested."""
+    current_bank = resolve_bank_id(bank)
     if body.clear_memory:
-        set_active_bank_id(f"{settings.bank_id}-demo-{int(time.time())}-{uuid.uuid4().hex[:6]}")
+        fresh_bank = new_bank_id(bank)
+        try:
+            memory.create_bank(fresh_bank)
+        except Exception as exc:
+            logger.error("Could not provision Hindsight bank: %s", exc)
+            raise HTTPException(status_code=503, detail="Could not create an isolated memory bank") from exc
+        store.clear_bank(current_bank)
+        register_bank_id(bank, fresh_bank)
+    else:
+        store.clear_bank(current_bank)
     return DemoResetResponse(ok=True)
 
 

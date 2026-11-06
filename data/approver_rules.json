@@ -1,0 +1,79 @@
+[
+  {
+    "vendor": "V-1001",
+    "exception": "PRICE_MISMATCH",
+    "approve_if_pct_at_most": 1.5,
+    "approve_note": "Rounding difference up to 1.5% is fine.",
+    "else": "ESCALATE_HUMAN"
+  },
+  {
+    "vendor": "V-1002",
+    "exception": "MISSING_PO",
+    "approve_if_amount_below": 50000,
+    "approve_note": "Small renewal linked to the master contract; below Rs. 50,000 is acceptable.",
+    "else": "ESCALATE_HUMAN"
+  },
+  {
+    "vendor": "V-1003",
+    "exception": "TAX_RATE_MISMATCH",
+    "always": "REQUEST_VENDOR_INFO",
+    "note": "Wrong GST rate: ask for a credit note and reissued invoice."
+  },
+  {
+    "vendor": "V-1004",
+    "exception": "PRICE_MISMATCH",
+    "approve_if_pct_at_most": 5.0,
+    "approve_note": "Fuel surcharge up to 5% is covered by the contract amendment.",
+    "else": "ESCALATE_HUMAN"
+  },
+  {
+    "vendor": "V-1005",
+    "exception": "QTY_MISMATCH",
+    "always": "REQUEST_VENDOR_INFO",
+    "note": "Pay only the received quantity and request a credit note for the shortfall."
+  },
+  {
+    "vendor": "V-1006",
+    "exception": "CURRENCY_MISMATCH",
+    "always": "REQUEST_VENDOR_INFO",
+    "note": "Please reissue the invoice in INR to match the purchase order."
+  },
+  {
+    "vendor": "V-1007",
+    "exception": "PRICE_MISMATCH",
+    "approve_if_pct_at_most": 10.0,
+    "approve_note": "Metered usage overage up to 10% is covered.",
+    "else": "ESCALATE_HUMAN"
+  },
+  {
+    "vendor": "V-1008",
+    "exception": "DUPLICATE_INVOICE",
+    "always": "REJECT",
+    "note": "Duplicate invoice detected; reject and hold payment."
+  },
+  {
+    "vendor": "V-1009",
+    "exception": "PRICE_MISMATCH",
+    "approve_if_pct_at_most": 3.0,
+    "approve_note": "Steel price index adjustment up to 3% is acceptable.",
+    "else": "ESCALATE_HUMAN"
+  },
+  {
+    "vendor": "V-1010",
+    "exception": "MISSING_PO",
+    "always": "ESCALATE_HUMAN",
+    "note": "Verify verbal marketing orders with the requester; do not auto-handle."
+  },
+  {
+    "vendor": "V-1011",
+    "exception": "GSTIN_MISMATCH",
+    "always": "REJECT",
+    "note": "GSTIN is outdated; request a corrected invoice."
+  },
+  {
+    "vendor": "V-1012",
+    "exception": "BANK_DETAILS_CHANGED",
+    "always": "ESCALATE_HUMAN",
+    "note": "Verify bank changes by phone with a known contact."
+  }
+]

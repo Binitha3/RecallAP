@@ -34,3 +34,33 @@ def test_missing_or_invalid_metrics_return_empty(tmp_path: Path, monkeypatch) ->
     assert metrics.get_metrics("off").points == []
     path.write_text("{invalid", encoding="utf-8")
     assert metrics.get_metrics("off").summary.processed == 0
+
+
+def test_reads_member3_experiment_result_shape(tmp_path: Path, monkeypatch) -> None:
+    path = tmp_path / "experiment_results.json"
+    path.write_text(
+        json.dumps(
+            {
+                "on": {
+                    "points": [{"n": 1, "rolling_rate": 1.0, "auto_correct": True, "human_touch": False}],
+                    "summary": {
+                        "final_rate": 1.0,
+                        "touchless_correct": 60,
+                        "unsafe": 0,
+                        "human_touches": 0,
+                        "invoices": 60,
+                    },
+                },
+                "off": {"points": [], "summary": {"invoices": 0}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(metrics, "EXPERIMENT_RESULTS", path)
+
+    result = metrics.get_metrics("on")
+
+    assert result.points[0].auto_correct is True
+    assert result.summary.final_rate == 1.0
+    assert result.summary.unsafe == 0
+    assert result.summary.invoices == result.summary.processed == 60

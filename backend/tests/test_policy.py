@@ -55,16 +55,17 @@ def proposal(
     ("exceptions", "recalled", "citations", "total", "confidence", "expected", "trigger"),
     [
         ([exception("BANK_DETAILS_CHANGED", None)], [memory()], ["CASE-0001"], 10_000, 0.99, "G1", "BANK_DETAILS_CHANGED"),
-        ([exception()], [], [], 10_000, 0.95, "G2", "no cited human precedent"),
+        ([exception()], [], [], 10_000, 0.95, "G2", "fewer than two cited human precedents"),
         ([exception(variance=5.1)], [memory()], ["CASE-0001"], 10_000, 0.95, "G3", "exceeds precedent range"),
-        ([exception(variance=4.9)], [memory()], ["CASE-0001"], 10_000, 0.95, None, None),
+        ([exception(variance=4.9)], [memory(), memory(case_id="CASE-0002")], ["CASE-0001", "CASE-0002"], 10_000, 0.95, None, None),
         ([exception(variance=5.1)], [memory()], ["CASE-0001"], 10_000, 0.95, "G3", "exceeds precedent range"),
-        ([exception("MISSING_PO", None)], [memory(kind="MISSING_PO", vendor="Godavari IT (V-2001)", body="Applies to invoices below Rs. 50,000.")], ["CASE-0001"], 32_000, 0.91, None, None),
+        ([exception("MISSING_PO", None)], [memory(kind="MISSING_PO", vendor="Godavari IT (V-2001)", body="Applies to invoices below Rs. 50,000."), memory(case_id="CASE-0002", kind="MISSING_PO", vendor="Godavari IT (V-2001)", body="Applies to invoices below Rs. 50,000.")], ["CASE-0001", "CASE-0002"], 32_000, 0.91, None, None),
         ([exception("MISSING_PO", None)], [memory(kind="MISSING_PO", vendor="Godavari IT (V-2001)", body="Applies to invoices below Rs. 50,000.")], ["CASE-0001"], 80_000, 0.91, "G3", "exceeds precedent range"),
-        ([exception()], [memory(decided="agent")], ["CASE-0001"], 10_000, 0.95, "G2", "no cited human precedent"),
+        ([exception()], [memory(decided="agent")], ["CASE-0001"], 10_000, 0.95, "G2", "fewer than two cited human precedents"),
         ([exception()], [memory()], ["CASE-9999"], 10_000, 0.95, "G6", "removed citations"),
         ([exception()], [memory()], ["CASE-0001"], 10_000, 0.79, "G5", "confidence below 0.80"),
         ([exception(), exception("MISSING_PO", None)], [memory()], ["CASE-0001"], 10_000, 0.95, "G7", "only some exception types"),
+        ([exception(), exception("MISSING_PO", None)], [memory(), memory(case_id="CASE-0002", kind="MISSING_PO")], ["CASE-0001", "CASE-0002"], 10_000, 0.95, "G2", "fewer than two cited human precedents"),
         ([exception("DUPLICATE_INVOICE", None)], [], [], 10_000, 0.95, None, None),
     ],
 )
@@ -115,6 +116,22 @@ def test_g4_absolute_invoice_limit() -> None:
     )
     assert final.action == DecisionAction.ESCALATE
     assert any("G4" in entry for entry in result.triggered)
+
+
+def test_manual_only_approval_is_not_reusable_as_precedent() -> None:
+    one_off = memory(case_id="CASE-0001")
+    one_off = one_off.model_copy(
+        update={"text": one_off.text + " Automation eligibility: manual-only."}
+    )
+    final, result = apply_guardrails(
+        proposal(citations=["CASE-0001", "CASE-0002"]),
+        [exception()],
+        [one_off, memory(case_id="CASE-0002")],
+        VENDOR,
+        10_000,
+    )
+    assert final.action == DecisionAction.ESCALATE
+    assert any("fewer than two cited human precedents" in entry for entry in result.triggered)
 
 
 def test_g8_unavailable_model_is_explicit() -> None:

@@ -7,12 +7,13 @@ import re
 import json
 import logging
 import threading
+import hashlib
 from datetime import date
 from pathlib import Path
 from typing import Iterable
 
 from backend import llm, memory
-from backend.config import get_active_bank_id, settings
+from backend.config import resolve_bank_id, settings
 from backend.detectors import run_all
 from backend.models import (
     DecisionAction,
@@ -39,6 +40,11 @@ logger = logging.getLogger(__name__)
 def _save_decision(bank_id: str, decision: dict) -> None:
     """Persist one decision in the snapshot and append one JSONL record."""
     store.save_decision(bank_id, decision)
+    _append_decision_log(decision)
+
+
+def _append_decision_log(decision: dict) -> None:
+    """Append one decision JSON object to the audit log."""
     try:
         path = APP_ROOT / "logs" / "decisions.jsonl"
         with _decision_log_lock:
@@ -114,10 +120,10 @@ def process_context(
             final_status="CLEAN",
             latency_ms=max(0, round((time.perf_counter() - started) * 1000)),
         )
-        _save_decision(bank_id or get_active_bank_id(), result.model_dump(mode="json"))
+        _save_decision(resolve_bank_id(bank_id), result.model_dump(mode="json"))
         return result
 
-    active_bank = bank_id or get_active_bank_id()
+    active_bank = resolve_bank_id(bank_id)
     recalled: list[RecalledMemory] = []
     if memory_enabled:
         first = exceptions[0]
@@ -169,17 +175,26 @@ def process_invoice(invoice_id: str, *, memory_enabled: bool = True, bank_id: st
     )
 
 
-def resolve_invoice(invoice_id: str, action: str, note: str, approver: str, bank_id: str | None = None) -> dict[str, str | bool]:
+def resolve_invoice(
+    invoice_id: str,
+    action: str,
+    note: str,
+    approver: str,
+    bank_id: str | None = None,
+    *,
+    reusable_precedent: bool = True,
+) -> dict[str, str | bool]:
     """Record a human resolution and retain the resulting case to Hindsight."""
     invoice, po, grn, vendor = store.load_context(invoice_id)
     exceptions = run_all(invoice, po, grn, vendor, store.all_invoices())
     if not exceptions:
         raise ValueError("Cannot resolve an invoice without an exception")
-    active_bank = bank_id or get_active_bank_id()
+    active_bank = resolve_bank_id(bank_id)
     normalized = action.strip().upper()
     action_map = {
         "APPROVE": DecisionAction.AUTO_APPROVE_WITH_NOTE,
         "APPROVED": DecisionAction.AUTO_APPROVE_WITH_NOTE,
+        "APPROVE_WITH_NOTE": DecisionAction.AUTO_APPROVE_WITH_NOTE,
         "AUTO_APPROVE": DecisionAction.AUTO_APPROVE,
         "AUTO_APPROVE_WITH_NOTE": DecisionAction.AUTO_APPROVE_WITH_NOTE,
         "REQUEST_VENDOR_INFO": DecisionAction.REQUEST_VENDOR_INFO,
@@ -195,19 +210,43 @@ def resolve_invoice(invoice_id: str, action: str, note: str, approver: str, bank
         confidence=1,
         rationale=f"Human decision by {approver.strip()}: {note.strip()}" if note.strip() else f"Human decision by {approver.strip()}.",
     )
-    case_id = store.next_case_id(active_bank)
-    case_text = _case_text(case_id, invoice, vendor, exceptions[0], decision, "human")
-    retained = memory.retain_case(active_bank, case_text, context="resolution_case", timestamp=invoice.date)
     status = _status_for(resolved_action)
-    _save_decision(
+    request_signature = json.dumps(
+        {
+            "invoice_id": invoice.id,
+            "action": resolved_action.value,
+            "note": note.strip(),
+            "approver": approver.strip(),
+            "reusable_precedent": reusable_precedent,
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    request_key = hashlib.sha256(request_signature.encode("utf-8")).hexdigest()
+    reservation, created = store.reserve_resolution(
         active_bank,
+        request_key,
         {
             "invoice_id": invoice.id,
             "final_status": status,
-            "case_id": case_id,
             "action": resolved_action.value,
             "human_approver": approver.strip(),
             "note": note.strip(),
+            "reusable_precedent": reusable_precedent,
         },
     )
+    if not created:
+        return {
+            "case_id": str(reservation["case_id"]),
+            "status": str(reservation["final_status"]),
+            "retained": bool(reservation.get("retained", False)),
+        }
+    case_id = str(reservation["case_id"])
+    case_text = _case_text(case_id, invoice, vendor, exceptions[0], decision, "human")
+    if not reusable_precedent:
+        case_text += " Automation eligibility: manual-only."
+    retained = memory.retain_case(active_bank, case_text, context="resolution_case", timestamp=invoice.date)
+    completed = store.complete_resolution(active_bank, request_key, retained)
+    _append_decision_log(completed)
     return {"case_id": case_id, "status": status, "retained": retained}

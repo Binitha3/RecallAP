@@ -2,7 +2,7 @@
 
 RecallAP compares invoices with purchase orders (POs), goods receipt notes (GRNs), and vendor records. Plain Python detects exceptions. Hindsight retrieves relevant vendor knowledge and past decisions. Groq proposes an action, and deterministic policy checks decide whether it can proceed or must go to a human.
 
-This repository contains Member 1's backend and agent work. It does not include the teammate-owned frontend UI, dataset generator, or experiment runner. OCR, login, ERP integration, payments, and email sending are out of scope.
+This repository contains Member 1's backend and agent work plus Member 3's verified 60-invoice dataset and ON/OFF experiment runner. It does not include the teammate-owned frontend UI or dataset generator. OCR, login, ERP integration, payments, and email sending are out of scope.
 
 ## Setup and run
 
@@ -45,6 +45,28 @@ To run the real Hindsight smoke check (it creates uniquely named throwaway banks
 python scripts\smoke_hindsight.py
 ```
 
+To run Member 3's simulated approver checks and full memory comparison, start the API first, then use a second PowerShell window:
+
+```powershell
+python scripts\simulate_approver.py
+$env:RECALLAP_API_URL = "http://127.0.0.1:8000"
+python scripts\run_experiment.py
+```
+
+The experiment processes all 60 invoices with memory on and off. It writes the summary to `data/experiment_results.json`, per-invoice decisions to `data/experiment_decisions.csv`, and an audit trail to `data/experiment_debug.jsonl`. A correct touchless rate is the number of correct automatic decisions divided by all invoices; clean invoices count as correct touchless decisions, while human-reviewed invoices do not. Unsafe touchless decisions are reported separately.
+
+To prepare a separate live-demo bank with the three Appendix A seed memories, run:
+
+```powershell
+python scripts\seed_demo_memory.py
+```
+
+The script creates a fresh bank, stores its ID and seed case IDs in the ignored local manifest `data/snapshots/demo_bank.json`, and prints the bank ID. Put that value in `.env` as `BANK_ID=...` and restart the API. This keeps demo seeds separate from the experiment banks; the seed case uses `CASE-9001` to avoid collisions with runtime case numbers.
+
+### Latest benchmark (2026-11-06)
+
+Using the verified 60-invoice set, the memory-on run achieved a **23.33% correct touchless rate (14/60)**, including 4 clean invoices and 10 correct automatic exception resolutions. It sent 46 invoices to human review and made **0 unsafe touchless decisions**. Memory-off achieved **6.67% (4/60)**, all from clean invoices, with 56 human reviews and 0 unsafe touchless decisions. The memory-on run improved the correct touchless rate by 16.66 percentage points. These figures use the runner's all-invoice denominator; they are not a claim that every invoice was automatically resolved.
+
 To run the test suite:
 
 ```powershell
@@ -75,7 +97,7 @@ Invoice JSON → deterministic detectors → Hindsight recall (optional)
 - `POST /api/invoices/{id}/resolve?bank=...` accepts `{ "action": "APPROVE", "note": "...", "approver": "..." }`, records the human outcome, and attempts to retain it.
 - `GET /api/memory/search?q=...&bank=...` searches a bank; `GET /api/vendors/{id}/briefing` returns a Hindsight reflect summary.
 - `GET /api/metrics?memory=on|off` reads the corresponding experiment series from `data/experiment_results.json`; it returns empty points and a zeroed summary when that file is absent.
-- `POST /api/demo/reset` accepts `{ "clear_memory": true|false }`. It clears local demo state. When `clear_memory` is true, it rotates to a new bank ID so the next request starts with an empty bank.
+- `POST /api/demo/reset?bank=...` accepts `{ "clear_memory": true|false }`. It clears local state for the selected bank. When `clear_memory` is true, it creates a fresh Hindsight bank before mapping the alias to it, so experiment/live runs remain isolated without relying on a bank-delete API.
 
 Decision responses include the invoice ID, exceptions, recalled memories, model proposal, guardrail result, final status, and latency. Final statuses are `AUTO_RESOLVED`, `VENDOR_QUERY`, `REJECTED`, `NEEDS_REVIEW`, and `CLEAN`.
 
@@ -96,7 +118,7 @@ The configured primary is `openai/gpt-oss-120b`. The prior `qwen/qwen3-32b` fall
 The policy layer checks every proposal in Python:
 
 - Changed bank details always escalate.
-- A non-escalation action needs a cited, recalled, human-decided case for the same vendor and exception type. Agent-decided cases alone do not count. Rejecting a pure duplicate invoice is the exception.
+- A non-escalation action needs at least two distinct cited, recalled, human-decided, reusable cases for each exception type, matching the same vendor and exception. One-off manual approvals can be retained for audit but are marked manual-only and cannot justify automation. Agent-decided cases alone do not count. Rejecting a pure duplicate invoice is the exception.
 - The invoice must stay within a precedent's stated percent or rupee range. If no range can be parsed, a percent variance may differ by at most one percentage point from the precedent.
 - Invoice totals above Rs. 2,50,000 escalate. Confidence below 0.80 escalates.
 - Citations not found in recall are stripped. If several exception types are present and only some have human precedent, the decision escalates.
@@ -121,7 +143,7 @@ The bank ID is not hard-coded into the Hindsight client. `BANK_ID` selects the d
 Checked against the official Hindsight documentation on 2026-11-06 and confirmed with the smoke script:
 
 - The Python package is `hindsight-client`; the Cloud client accepts `Hindsight(base_url=..., api_key=...)`. The Cloud base URL is `https://api.hindsight.vectorize.io`.
-- Cloud creates a bank on first retain. Batch retain is available in the installed client. The smoke script probes these behaviors in throwaway banks.
+- The app explicitly creates a fresh bank on reset before using it. Batch retain is available in the installed client. The smoke script probes retain, recall, and batch behavior in throwaway banks.
 - Reflect returns its answer in `.text`.
 - Two real Cloud smoke runs successfully retained three seed memories without an explicit create-bank call. The latest three retains took 3.516s, 3.691s, and 2.818s (10.025s total). Immediate recall returned 9 facts; recall after 10 seconds returned 13. The precedent was available immediately. Batch retain succeeded.
 - In both recalls, extracted fact text included `up to 5%` but omitted `CASE-0001`. With `metadata={"case_id":"CASE-0001"}`, the ID appeared in result metadata. With `include_chunks=True`, the source chunk preserved the entire case verbatim and untruncated, including both values.

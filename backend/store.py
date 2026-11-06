@@ -151,6 +151,46 @@ class InMemoryStore:
             self._case_counters.pop(bank_id, None)
             self._write_snapshot_locked()
 
+    def reserve_resolution(
+        self,
+        bank_id: str,
+        idempotency_key: str,
+        record: dict[str, Any],
+    ) -> tuple[dict[str, Any], bool]:
+        """Atomically reserve a human resolution once per request signature."""
+        with self.lock:
+            for existing in self._decisions.get(bank_id, []):
+                if existing.get("resolution_key") == idempotency_key:
+                    return dict(existing), False
+            case_number = self._case_counters.get(bank_id, 0) + 1
+            self._case_counters[bank_id] = case_number
+            entry = {
+                **record,
+                "case_id": f"CASE-{case_number:04d}",
+                "resolution_key": idempotency_key,
+                "resolution_state": "pending",
+                "retained": False,
+            }
+            self._decisions.setdefault(bank_id, []).append(entry)
+            self._write_snapshot_locked()
+            return dict(entry), True
+
+    def complete_resolution(
+        self,
+        bank_id: str,
+        idempotency_key: str,
+        retained: bool,
+    ) -> dict[str, Any]:
+        """Record retain completion for a previously reserved resolution."""
+        with self.lock:
+            for existing in reversed(self._decisions.get(bank_id, [])):
+                if existing.get("resolution_key") == idempotency_key:
+                    existing["retained"] = retained
+                    existing["resolution_state"] = "complete"
+                    self._write_snapshot_locked()
+                    return dict(existing)
+        raise KeyError("resolution reservation not found")
+
     def _write_snapshot_locked(self) -> None:
         """Write the current in-memory state while the caller holds the lock."""
         self.snapshot_path.parent.mkdir(parents=True, exist_ok=True)

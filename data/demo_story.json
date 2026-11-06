@@ -1,0 +1,75 @@
+[
+  {
+    "step": "D1",
+    "invoice": {
+      "vendor_id": "V-1004",
+      "exception": "PRICE_MISMATCH",
+      "variance_pct": 4.0,
+      "po_total": 100000,
+      "total": 104000
+    },
+    "expected": "ESCALATE first (cold start); Priya approves with note: surcharge up to 5% per contract amendment; retain CASE-0001."
+  },
+  {
+    "step": "D2",
+    "invoice": {
+      "vendor_id": "V-1004",
+      "exception": "PRICE_MISMATCH",
+      "variance_pct": 3.2,
+      "po_total": 100000,
+      "total": 103200
+    },
+    "expected": "Recall CASE-0001; draft approval and ask human to confirm (moderate confidence)."
+  },
+  {
+    "step": "D3",
+    "invoice": {
+      "vendor_id": "V-1004",
+      "exception": "PRICE_MISMATCH",
+      "variance_pct": 4.5,
+      "po_total": 100000,
+      "total": 104500
+    },
+    "expected": "Recall two similar cases; recommend approval; human confirms."
+  },
+  {
+    "step": "D4",
+    "invoice": {
+      "vendor_id": "V-1002",
+      "exception": "MISSING_PO",
+      "total": 32000
+    },
+    "expected": "ESCALATE; human approves with note that renewals below Rs. 50,000 can be handled under the master contract."
+  },
+  {
+    "step": "D5",
+    "invoice": {
+      "vendor_id": "V-1004",
+      "exception": "PRICE_MISMATCH",
+      "variance_pct": 3.8,
+      "po_total": 100000,
+      "total": 103800
+    },
+    "expected": "AUTO_APPROVE_WITH_NOTE citing CASE-0001, CASE-0002 and CASE-0003."
+  },
+  {
+    "step": "D6",
+    "invoice": {
+      "vendor_id": "V-1004",
+      "exception": "PRICE_MISMATCH",
+      "variance_pct": 9.0,
+      "po_total": 100000,
+      "total": 109000
+    },
+    "expected": "ESCALATE by guardrail G3 because the learned range is up to 5%."
+  },
+  {
+    "step": "D7",
+    "invoice": {
+      "vendor_id": "V-1004",
+      "exception": "BANK_DETAILS_CHANGED",
+      "total": 100000
+    },
+    "expected": "ESCALATE by guardrail G1 regardless of history."
+  }
+]

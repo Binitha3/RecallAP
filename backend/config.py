@@ -2,6 +2,8 @@
 
 import os
 import threading
+import time
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -52,6 +54,7 @@ class Settings:
 settings = Settings.from_environment()
 _active_bank_id = settings.bank_id
 _active_bank_lock = threading.Lock()
+_bank_aliases: dict[str, str] = {}
 
 
 def get_active_bank_id() -> str:
@@ -65,3 +68,41 @@ def set_active_bank_id(bank_id: str) -> None:
     global _active_bank_id
     with _active_bank_lock:
         _active_bank_id = bank_id
+
+
+def resolve_bank_id(bank_id: str | None = None) -> str:
+    """Resolve a requested bank alias or return the current live bank."""
+    with _active_bank_lock:
+        if bank_id is None:
+            return _active_bank_id
+        return _bank_aliases.get(bank_id, bank_id)
+
+
+def rotate_bank_id(bank_id: str | None = None) -> str:
+    """Map an experiment/live bank name to a fresh physical bank identifier."""
+    global _active_bank_id
+    alias = bank_id or settings.bank_id
+    fresh_id = f"{alias}-demo-{int(time.time())}-{uuid.uuid4().hex[:6]}"
+    with _active_bank_lock:
+        if bank_id is None:
+            _active_bank_id = fresh_id
+        else:
+            _bank_aliases[alias] = fresh_id
+    return fresh_id
+
+
+def new_bank_id(bank_id: str | None = None) -> str:
+    """Return a fresh physical identifier without changing the active mapping."""
+    alias = bank_id or settings.bank_id
+    return f"{alias}-demo-{int(time.time())}-{uuid.uuid4().hex[:6]}"
+
+
+def register_bank_id(bank_id: str | None, fresh_id: str) -> None:
+    """Publish an already provisioned bank for an alias or as the live bank."""
+    global _active_bank_id
+    alias = bank_id or settings.bank_id
+    with _active_bank_lock:
+        if bank_id is None:
+            _active_bank_id = fresh_id
+        else:
+            _bank_aliases[alias] = fresh_id

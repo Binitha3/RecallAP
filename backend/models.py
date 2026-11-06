@@ -113,6 +113,7 @@ class HumanResolutionRequest(APIModel):
     action: str
     note: str = ""
     approver: str
+    reusable_precedent: bool = True
 
     @field_validator("action", "approver")
     @classmethod
@@ -151,11 +152,16 @@ class VendorBriefingResponse(APIModel):
 class MetricPoint(APIModel):
     n: int
     rolling_rate: float
-    auto_correct: float
-    human_touch: int
+    auto_correct: bool
+    human_touch: bool
 
 
 class MetricSummary(APIModel):
+    final_rate: float = 0
+    touchless_correct: int = 0
+    unsafe: int = 0
+    human_touches: int = 0
+    invoices: int = 0
     processed: int = 0
     touchless: int = 0
     human_touch: int = 0

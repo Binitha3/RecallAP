@@ -22,6 +22,7 @@ AMOUNT_LIMIT_RE = re.compile(
 )
 VARIANCE_RE = re.compile(r"\(([+-]?\d+(?:\.\d+)?)\s*%\)")
 HUMAN_RE = re.compile(r"Decided\s+by\s*:\s*human\b", re.IGNORECASE)
+MANUAL_ONLY_RE = re.compile(r"Automation\s+eligibility\s*:\s*manual-only\b", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -33,6 +34,7 @@ class Precedent:
     vendor: str
     exception_type: str
     human_decided: bool
+    reusable: bool
 
 
 def _vendor_matches(text: str, vendor: str) -> bool:
@@ -59,6 +61,7 @@ def _parse_precedent(memory: RecalledMemory, vendor: str) -> Precedent | None:
         vendor=vendor,
         exception_type=exception.group(1).upper(),
         human_decided=bool(HUMAN_RE.search(memory.text)),
+        reusable=not bool(MANUAL_ONLY_RE.search(memory.text)),
     )
 
 
@@ -114,7 +117,7 @@ def apply_guardrails(
     parsed = [item for item in parsed if item is not None]
     human_cited = [
         item for item in parsed
-        if item.human_decided and item.case_id in valid_citations
+        if item.human_decided and item.reusable and item.case_id in valid_citations
     ]
 
     if proposed_action != DecisionAction.ESCALATE:
@@ -122,14 +125,24 @@ def apply_guardrails(
             pass
         else:
             for exception in exceptions:
-                if not any(item.exception_type == exception.type for item in human_cited):
-                    _add(triggered, f"G2: no cited human precedent for {exception.type}")
+                matching_count = sum(
+                    1 for item in human_cited if item.exception_type == exception.type
+                )
+                if matching_count < 2:
+                    _add(
+                        triggered,
+                        f"G2: fewer than two cited human precedents for {exception.type}",
+                    )
 
     if len({exception.type for exception in exceptions}) > 1:
         covered = {
             exception.type
             for exception in exceptions
-            if any(item.exception_type == exception.type for item in parsed if item.human_decided)
+            if any(
+                item.exception_type == exception.type
+                for item in parsed
+                if item.human_decided and item.reusable
+            )
         }
         if covered and len(covered) != len({exception.type for exception in exceptions}):
             _add(triggered, "G7: only some exception types have human precedent")

@@ -67,3 +67,22 @@ def test_accounts_are_masked() -> None:
         bank_account="1234 5678 9012 4821",
     )
     assert vendor.bank_account == "XXXX4821"
+
+
+def test_resolution_reservation_is_idempotent_and_per_bank(tmp_path: Path) -> None:
+    store = InMemoryStore(
+        data_dir=Path("data-does-not-exist"),
+        stub_dir=STUB_DIR,
+        snapshot_path=tmp_path / "snapshot.json",
+    )
+    payload = {"invoice_id": "INV-1", "final_status": "AUTO_RESOLVED"}
+
+    first, created_first = store.reserve_resolution("bank-a", "sig-1", payload)
+    repeated, created_repeat = store.reserve_resolution("bank-a", "sig-1", payload)
+    other_bank, created_other_bank = store.reserve_resolution("bank-b", "sig-1", payload)
+
+    assert created_first is True
+    assert created_repeat is False
+    assert repeated["case_id"] == first["case_id"]
+    assert created_other_bank is True
+    assert other_bank["case_id"] == "CASE-0001"

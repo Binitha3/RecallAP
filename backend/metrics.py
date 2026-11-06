@@ -32,8 +32,18 @@ def get_metrics(memory: str = "on") -> MetricsResponse:
     if not isinstance(selected, dict):
         return _empty()
     try:
+        summary = selected.get("summary", {})
+        if not isinstance(summary, dict):
+            summary = {}
+        summary = {
+            **summary,
+            "processed": summary.get("processed", summary.get("invoices", 0)),
+            "touchless": summary.get("touchless", summary.get("touchless_correct", 0)),
+            "human_touch": summary.get("human_touch", summary.get("human_touches", 0)),
+            "auto_correct": summary.get("auto_correct", summary.get("final_rate", 0)),
+        }
         return MetricsResponse.model_validate(
-            {"points": selected.get("points", []), "summary": selected.get("summary", {})}
+            {"points": selected.get("points", []), "summary": summary}
         )
     except Exception:
         return _empty()

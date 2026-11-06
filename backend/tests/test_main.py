@@ -63,19 +63,21 @@ def test_memory_routes_metrics_and_demo_reset(monkeypatch) -> None:
     monkeypatch.setattr(main_module.memory, "reflect_vendor", lambda bank, vendor: "Net 30.")
     monkeypatch.setattr(main_module, "get_metrics", lambda mode: MetricsResponse(points=[], summary={}))
     monkeypatch.setattr(main_module.store, "clear_bank", lambda bank: None)
-    captured: list[str] = []
-    monkeypatch.setattr(main_module, "set_active_bank_id", captured.append)
+    captured: list[tuple[str | None, str]] = []
+    monkeypatch.setattr(main_module, "new_bank_id", lambda bank=None: "fresh-bank")
+    monkeypatch.setattr(main_module.memory, "create_bank", lambda bank: captured.append(("create", bank)))
+    monkeypatch.setattr(main_module, "register_bank_id", lambda alias, bank: captured.append((alias, bank)))
 
     search = main_module.search_memories("precedent", "bank-a")
     briefing = main_module.vendor_briefing("V-1004")
     metrics_result = main_module.metrics("off")
-    reset = main_module.reset_demo(main_module.DemoResetRequest(clear_memory=True))
+    reset = main_module.reset_demo(main_module.DemoResetRequest(clear_memory=True), bank=None)
 
     assert search[0].type == "resolution_case"
     assert briefing.vendor_id == "V-1004" and briefing.briefing_text == "Net 30."
     assert metrics_result.points == []
     assert reset.ok is True
-    assert captured and captured[0].startswith("recallap-demo-demo-")
+    assert captured == [("create", "fresh-bank"), (None, "fresh-bank")]
 
 
 
