@@ -1,0 +1,20 @@
+[
+  {
+    "id": "V-1004",
+    "name": "Deccan Freight Lines",
+    "gstin": "36ABCDE1234F1Z5",
+    "bank_account": "XXXX4821",
+    "payment_terms": "Net 30",
+    "category": "Logistics",
+    "currency": "INR"
+  },
+  {
+    "id": "V-1002",
+    "name": "Godavari IT Services",
+    "gstin": "36FGHIJ5678K1Z2",
+    "bank_account": "XXXX1189",
+    "payment_terms": "Net 30",
+    "category": "IT services",
+    "currency": "INR"
+  }
+]

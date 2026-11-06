@@ -1,0 +1,44 @@
+[
+  {
+    "id": "INV-2025-0731",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5521",
+    "invoice_number": "DFL/25/0731",
+    "date": "2025-03-12",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [{"item": "Freight HYD-BLR", "qty": 10, "unit_price": 10400}],
+    "total": 104000,
+    "seq": 1
+  },
+  {
+    "id": "INV-2025-0732",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5522",
+    "invoice_number": "DFL/25/0732",
+    "date": "2025-03-15",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [{"item": "Freight HYD-BLR", "qty": 10, "unit_price": 10320}],
+    "total": 103200,
+    "seq": 2
+  },
+  {
+    "id": "INV-2025-0801",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "GIT/25/0801",
+    "date": "2025-03-17",
+    "currency": "INR",
+    "gstin": "36FGHIJ5678K1Z2",
+    "gst_rate": 18,
+    "bank_account": "XXXX1189",
+    "lines": [{"item": "Annual support renewal", "qty": 1, "unit_price": 32000}],
+    "total": 32000,
+    "seq": 3
+  }
+]

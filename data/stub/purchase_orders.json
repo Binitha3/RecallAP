@@ -1,0 +1,16 @@
+[
+  {
+    "po_number": "PO-5521",
+    "vendor_id": "V-1004",
+    "total": 100000,
+    "currency": "INR",
+    "lines": [{"item": "Freight HYD-BLR", "qty": 10, "unit_price": 10000}]
+  },
+  {
+    "po_number": "PO-5522",
+    "vendor_id": "V-1004",
+    "total": 100000,
+    "currency": "INR",
+    "lines": [{"item": "Freight HYD-BLR", "qty": 10, "unit_price": 10000}]
+  }
+]
