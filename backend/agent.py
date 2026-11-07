@@ -70,6 +70,13 @@ def _status_for(action: DecisionAction) -> str:
     return "NEEDS_REVIEW"
 
 
+def _sync_case_counter(bank_id: str) -> None:
+    """Reconcile the local sequence with Hindsight before reserving a CASE ID."""
+    if not store.case_counter_synced(bank_id):
+        highest_existing = memory.highest_case_number(bank_id)
+        store.sync_case_counter(bank_id, highest_existing)
+
+
 def _memory_type_for(exception: InvoiceException) -> str:
     return "resolution_case" if exception.type else "vendor_profile"
 
@@ -156,6 +163,7 @@ def process_context(
     final_status = _status_for(decision.action)
 
     if settings.retain_agent_decisions and final_status in TOUCHLESS_STATUSES and exceptions:
+        _sync_case_counter(active_bank)
         case_id = store.next_case_id(active_bank)
         text = _case_text(case_id, invoice, vendor, exceptions[0], decision, "agent")
         memory.retain_case(active_bank, text, context=_memory_type_for(exceptions[0]), timestamp=invoice.date)
@@ -237,6 +245,7 @@ def resolve_invoice(
         separators=(",", ":"),
     )
     request_key = hashlib.sha256(request_signature.encode("utf-8")).hexdigest()
+    _sync_case_counter(active_bank)
     reservation, created = store.reserve_resolution(
         active_bank,
         request_key,

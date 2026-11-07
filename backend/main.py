@@ -133,6 +133,11 @@ def process_invoice_route(
         return process_invoice(invoice_id, memory_enabled=memory == "on", bank_id=bank)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail="Invoice or vendor not found") from exc
+    except memory.HindsightCaseCounterError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Could not verify bank case IDs; decision was not recorded",
+        ) from exc
 
 
 @app.post("/api/invoices/{invoice_id}/resolve", response_model=HumanResolutionResponse)
@@ -166,6 +171,11 @@ def resolve_invoice_route(
         raise HTTPException(status_code=404, detail="Invoice or vendor not found") from exc
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except memory.HindsightCaseCounterError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Could not verify bank case IDs; approval was not recorded",
+        ) from exc
 
 
 @app.get("/api/memory/search", response_model=list[MemorySearchResult])
@@ -217,7 +227,11 @@ def reset_demo(
     body: DemoResetRequest,
     bank: str | None = Query(None, min_length=1, max_length=100),
 ) -> DemoResetResponse:
-    """Clear local state and rotate the selected Hindsight bank when requested."""
+    """Switch the selected alias to a new empty Hindsight bank when requested.
+
+    The previous physical bank is retained in Hindsight; only its local snapshot
+    is cleared. A fresh physical bank keeps old memories out of the new demo.
+    """
     current_bank = resolve_bank_id(bank)
     if body.clear_memory:
         fresh_bank = new_bank_id(bank)
@@ -228,6 +242,7 @@ def reset_demo(
             raise HTTPException(status_code=503, detail="Could not create an isolated memory bank") from exc
         store.clear_bank(current_bank)
         register_bank_id(bank, fresh_bank)
+        store.sync_case_counter(fresh_bank, 0)
     else:
         store.clear_bank(current_bank)
     return DemoResetResponse(ok=True)

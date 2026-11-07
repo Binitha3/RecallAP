@@ -156,7 +156,7 @@ For an invoice exception, RecallAP asks Hindsight three focused questions: for a
 
 RecallAP sends the vendor, detected exception, and invoice detail to the Hindsight bank. Hindsight returns extracted facts that can be easier to search, but an extracted fact may omit exact wording such as a case number. The adapter therefore reads the `case_id` metadata and requests source chunks; for case memories it uses the original retained chunk as the citation text. If the metadata is missing, it looks for the ID in that source chunk. The policy layer then checks the case ID, vendor, exception, decision-maker marker, and range before allowing the LLM's recommendation.
 
-The bank ID is not hard-coded into the Hindsight client. `BANK_ID` selects the default bank, API routes can accept a bank override where specified, and demo reset rotates to a fresh bank instead of assuming a bank-delete API.
+The bank ID is not hard-coded into the Hindsight client. `BANK_ID` selects the default bank, API routes can accept a bank override where specified, and demo reset rotates the active alias to a fresh physical bank. Reset clears the local snapshot for the previous bank; it does not delete that old Hindsight bank. CASE numbers are scoped to the physical bank, and before allocating an ID in a bank the backend reconciles its local counter with existing Hindsight case metadata and legacy case text.
 
 ## Hindsight verification notes
 

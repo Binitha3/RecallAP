@@ -19,6 +19,10 @@ CASE_ID_RE = re.compile(r"CASE-\d{4}")
 class HindsightSearchError(RuntimeError):
     """Raised when Hindsight could not execute a memory search."""
 
+
+class HindsightCaseCounterError(RuntimeError):
+    """Raised when the bank could not be scanned to avoid reusing a CASE ID."""
+
 _client: Any | None = None
 _client_lock = threading.Lock()
 
@@ -142,6 +146,41 @@ def retain_case(
             if attempt < 2:
                 time.sleep(0.5 * (attempt + 1))
     return False
+
+
+def highest_case_number(bank_id: str) -> int:
+    """Find the largest CASE number already stored in a bank, including legacy text."""
+    if not bank_id:
+        raise ValueError("bank_id is required")
+    highest = 0
+    offset = 0
+    page_size = 100
+    try:
+        client = _get_client()
+        while True:
+            page = client.list_memories(bank_id=bank_id, limit=page_size, offset=offset)
+            items = getattr(page, "items", None) or []
+            for item in items:
+                metadata = getattr(item, "metadata", None)
+                if isinstance(metadata, dict):
+                    case_id = metadata.get("case_id")
+                    match = CASE_ID_RE.fullmatch(case_id) if isinstance(case_id, str) else None
+                    if match:
+                        highest = max(highest, int(match.group(0)[5:]))
+                searchable = " ".join(
+                    str(value)
+                    for value in (getattr(item, "text", ""), getattr(item, "entities", ""))
+                    if value
+                )
+                for case_id in CASE_ID_RE.findall(searchable):
+                    highest = max(highest, int(case_id[5:]))
+            offset += len(items)
+            total = getattr(page, "total", offset)
+            if not items or offset >= total:
+                return highest
+    except Exception as exc:
+        logger.warning("Could not scan Hindsight bank for existing CASE IDs: %s", exc)
+        raise HindsightCaseCounterError("Could not verify existing CASE IDs in Hindsight") from exc
 
 
 def recall_for(

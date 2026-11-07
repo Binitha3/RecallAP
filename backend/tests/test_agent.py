@@ -81,6 +81,7 @@ def test_agent_strips_hallucinated_citation_before_confidence_calibration(monkey
 
 def test_human_resolution_retains_human_tag_and_case_id(monkeypatch: Any) -> None:
     captured: list[dict[str, Any]] = []
+    monkeypatch.setattr(agent.store, "case_counter_synced", lambda bank: True)
     monkeypatch.setattr(
         agent.store,
         "reserve_resolution",
@@ -114,6 +115,7 @@ def test_human_resolution_retains_human_tag_and_case_id(monkeypatch: Any) -> Non
 def test_repeating_same_human_resolution_does_not_retain_twice(monkeypatch: Any) -> None:
     reservations: dict[str, dict[str, Any]] = {}
     retains: list[str] = []
+    monkeypatch.setattr(agent.store, "case_counter_synced", lambda bank: True)
 
     def reserve(bank: str, key: str, record: dict[str, Any]) -> tuple[dict[str, Any], bool]:
         if key in reservations:

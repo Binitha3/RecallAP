@@ -105,6 +105,12 @@ def test_memory_routes_metrics_and_demo_reset(monkeypatch) -> None:
     monkeypatch.setattr(main_module.memory, "reflect_vendor", lambda bank, vendor: "Net 30.")
     monkeypatch.setattr(main_module, "get_metrics", lambda mode: MetricsResponse(points=[], summary={}))
     monkeypatch.setattr(main_module.store, "clear_bank", lambda bank: None)
+    synced: list[tuple[str, int]] = []
+    monkeypatch.setattr(
+        main_module.store,
+        "sync_case_counter",
+        lambda bank, highest: synced.append((bank, highest)),
+    )
     captured: list[tuple[str | None, str]] = []
     monkeypatch.setattr(main_module, "new_bank_id", lambda bank=None: "fresh-bank")
     monkeypatch.setattr(main_module.memory, "create_bank", lambda bank: captured.append(("create", bank)))
@@ -125,6 +131,7 @@ def test_memory_routes_metrics_and_demo_reset(monkeypatch) -> None:
     assert metrics_response.headers["cache-control"] == "no-store"
     assert reset.ok is True
     assert captured == [("create", "fresh-bank"), (None, "fresh-bank")]
+    assert synced == [("fresh-bank", 0)]
 
 
 def test_resolve_route_reports_bank_and_retained_state(monkeypatch) -> None:

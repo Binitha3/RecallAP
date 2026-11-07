@@ -44,6 +44,18 @@ def test_case_counter_is_per_bank_and_thread_safe(tmp_path: Path) -> None:
     assert store.next_case_id("other-bank") == "CASE-0001"
 
 
+def test_case_counter_sync_keeps_local_counter_above_hindsight_max(tmp_path: Path) -> None:
+    store = InMemoryStore(
+        data_dir=Path("data-does-not-exist"),
+        stub_dir=STUB_DIR,
+        snapshot_path=tmp_path / "snapshot.json",
+    )
+    store.sync_case_counter("bank-a", 5)
+
+    assert store.case_counter_synced("bank-a") is True
+    assert store.next_case_id("bank-a") == "CASE-0006"
+
+
 def test_decisions_survive_snapshot_reload(tmp_path: Path) -> None:
     snapshot = tmp_path / "snapshot.json"
     store = InMemoryStore(

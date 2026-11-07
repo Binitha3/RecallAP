@@ -41,6 +41,7 @@ class InMemoryStore:
         self.lock = threading.RLock()
         self._decisions: dict[str, list[dict[str, Any]]] = {}
         self._case_counters: dict[str, int] = {}
+        self._case_counters_synced: set[str] = set()
         snapshot = _read_json(snapshot_path, {})
         if isinstance(snapshot, dict):
             self._decisions = snapshot.get("decisions", {})
@@ -131,6 +132,20 @@ class InMemoryStore:
             self._write_snapshot_locked()
             return f"CASE-{next_number:04d}"
 
+    def case_counter_synced(self, bank_id: str) -> bool:
+        """Whether this process has reconciled a bank's counter with Hindsight."""
+        with self.lock:
+            return bank_id in self._case_counters_synced
+
+    def sync_case_counter(self, bank_id: str, highest_existing: int) -> None:
+        """Persist the maximum known case number before allocating another ID."""
+        with self.lock:
+            self._case_counters[bank_id] = max(
+                self._case_counters.get(bank_id, 0), highest_existing
+            )
+            self._case_counters_synced.add(bank_id)
+            self._write_snapshot_locked()
+
     def save_decision(self, bank_id: str, decision: dict[str, Any]) -> None:
         """Append a decision and persist a JSON snapshot atomically."""
         with self.lock:
@@ -149,6 +164,7 @@ class InMemoryStore:
         with self.lock:
             self._decisions.pop(bank_id, None)
             self._case_counters.pop(bank_id, None)
+            self._case_counters_synced.discard(bank_id)
             self._write_snapshot_locked()
 
     def reserve_resolution(

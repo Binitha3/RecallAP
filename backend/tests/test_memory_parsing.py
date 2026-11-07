@@ -236,3 +236,26 @@ def test_search_memory_surfaces_hindsight_failures(monkeypatch: Any) -> None:
         assert str(exc) == "Hindsight memory search failed"
     else:
         raise AssertionError("Hindsight search failure should not look like an empty result")
+
+
+def test_highest_case_number_scans_metadata_and_legacy_text(monkeypatch: Any) -> None:
+    class FakeClient:
+        def list_memories(self, *, bank_id: str, limit: int, offset: int) -> Any:
+            assert bank_id == "bank-a"
+            if offset == 0:
+                items = [
+                    SimpleNamespace(
+                        metadata={"case_id": "CASE-0004"},
+                        text="Legacy source includes CASE-0006.",
+                        entities="",
+                    )
+                ]
+                return SimpleNamespace(items=items, total=2)
+            return SimpleNamespace(
+                items=[SimpleNamespace(metadata={}, text="", entities="CASE-0005")],
+                total=2,
+            )
+
+    monkeypatch.setattr(memory, "_get_client", lambda: FakeClient())
+
+    assert memory.highest_case_number("bank-a") == 6
