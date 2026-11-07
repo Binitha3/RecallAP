@@ -1,0 +1,142 @@
+[
+  {
+    "id": "INV-2025-7301",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7301",
+    "date": "2025-03-12",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10400.0
+      }
+    ],
+    "total": 104000.0,
+    "seq": 1
+  },
+  {
+    "id": "INV-2025-7302",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7302",
+    "date": "2025-03-14",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10320.0
+      }
+    ],
+    "total": 103200.0,
+    "seq": 2
+  },
+  {
+    "id": "INV-2025-7303",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7303",
+    "date": "2025-03-16",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10450.0
+      }
+    ],
+    "total": 104500.0,
+    "seq": 3
+  },
+  {
+    "id": "INV-2025-7304",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7304",
+    "date": "2025-03-18",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 1600.0
+      }
+    ],
+    "total": 32000.0,
+    "seq": 4
+  },
+  {
+    "id": "INV-2025-7305",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7305",
+    "date": "2025-03-20",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10380.0
+      }
+    ],
+    "total": 103800.0,
+    "seq": 5
+  },
+  {
+    "id": "INV-2025-7306",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7306",
+    "date": "2025-03-22",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10900.0
+      }
+    ],
+    "total": 109000.0,
+    "seq": 6
+  },
+  {
+    "id": "INV-2025-7307",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7307",
+    "date": "2025-03-24",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX9999",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 7
+  }
+]

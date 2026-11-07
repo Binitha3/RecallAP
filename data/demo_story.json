@@ -1,75 +1,177 @@
 [
   {
     "step": "D1",
+    "invoice_id": "INV-2025-7301",
     "invoice": {
+      "id": "INV-2025-7301",
       "vendor_id": "V-1004",
-      "exception": "PRICE_MISMATCH",
-      "variance_pct": 4.0,
-      "po_total": 100000,
-      "total": 104000
+      "po_number": "PO-5524",
+      "invoice_number": "1004/25/7301",
+      "date": "2025-03-12",
+      "currency": "INR",
+      "gstin": "36ABCDE1234F1Z5",
+      "gst_rate": 18,
+      "bank_account": "XXXX4821",
+      "lines": [
+        {
+          "item": "Freight HYD-BLR",
+          "qty": 10,
+          "unit_price": 10400.0
+        }
+      ],
+      "total": 104000.0,
+      "seq": 1
     },
-    "expected": "ESCALATE first (cold start); Priya approves with note: surcharge up to 5% per contract amendment; retain CASE-0001."
+    "expected": "ESCALATE first (cold start); Priya approves with note: 'surcharge up to 5% per contract amendment'; retain CASE-0001."
   },
   {
     "step": "D2",
+    "invoice_id": "INV-2025-7302",
     "invoice": {
+      "id": "INV-2025-7302",
       "vendor_id": "V-1004",
-      "exception": "PRICE_MISMATCH",
-      "variance_pct": 3.2,
-      "po_total": 100000,
-      "total": 103200
+      "po_number": "PO-5524",
+      "invoice_number": "1004/25/7302",
+      "date": "2025-03-14",
+      "currency": "INR",
+      "gstin": "36ABCDE1234F1Z5",
+      "gst_rate": 18,
+      "bank_account": "XXXX4821",
+      "lines": [
+        {
+          "item": "Freight HYD-BLR",
+          "qty": 10,
+          "unit_price": 10320.0
+        }
+      ],
+      "total": 103200.0,
+      "seq": 2
     },
     "expected": "Recall CASE-0001; draft approval and ask human to confirm (moderate confidence)."
   },
   {
     "step": "D3",
+    "invoice_id": "INV-2025-7303",
     "invoice": {
+      "id": "INV-2025-7303",
       "vendor_id": "V-1004",
-      "exception": "PRICE_MISMATCH",
-      "variance_pct": 4.5,
-      "po_total": 100000,
-      "total": 104500
+      "po_number": "PO-5524",
+      "invoice_number": "1004/25/7303",
+      "date": "2025-03-16",
+      "currency": "INR",
+      "gstin": "36ABCDE1234F1Z5",
+      "gst_rate": 18,
+      "bank_account": "XXXX4821",
+      "lines": [
+        {
+          "item": "Freight HYD-BLR",
+          "qty": 10,
+          "unit_price": 10450.0
+        }
+      ],
+      "total": 104500.0,
+      "seq": 3
     },
     "expected": "Recall two similar cases; recommend approval; human confirms."
   },
   {
     "step": "D4",
+    "invoice_id": "INV-2025-7304",
     "invoice": {
+      "id": "INV-2025-7304",
       "vendor_id": "V-1002",
-      "exception": "MISSING_PO",
-      "total": 32000
+      "po_number": "",
+      "invoice_number": "1002/25/7304",
+      "date": "2025-03-18",
+      "currency": "INR",
+      "gstin": "36AABCG1002F1Z5",
+      "gst_rate": 18,
+      "bank_account": "XXXX1002",
+      "lines": [
+        {
+          "item": "Annual software support",
+          "qty": 20,
+          "unit_price": 1600.0
+        }
+      ],
+      "total": 32000.0,
+      "seq": 4
     },
-    "expected": "ESCALATE; human approves with note that renewals below Rs. 50,000 can be handled under the master contract."
+    "expected": "ESCALATE; human approves with note that renewals below Rs. 50,000 can be handled under master contract."
   },
   {
     "step": "D5",
+    "invoice_id": "INV-2025-7305",
     "invoice": {
+      "id": "INV-2025-7305",
       "vendor_id": "V-1004",
-      "exception": "PRICE_MISMATCH",
-      "variance_pct": 3.8,
-      "po_total": 100000,
-      "total": 103800
+      "po_number": "PO-5524",
+      "invoice_number": "1004/25/7305",
+      "date": "2025-03-20",
+      "currency": "INR",
+      "gstin": "36ABCDE1234F1Z5",
+      "gst_rate": 18,
+      "bank_account": "XXXX4821",
+      "lines": [
+        {
+          "item": "Freight HYD-BLR",
+          "qty": 10,
+          "unit_price": 10380.0
+        }
+      ],
+      "total": 103800.0,
+      "seq": 5
     },
-    "expected": "AUTO_APPROVE_WITH_NOTE citing CASE-0001, CASE-0002 and CASE-0003."
+    "expected": "AUTO_APPROVE_WITH_NOTE touchlessly citing CASE-0001, CASE-0002 and CASE-0003."
   },
   {
     "step": "D6",
+    "invoice_id": "INV-2025-7306",
     "invoice": {
+      "id": "INV-2025-7306",
       "vendor_id": "V-1004",
-      "exception": "PRICE_MISMATCH",
-      "variance_pct": 9.0,
-      "po_total": 100000,
-      "total": 109000
+      "po_number": "PO-5524",
+      "invoice_number": "1004/25/7306",
+      "date": "2025-03-22",
+      "currency": "INR",
+      "gstin": "36ABCDE1234F1Z5",
+      "gst_rate": 18,
+      "bank_account": "XXXX4821",
+      "lines": [
+        {
+          "item": "Freight HYD-BLR",
+          "qty": 10,
+          "unit_price": 10900.0
+        }
+      ],
+      "total": 109000.0,
+      "seq": 6
     },
-    "expected": "ESCALATE by guardrail G3 because the learned range is up to 5%."
+    "expected": "ESCALATE by guardrail G3 because variance (9.0%) exceeds the learned 5% ceiling."
   },
   {
     "step": "D7",
+    "invoice_id": "INV-2025-7307",
     "invoice": {
+      "id": "INV-2025-7307",
       "vendor_id": "V-1004",
-      "exception": "BANK_DETAILS_CHANGED",
-      "total": 100000
+      "po_number": "PO-5524",
+      "invoice_number": "1004/25/7307",
+      "date": "2025-03-24",
+      "currency": "INR",
+      "gstin": "36ABCDE1234F1Z5",
+      "gst_rate": 18,
+      "bank_account": "XXXX9999",
+      "lines": [
+        {
+          "item": "Freight HYD-BLR",
+          "qty": 10,
+          "unit_price": 10000.0
+        }
+      ],
+      "total": 100000.0,
+      "seq": 7
     },
-    "expected": "ESCALATE by guardrail G1 regardless of history."
+    "expected": "ESCALATE by guardrail G1 immediately because bank account changed (XXXX9999 vs XXXX4821)."
   }
 ]

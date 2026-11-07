@@ -21,10 +21,50 @@
   },
   {
     "id": "INV-2025-7302",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7302",
+    "date": "2025-03-14",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10320.0
+      }
+    ],
+    "total": 103200.0,
+    "seq": 2
+  },
+  {
+    "id": "INV-2025-7303",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7303",
+    "date": "2025-03-16",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10450.0
+      }
+    ],
+    "total": 104500.0,
+    "seq": 3
+  },
+  {
+    "id": "INV-2025-7304",
     "vendor_id": "V-1002",
     "po_number": "",
-    "invoice_number": "1002/25/7302",
-    "date": "2025-03-16",
+    "invoice_number": "1002/25/7304",
+    "date": "2025-03-18",
     "currency": "INR",
     "gstin": "36AABCG1002F1Z5",
     "gst_rate": 18,
@@ -33,38 +73,78 @@
       {
         "item": "Annual software support",
         "qty": 20,
-        "unit_price": 2400.0
+        "unit_price": 1600.0
       }
     ],
-    "total": 48000.0,
-    "seq": 2
+    "total": 32000.0,
+    "seq": 4
   },
   {
-    "id": "INV-2025-7303",
-    "vendor_id": "V-1003",
-    "po_number": "PO-5523",
-    "invoice_number": "1003/25/7303",
+    "id": "INV-2025-7305",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7305",
     "date": "2025-03-20",
     "currency": "INR",
-    "gstin": "36AABCH1003F1Z5",
+    "gstin": "36ABCDE1234F1Z5",
     "gst_rate": 18,
-    "bank_account": "XXXX1003",
+    "bank_account": "XXXX4821",
     "lines": [
       {
-        "item": "Facility maintenance",
+        "item": "Freight HYD-BLR",
         "qty": 10,
-        "unit_price": 5000.0
+        "unit_price": 10380.0
       }
     ],
-    "total": 50000.0,
-    "seq": 3
+    "total": 103800.0,
+    "seq": 5
   },
   {
-    "id": "INV-2025-7304",
+    "id": "INV-2025-7306",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7306",
+    "date": "2025-03-22",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10900.0
+      }
+    ],
+    "total": 109000.0,
+    "seq": 6
+  },
+  {
+    "id": "INV-2025-7307",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7307",
+    "date": "2025-03-24",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX9999",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 7
+  },
+  {
+    "id": "INV-2025-7308",
     "vendor_id": "V-1001",
     "po_number": "PO-5521",
-    "invoice_number": "1001/25/7304",
-    "date": "2025-03-24",
+    "invoice_number": "1001/25/7308",
+    "date": "2025-03-26",
     "currency": "INR",
     "gstin": "36AABCC1001F1Z5",
     "gst_rate": 5,
@@ -77,14 +157,34 @@
       }
     ],
     "total": 25250.0,
-    "seq": 4
+    "seq": 8
   },
   {
-    "id": "INV-2025-7305",
+    "id": "INV-2025-7309",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7309",
+    "date": "2025-03-28",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 9
+  },
+  {
+    "id": "INV-2025-7310",
     "vendor_id": "V-1005",
     "po_number": "PO-5525",
-    "invoice_number": "1005/25/7305",
-    "date": "2025-03-28",
+    "invoice_number": "1005/25/7310",
+    "date": "2025-03-30",
     "currency": "INR",
     "gstin": "29AABCS1005F1Z5",
     "gst_rate": 5,
@@ -97,13 +197,13 @@
       }
     ],
     "total": 25000.0,
-    "seq": 5
+    "seq": 10
   },
   {
-    "id": "INV-2025-7306",
+    "id": "INV-2025-7311",
     "vendor_id": "V-1006",
     "po_number": "PO-5526",
-    "invoice_number": "1006/25/7306",
+    "invoice_number": "1006/25/7311",
     "date": "2025-04-01",
     "currency": "USD",
     "gstin": "29AABCK1006F1Z5",
@@ -117,14 +217,14 @@
       }
     ],
     "total": 40000.0,
-    "seq": 6
+    "seq": 11
   },
   {
-    "id": "INV-2025-7307",
+    "id": "INV-2025-7312",
     "vendor_id": "V-1007",
     "po_number": "PO-5527",
-    "invoice_number": "1007/25/7307",
-    "date": "2025-04-05",
+    "invoice_number": "1007/25/7312",
+    "date": "2025-04-03",
     "currency": "INR",
     "gstin": "36AABCB1007F1Z5",
     "gst_rate": 18,
@@ -137,14 +237,14 @@
       }
     ],
     "total": 31800.0,
-    "seq": 7
+    "seq": 12
   },
   {
-    "id": "INV-2025-7308",
+    "id": "INV-2025-7313",
     "vendor_id": "V-1008",
     "po_number": "PO-5528",
-    "invoice_number": "1008/25/DUP01",
-    "date": "2025-04-09",
+    "invoice_number": "1008/25/7313",
+    "date": "2025-04-05",
     "currency": "INR",
     "gstin": "36AABCN1008F1Z5",
     "gst_rate": 18,
@@ -157,14 +257,14 @@
       }
     ],
     "total": 50000.0,
-    "seq": 8
+    "seq": 13
   },
   {
-    "id": "INV-2025-7309",
+    "id": "INV-2025-7314",
     "vendor_id": "V-1009",
     "po_number": "PO-5529",
-    "invoice_number": "1009/25/7309",
-    "date": "2025-04-13",
+    "invoice_number": "1009/25/7314",
+    "date": "2025-04-07",
     "currency": "INR",
     "gstin": "36AABCT1009F1Z5",
     "gst_rate": 18,
@@ -177,14 +277,14 @@
       }
     ],
     "total": 102000.0,
-    "seq": 9
+    "seq": 14
   },
   {
-    "id": "INV-2025-7310",
+    "id": "INV-2025-7315",
     "vendor_id": "V-1010",
     "po_number": "",
-    "invoice_number": "1010/25/7310",
-    "date": "2025-04-17",
+    "invoice_number": "1010/25/7315",
+    "date": "2025-04-09",
     "currency": "INR",
     "gstin": "36AABCP1010F1Z5",
     "gst_rate": 18,
@@ -197,14 +297,14 @@
       }
     ],
     "total": 20000.0,
-    "seq": 10
+    "seq": 15
   },
   {
-    "id": "INV-2025-7311",
+    "id": "INV-2025-7316",
     "vendor_id": "V-1011",
     "po_number": "PO-5531",
-    "invoice_number": "1011/25/7311",
-    "date": "2025-04-21",
+    "invoice_number": "1011/25/7316",
+    "date": "2025-04-11",
     "currency": "INR",
     "gstin": "29OLDGSTIN0001Z1",
     "gst_rate": 18,
@@ -217,14 +317,14 @@
       }
     ],
     "total": 45000.0,
-    "seq": 11
+    "seq": 16
   },
   {
-    "id": "INV-2025-7312",
+    "id": "INV-2025-7317",
     "vendor_id": "V-1012",
     "po_number": "PO-5532",
-    "invoice_number": "1012/25/7312",
-    "date": "2025-04-25",
+    "invoice_number": "1012/25/7317",
+    "date": "2025-04-13",
     "currency": "INR",
     "gstin": "36AABCM1012F1Z5",
     "gst_rate": 18,
@@ -237,13 +337,153 @@
       }
     ],
     "total": 40000.0,
-    "seq": 12
+    "seq": 17
   },
   {
-    "id": "INV-2025-7313",
+    "id": "INV-2025-7318",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7318",
+    "date": "2025-04-15",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 18
+  },
+  {
+    "id": "INV-2025-7319",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7319",
+    "date": "2025-04-17",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2400.0
+      }
+    ],
+    "total": 48000.0,
+    "seq": 19
+  },
+  {
+    "id": "INV-2025-7320",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7320",
+    "date": "2025-04-19",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1500.0
+      }
+    ],
+    "total": 30000.0,
+    "seq": 20
+  },
+  {
+    "id": "INV-2025-7321",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7321",
+    "date": "2025-04-21",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 21
+  },
+  {
+    "id": "INV-2025-7322",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7322",
+    "date": "2025-04-23",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 22
+  },
+  {
+    "id": "INV-2025-7323",
+    "vendor_id": "V-1006",
+    "po_number": "PO-5526",
+    "invoice_number": "1006/25/7323",
+    "date": "2025-04-25",
+    "currency": "USD",
+    "gstin": "29AABCK1006F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1006",
+    "lines": [
+      {
+        "item": "Industrial components",
+        "qty": 10,
+        "unit_price": 4000.0
+      }
+    ],
+    "total": 40000.0,
+    "seq": 23
+  },
+  {
+    "id": "INV-2025-7324",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7324",
+    "date": "2025-04-27",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10150.0
+      }
+    ],
+    "total": 101500.0,
+    "seq": 24
+  },
+  {
+    "id": "INV-2025-7325",
     "vendor_id": "V-1004",
     "po_number": "PO-5524",
-    "invoice_number": "1004/25/7313",
+    "invoice_number": "1004/25/7325",
     "date": "2025-04-29",
     "currency": "INR",
     "gstin": "36ABCDE1234F1Z5",
@@ -257,274 +497,14 @@
       }
     ],
     "total": 100000.0,
-    "seq": 13
-  },
-  {
-    "id": "INV-2025-7314",
-    "vendor_id": "V-1002",
-    "po_number": "",
-    "invoice_number": "1002/25/7314",
-    "date": "2025-05-03",
-    "currency": "INR",
-    "gstin": "36AABCG1002F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1002",
-    "lines": [
-      {
-        "item": "Annual software support",
-        "qty": 20,
-        "unit_price": 1600.0
-      }
-    ],
-    "total": 32000.0,
-    "seq": 14
-  },
-  {
-    "id": "INV-2025-7315",
-    "vendor_id": "V-1004",
-    "po_number": "PO-5524",
-    "invoice_number": "1004/25/7315",
-    "date": "2025-05-07",
-    "currency": "INR",
-    "gstin": "36ABCDE1234F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX4821",
-    "lines": [
-      {
-        "item": "Freight HYD-BLR",
-        "qty": 10,
-        "unit_price": 10490.0
-      }
-    ],
-    "total": 104900.0,
-    "seq": 15
-  },
-  {
-    "id": "INV-2025-7316",
-    "vendor_id": "V-1001",
-    "po_number": "PO-5521",
-    "invoice_number": "1001/25/7316",
-    "date": "2025-05-11",
-    "currency": "INR",
-    "gstin": "36AABCC1001F1Z5",
-    "gst_rate": 5,
-    "bank_account": "XXXX1001",
-    "lines": [
-      {
-        "item": "Office paper cartons",
-        "qty": 20,
-        "unit_price": 1313.75
-      }
-    ],
-    "total": 26275.0,
-    "seq": 16
-  },
-  {
-    "id": "INV-2025-7317",
-    "vendor_id": "V-1007",
-    "po_number": "PO-5527",
-    "invoice_number": "1007/25/7317",
-    "date": "2025-05-15",
-    "currency": "INR",
-    "gstin": "36AABCB1007F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1007",
-    "lines": [
-      {
-        "item": "Cloud hosting usage",
-        "qty": 20,
-        "unit_price": 1605.0
-      }
-    ],
-    "total": 32100.0,
-    "seq": 17
-  },
-  {
-    "id": "INV-2025-7318",
-    "vendor_id": "V-1009",
-    "po_number": "PO-5529",
-    "invoice_number": "1009/25/7318",
-    "date": "2025-05-19",
-    "currency": "INR",
-    "gstin": "36AABCT1009F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1009",
-    "lines": [
-      {
-        "item": "Steel sheets",
-        "qty": 10,
-        "unit_price": 10220.0
-      }
-    ],
-    "total": 102200.0,
-    "seq": 18
-  },
-  {
-    "id": "INV-2025-7319",
-    "vendor_id": "V-1002",
-    "po_number": "",
-    "invoice_number": "1002/25/7319",
-    "date": "2025-05-23",
-    "currency": "INR",
-    "gstin": "36AABCG1002F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1002",
-    "lines": [
-      {
-        "item": "Annual software support",
-        "qty": 20,
-        "unit_price": 2100.0
-      }
-    ],
-    "total": 42000.0,
-    "seq": 19
-  },
-  {
-    "id": "INV-2025-7320",
-    "vendor_id": "V-1003",
-    "po_number": "PO-5523",
-    "invoice_number": "1003/25/7320",
-    "date": "2025-05-27",
-    "currency": "INR",
-    "gstin": "36AABCH1003F1Z5",
-    "gst_rate": 12,
-    "bank_account": "XXXX1003",
-    "lines": [
-      {
-        "item": "Facility maintenance",
-        "qty": 10,
-        "unit_price": 5000.0
-      }
-    ],
-    "total": 50000.0,
-    "seq": 20
-  },
-  {
-    "id": "INV-2025-7321",
-    "vendor_id": "V-1005",
-    "po_number": "PO-5525",
-    "invoice_number": "1005/25/7321",
-    "date": "2025-05-31",
-    "currency": "INR",
-    "gstin": "29AABCS1005F1Z5",
-    "gst_rate": 5,
-    "bank_account": "XXXX1005",
-    "lines": [
-      {
-        "item": "Packaging cartons",
-        "qty": 20,
-        "unit_price": 1250.0
-      }
-    ],
-    "total": 25000.0,
-    "seq": 21
-  },
-  {
-    "id": "INV-2025-7322",
-    "vendor_id": "V-1006",
-    "po_number": "PO-5526",
-    "invoice_number": "1006/25/7322",
-    "date": "2025-06-04",
-    "currency": "USD",
-    "gstin": "29AABCK1006F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1006",
-    "lines": [
-      {
-        "item": "Industrial components",
-        "qty": 10,
-        "unit_price": 4000.0
-      }
-    ],
-    "total": 40000.0,
-    "seq": 22
-  },
-  {
-    "id": "INV-2025-7323",
-    "vendor_id": "V-1008",
-    "po_number": "PO-5528",
-    "invoice_number": "1008/25/DUP01",
-    "date": "2025-06-08",
-    "currency": "INR",
-    "gstin": "36AABCN1008F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1008",
-    "lines": [
-      {
-        "item": "Catering services",
-        "qty": 20,
-        "unit_price": 2500.0
-      }
-    ],
-    "total": 50000.0,
-    "seq": 23
-  },
-  {
-    "id": "INV-2025-7324",
-    "vendor_id": "V-1010",
-    "po_number": "",
-    "invoice_number": "1010/25/7324",
-    "date": "2025-06-12",
-    "currency": "INR",
-    "gstin": "36AABCP1010F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1010",
-    "lines": [
-      {
-        "item": "Marketing print order",
-        "qty": 20,
-        "unit_price": 1250.0
-      }
-    ],
-    "total": 25000.0,
-    "seq": 24
-  },
-  {
-    "id": "INV-2025-7325",
-    "vendor_id": "V-1011",
-    "po_number": "PO-5531",
-    "invoice_number": "1011/25/7325",
-    "date": "2025-06-16",
-    "currency": "INR",
-    "gstin": "29OLDGSTIN0001Z1",
-    "gst_rate": 18,
-    "bank_account": "XXXX1011",
-    "lines": [
-      {
-        "item": "Security services",
-        "qty": 20,
-        "unit_price": 2250.0
-      }
-    ],
-    "total": 45000.0,
     "seq": 25
   },
   {
     "id": "INV-2025-7326",
-    "vendor_id": "V-1012",
-    "po_number": "PO-5532",
-    "invoice_number": "1012/25/7326",
-    "date": "2025-06-20",
-    "currency": "INR",
-    "gstin": "36AABCM1012F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1012",
-    "lines": [
-      {
-        "item": "Industrial chemicals",
-        "qty": 10,
-        "unit_price": 4000.0
-      }
-    ],
-    "total": 40000.0,
-    "seq": 26
-  },
-  {
-    "id": "INV-2025-7327",
     "vendor_id": "V-1004",
     "po_number": "PO-5524",
-    "invoice_number": "1004/25/7327",
-    "date": "2025-06-24",
+    "invoice_number": "1004/25/7326",
+    "date": "2025-05-01",
     "currency": "INR",
     "gstin": "36ABCDE1234F1Z5",
     "gst_rate": 18,
@@ -533,218 +513,18 @@
       {
         "item": "Freight HYD-BLR",
         "qty": 10,
-        "unit_price": 10370.0
+        "unit_price": 10520.0
       }
     ],
-    "total": 103700.0,
-    "seq": 27
+    "total": 105200.0,
+    "seq": 26
   },
   {
-    "id": "INV-2025-7328",
-    "vendor_id": "V-1001",
-    "po_number": "PO-5521",
-    "invoice_number": "1001/25/7328",
-    "date": "2025-06-28",
-    "currency": "INR",
-    "gstin": "36AABCC1001F1Z5",
-    "gst_rate": 5,
-    "bank_account": "XXXX1001",
-    "lines": [
-      {
-        "item": "Office paper cartons",
-        "qty": 20,
-        "unit_price": 1265.0
-      }
-    ],
-    "total": 25300.0,
-    "seq": 28
-  },
-  {
-    "id": "INV-2025-7329",
-    "vendor_id": "V-1007",
-    "po_number": "PO-5527",
-    "invoice_number": "1007/25/7329",
-    "date": "2025-07-02",
-    "currency": "INR",
-    "gstin": "36AABCB1007F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1007",
-    "lines": [
-      {
-        "item": "Cloud hosting usage",
-        "qty": 20,
-        "unit_price": 1605.0
-      }
-    ],
-    "total": 32100.0,
-    "seq": 29
-  },
-  {
-    "id": "INV-2025-7330",
-    "vendor_id": "V-1009",
-    "po_number": "PO-5529",
-    "invoice_number": "1009/25/7330",
-    "date": "2025-07-06",
-    "currency": "INR",
-    "gstin": "36AABCT1009F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1009",
-    "lines": [
-      {
-        "item": "Steel sheets",
-        "qty": 10,
-        "unit_price": 10220.0
-      }
-    ],
-    "total": 102200.0,
-    "seq": 30
-  },
-  {
-    "id": "INV-2025-7331",
-    "vendor_id": "V-1002",
-    "po_number": "",
-    "invoice_number": "1002/25/7331",
-    "date": "2025-07-10",
-    "currency": "INR",
-    "gstin": "36AABCG1002F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1002",
-    "lines": [
-      {
-        "item": "Annual software support",
-        "qty": 20,
-        "unit_price": 2100.0
-      }
-    ],
-    "total": 42000.0,
-    "seq": 31
-  },
-  {
-    "id": "INV-2025-7332",
-    "vendor_id": "V-1003",
-    "po_number": "PO-5523",
-    "invoice_number": "1003/25/7332",
-    "date": "2025-07-14",
-    "currency": "INR",
-    "gstin": "36AABCH1003F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1003",
-    "lines": [
-      {
-        "item": "Facility maintenance",
-        "qty": 10,
-        "unit_price": 5000.0
-      }
-    ],
-    "total": 50000.0,
-    "seq": 32
-  },
-  {
-    "id": "INV-2025-7333",
-    "vendor_id": "V-1005",
-    "po_number": "PO-5525",
-    "invoice_number": "1005/25/7333",
-    "date": "2025-07-18",
-    "currency": "INR",
-    "gstin": "29AABCS1005F1Z5",
-    "gst_rate": 5,
-    "bank_account": "XXXX1005",
-    "lines": [
-      {
-        "item": "Packaging cartons",
-        "qty": 20,
-        "unit_price": 1250.0
-      }
-    ],
-    "total": 25000.0,
-    "seq": 33
-  },
-  {
-    "id": "INV-2025-7334",
-    "vendor_id": "V-1006",
-    "po_number": "PO-5526",
-    "invoice_number": "1006/25/7334",
-    "date": "2025-07-22",
-    "currency": "USD",
-    "gstin": "29AABCK1006F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1006",
-    "lines": [
-      {
-        "item": "Industrial components",
-        "qty": 10,
-        "unit_price": 4000.0
-      }
-    ],
-    "total": 40000.0,
-    "seq": 34
-  },
-  {
-    "id": "INV-2025-7335",
-    "vendor_id": "V-1008",
-    "po_number": "PO-5528",
-    "invoice_number": "1008/25/DUP01",
-    "date": "2025-07-26",
-    "currency": "INR",
-    "gstin": "36AABCN1008F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1008",
-    "lines": [
-      {
-        "item": "Catering services",
-        "qty": 20,
-        "unit_price": 2500.0
-      }
-    ],
-    "total": 50000.0,
-    "seq": 35
-  },
-  {
-    "id": "INV-2025-7336",
-    "vendor_id": "V-1010",
-    "po_number": "",
-    "invoice_number": "1010/25/7336",
-    "date": "2025-07-30",
-    "currency": "INR",
-    "gstin": "36AABCP1010F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1010",
-    "lines": [
-      {
-        "item": "Marketing print order",
-        "qty": 20,
-        "unit_price": 1250.0
-      }
-    ],
-    "total": 25000.0,
-    "seq": 36
-  },
-  {
-    "id": "INV-2025-7337",
-    "vendor_id": "V-1011",
-    "po_number": "PO-5531",
-    "invoice_number": "1011/25/7337",
-    "date": "2025-08-03",
-    "currency": "INR",
-    "gstin": "29OLDGSTIN0001Z1",
-    "gst_rate": 18,
-    "bank_account": "XXXX1011",
-    "lines": [
-      {
-        "item": "Security services",
-        "qty": 20,
-        "unit_price": 2250.0
-      }
-    ],
-    "total": 45000.0,
-    "seq": 37
-  },
-  {
-    "id": "INV-2025-7338",
+    "id": "INV-2025-7327",
     "vendor_id": "V-1012",
     "po_number": "PO-5532",
-    "invoice_number": "1012/25/7338",
-    "date": "2025-08-07",
+    "invoice_number": "1012/25/7327",
+    "date": "2025-05-03",
     "currency": "INR",
     "gstin": "36AABCM1012F1Z5",
     "gst_rate": 18,
@@ -757,14 +537,54 @@
       }
     ],
     "total": 40000.0,
-    "seq": 38
+    "seq": 27
   },
   {
-    "id": "INV-2025-7339",
+    "id": "INV-2025-7328",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7328",
+    "date": "2025-05-05",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1608.0
+      }
+    ],
+    "total": 32160.0,
+    "seq": 28
+  },
+  {
+    "id": "INV-2025-7329",
+    "vendor_id": "V-1005",
+    "po_number": "PO-5525",
+    "invoice_number": "1005/25/7329",
+    "date": "2025-05-07",
+    "currency": "INR",
+    "gstin": "29AABCS1005F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1005",
+    "lines": [
+      {
+        "item": "Packaging cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 29
+  },
+  {
+    "id": "INV-2025-7330",
     "vendor_id": "V-1004",
     "po_number": "PO-5524",
-    "invoice_number": "1004/25/7339",
-    "date": "2025-08-11",
+    "invoice_number": "1004/25/7330",
+    "date": "2025-05-09",
     "currency": "INR",
     "gstin": "36ABCDE1234F1Z5",
     "gst_rate": 18,
@@ -777,94 +597,74 @@
       }
     ],
     "total": 100000.0,
-    "seq": 39
+    "seq": 30
   },
   {
-    "id": "INV-2025-7340",
-    "vendor_id": "V-1001",
-    "po_number": "PO-5521",
-    "invoice_number": "1001/25/7340",
-    "date": "2025-08-15",
+    "id": "INV-2025-7331",
+    "vendor_id": "V-1008",
+    "po_number": "PO-5528",
+    "invoice_number": "1008/25/7313",
+    "date": "2025-05-11",
     "currency": "INR",
-    "gstin": "36AABCC1001F1Z5",
-    "gst_rate": 5,
-    "bank_account": "XXXX1001",
-    "lines": [
-      {
-        "item": "Office paper cartons",
-        "qty": 20,
-        "unit_price": 1265.0
-      }
-    ],
-    "total": 25300.0,
-    "seq": 40
-  },
-  {
-    "id": "INV-2025-7341",
-    "vendor_id": "V-1004",
-    "po_number": "PO-5524",
-    "invoice_number": "1004/25/7341",
-    "date": "2025-08-19",
-    "currency": "INR",
-    "gstin": "36ABCDE1234F1Z5",
+    "gstin": "36AABCN1008F1Z5",
     "gst_rate": 18,
-    "bank_account": "XXXX4821",
+    "bank_account": "XXXX1008",
     "lines": [
       {
-        "item": "Freight HYD-BLR",
-        "qty": 10,
-        "unit_price": 10350.0
-      }
-    ],
-    "total": 103500.0,
-    "seq": 41
-  },
-  {
-    "id": "INV-2025-7342",
-    "vendor_id": "V-1001",
-    "po_number": "PO-5521",
-    "invoice_number": "1001/25/7342",
-    "date": "2025-08-23",
-    "currency": "INR",
-    "gstin": "36AABCC1001F1Z5",
-    "gst_rate": 5,
-    "bank_account": "XXXX1001",
-    "lines": [
-      {
-        "item": "Office paper cartons",
+        "item": "Catering services",
         "qty": 20,
-        "unit_price": 1263.75
+        "unit_price": 2500.0
       }
     ],
-    "total": 25275.0,
-    "seq": 42
+    "total": 50000.0,
+    "seq": 31
   },
   {
-    "id": "INV-2025-7343",
-    "vendor_id": "V-1007",
-    "po_number": "PO-5527",
-    "invoice_number": "1007/25/7343",
-    "date": "2025-08-27",
+    "id": "INV-2025-7332",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7332",
+    "date": "2025-05-13",
     "currency": "INR",
-    "gstin": "36AABCB1007F1Z5",
+    "gstin": "36AABCG1002F1Z5",
     "gst_rate": 18,
-    "bank_account": "XXXX1007",
+    "bank_account": "XXXX1002",
     "lines": [
       {
-        "item": "Cloud hosting usage",
+        "item": "Annual software support",
         "qty": 20,
-        "unit_price": 1597.5
+        "unit_price": 1600.0
       }
     ],
-    "total": 31950.0,
-    "seq": 43
+    "total": 32000.0,
+    "seq": 32
   },
   {
-    "id": "INV-2025-7344",
+    "id": "INV-2025-7333",
+    "vendor_id": "V-1011",
+    "po_number": "PO-5531",
+    "invoice_number": "1011/25/7333",
+    "date": "2025-05-15",
+    "currency": "INR",
+    "gstin": "29OLDGSTIN0001Z1",
+    "gst_rate": 18,
+    "bank_account": "XXXX1011",
+    "lines": [
+      {
+        "item": "Security services",
+        "qty": 20,
+        "unit_price": 2250.0
+      }
+    ],
+    "total": 45000.0,
+    "seq": 33
+  },
+  {
+    "id": "INV-2025-7334",
     "vendor_id": "V-1009",
     "po_number": "PO-5529",
-    "invoice_number": "1009/25/7344",
-    "date": "2025-08-31",
+    "invoice_number": "1009/25/7334",
+    "date": "2025-05-17",
     "currency": "INR",
     "gstin": "36AABCT1009F1Z5",
     "gst_rate": 18,
@@ -873,18 +673,18 @@
       {
         "item": "Steel sheets",
         "qty": 10,
-        "unit_price": 10190.0
+        "unit_price": 10150.0
       }
     ],
-    "total": 101900.0,
-    "seq": 44
+    "total": 101500.0,
+    "seq": 34
   },
   {
-    "id": "INV-2025-7345",
+    "id": "INV-2025-7335",
     "vendor_id": "V-1004",
     "po_number": "PO-5524",
-    "invoice_number": "1004/25/7345",
-    "date": "2025-09-04",
+    "invoice_number": "1004/25/7335",
+    "date": "2025-05-19",
     "currency": "INR",
     "gstin": "36ABCDE1234F1Z5",
     "gst_rate": 18,
@@ -893,10 +693,210 @@
       {
         "item": "Freight HYD-BLR",
         "qty": 10,
-        "unit_price": 10350.0
+        "unit_price": 10000.0
       }
     ],
-    "total": 103500.0,
+    "total": 100000.0,
+    "seq": 35
+  },
+  {
+    "id": "INV-2025-7336",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7336",
+    "date": "2025-05-21",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1266.25
+      }
+    ],
+    "total": 25325.0,
+    "seq": 36
+  },
+  {
+    "id": "INV-2025-7337",
+    "vendor_id": "V-1006",
+    "po_number": "PO-5526",
+    "invoice_number": "1006/25/7337",
+    "date": "2025-05-23",
+    "currency": "USD",
+    "gstin": "29AABCK1006F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1006",
+    "lines": [
+      {
+        "item": "Industrial components",
+        "qty": 10,
+        "unit_price": 4000.0
+      }
+    ],
+    "total": 40000.0,
+    "seq": 37
+  },
+  {
+    "id": "INV-2025-7338",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7338",
+    "date": "2025-05-25",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1638.0
+      }
+    ],
+    "total": 32760.0,
+    "seq": 38
+  },
+  {
+    "id": "INV-2025-7339",
+    "vendor_id": "V-1010",
+    "po_number": "",
+    "invoice_number": "1010/25/7339",
+    "date": "2025-05-27",
+    "currency": "INR",
+    "gstin": "36AABCP1010F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1010",
+    "lines": [
+      {
+        "item": "Marketing print order",
+        "qty": 20,
+        "unit_price": 1750.0
+      }
+    ],
+    "total": 35000.0,
+    "seq": 39
+  },
+  {
+    "id": "INV-2025-7340",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7340",
+    "date": "2025-05-29",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 40
+  },
+  {
+    "id": "INV-2025-7341",
+    "vendor_id": "V-1012",
+    "po_number": "PO-5532",
+    "invoice_number": "1012/25/7341",
+    "date": "2025-05-31",
+    "currency": "INR",
+    "gstin": "36AABCM1012F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX9999",
+    "lines": [
+      {
+        "item": "Industrial chemicals",
+        "qty": 10,
+        "unit_price": 4000.0
+      }
+    ],
+    "total": 40000.0,
+    "seq": 41
+  },
+  {
+    "id": "INV-2025-7342",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7342",
+    "date": "2025-06-02",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2050.0
+      }
+    ],
+    "total": 41000.0,
+    "seq": 42
+  },
+  {
+    "id": "INV-2025-7343",
+    "vendor_id": "V-1005",
+    "po_number": "PO-5525",
+    "invoice_number": "1005/25/7343",
+    "date": "2025-06-04",
+    "currency": "INR",
+    "gstin": "29AABCS1005F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1005",
+    "lines": [
+      {
+        "item": "Packaging cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 43
+  },
+  {
+    "id": "INV-2025-7344",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7344",
+    "date": "2025-06-06",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10150.0
+      }
+    ],
+    "total": 101500.0,
+    "seq": 44
+  },
+  {
+    "id": "INV-2025-7345",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7345",
+    "date": "2025-06-08",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
     "seq": 45
   },
   {
@@ -904,7 +904,7 @@
     "vendor_id": "V-1001",
     "po_number": "PO-5521",
     "invoice_number": "1001/25/7346",
-    "date": "2025-09-08",
+    "date": "2025-06-10",
     "currency": "INR",
     "gstin": "36AABCC1001F1Z5",
     "gst_rate": 5,
@@ -921,170 +921,10 @@
   },
   {
     "id": "INV-2025-7347",
-    "vendor_id": "V-1007",
-    "po_number": "PO-5527",
-    "invoice_number": "1007/25/7347",
-    "date": "2025-09-12",
-    "currency": "INR",
-    "gstin": "36AABCB1007F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1007",
-    "lines": [
-      {
-        "item": "Cloud hosting usage",
-        "qty": 20,
-        "unit_price": 1620.0
-      }
-    ],
-    "total": 32400.0,
-    "seq": 47
-  },
-  {
-    "id": "INV-2025-7348",
-    "vendor_id": "V-1009",
-    "po_number": "PO-5529",
-    "invoice_number": "1009/25/7348",
-    "date": "2025-09-16",
-    "currency": "INR",
-    "gstin": "36AABCT1009F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1009",
-    "lines": [
-      {
-        "item": "Steel sheets",
-        "qty": 10,
-        "unit_price": 10280.0
-      }
-    ],
-    "total": 102800.0,
-    "seq": 48
-  },
-  {
-    "id": "INV-2025-7349",
-    "vendor_id": "V-1002",
-    "po_number": "",
-    "invoice_number": "1002/25/7349",
-    "date": "2025-09-20",
-    "currency": "INR",
-    "gstin": "36AABCG1002F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1002",
-    "lines": [
-      {
-        "item": "Annual software support",
-        "qty": 20,
-        "unit_price": 1500.0
-      }
-    ],
-    "total": 30000.0,
-    "seq": 49
-  },
-  {
-    "id": "INV-2025-7350",
-    "vendor_id": "V-1003",
-    "po_number": "PO-5523",
-    "invoice_number": "1003/25/7350",
-    "date": "2025-09-24",
-    "currency": "INR",
-    "gstin": "36AABCH1003F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1003",
-    "lines": [
-      {
-        "item": "Facility maintenance",
-        "qty": 10,
-        "unit_price": 5000.0
-      }
-    ],
-    "total": 50000.0,
-    "seq": 50
-  },
-  {
-    "id": "INV-2025-7351",
-    "vendor_id": "V-1005",
-    "po_number": "PO-5525",
-    "invoice_number": "1005/25/7351",
-    "date": "2025-09-28",
-    "currency": "INR",
-    "gstin": "29AABCS1005F1Z5",
-    "gst_rate": 5,
-    "bank_account": "XXXX1005",
-    "lines": [
-      {
-        "item": "Packaging cartons",
-        "qty": 20,
-        "unit_price": 1250.0
-      }
-    ],
-    "total": 25000.0,
-    "seq": 51
-  },
-  {
-    "id": "INV-2025-7352",
-    "vendor_id": "V-1006",
-    "po_number": "PO-5526",
-    "invoice_number": "1006/25/7352",
-    "date": "2025-10-02",
-    "currency": "USD",
-    "gstin": "29AABCK1006F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1006",
-    "lines": [
-      {
-        "item": "Industrial components",
-        "qty": 10,
-        "unit_price": 4000.0
-      }
-    ],
-    "total": 40000.0,
-    "seq": 52
-  },
-  {
-    "id": "INV-2025-7353",
-    "vendor_id": "V-1008",
-    "po_number": "PO-5528",
-    "invoice_number": "1008/25/DUP01",
-    "date": "2025-10-06",
-    "currency": "INR",
-    "gstin": "36AABCN1008F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1008",
-    "lines": [
-      {
-        "item": "Catering services",
-        "qty": 20,
-        "unit_price": 2500.0
-      }
-    ],
-    "total": 50000.0,
-    "seq": 53
-  },
-  {
-    "id": "INV-2025-7354",
-    "vendor_id": "V-1010",
-    "po_number": "",
-    "invoice_number": "1010/25/7354",
-    "date": "2025-10-10",
-    "currency": "INR",
-    "gstin": "36AABCP1010F1Z5",
-    "gst_rate": 18,
-    "bank_account": "XXXX1010",
-    "lines": [
-      {
-        "item": "Marketing print order",
-        "qty": 20,
-        "unit_price": 2000.0
-      }
-    ],
-    "total": 40000.0,
-    "seq": 54
-  },
-  {
-    "id": "INV-2025-7355",
     "vendor_id": "V-1011",
     "po_number": "PO-5531",
-    "invoice_number": "1011/25/7355",
-    "date": "2025-10-14",
+    "invoice_number": "1011/25/7347",
+    "date": "2025-06-12",
     "currency": "INR",
     "gstin": "29OLDGSTIN0001Z1",
     "gst_rate": 18,
@@ -1097,34 +937,314 @@
       }
     ],
     "total": 45000.0,
-    "seq": 55
+    "seq": 47
   },
   {
-    "id": "INV-2025-7356",
-    "vendor_id": "V-1012",
-    "po_number": "PO-5532",
-    "invoice_number": "1012/25/7356",
-    "date": "2025-10-18",
+    "id": "INV-2025-7348",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7348",
+    "date": "2025-06-14",
     "currency": "INR",
-    "gstin": "36AABCM1012F1Z5",
+    "gstin": "36AABCB1007F1Z5",
     "gst_rate": 18,
-    "bank_account": "XXXX9999",
+    "bank_account": "XXXX1007",
     "lines": [
       {
-        "item": "Industrial chemicals",
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1582.5
+      }
+    ],
+    "total": 31650.0,
+    "seq": 48
+  },
+  {
+    "id": "INV-2025-7349",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7349",
+    "date": "2025-06-16",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 49
+  },
+  {
+    "id": "INV-2025-7350",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7350",
+    "date": "2025-06-18",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 50
+  },
+  {
+    "id": "INV-2025-7351",
+    "vendor_id": "V-1006",
+    "po_number": "PO-5526",
+    "invoice_number": "1006/25/7351",
+    "date": "2025-06-20",
+    "currency": "USD",
+    "gstin": "29AABCK1006F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1006",
+    "lines": [
+      {
+        "item": "Industrial components",
         "qty": 10,
         "unit_price": 4000.0
       }
     ],
     "total": 40000.0,
+    "seq": 51
+  },
+  {
+    "id": "INV-2025-7352",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7352",
+    "date": "2025-06-22",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 1600.0
+      }
+    ],
+    "total": 32000.0,
+    "seq": 52
+  },
+  {
+    "id": "INV-2025-7353",
+    "vendor_id": "V-1010",
+    "po_number": "",
+    "invoice_number": "1010/25/7353",
+    "date": "2025-06-24",
+    "currency": "INR",
+    "gstin": "36AABCP1010F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1010",
+    "lines": [
+      {
+        "item": "Marketing print order",
+        "qty": 20,
+        "unit_price": 1750.0
+      }
+    ],
+    "total": 35000.0,
+    "seq": 53
+  },
+  {
+    "id": "INV-2025-7354",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7354",
+    "date": "2025-06-26",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10250.0
+      }
+    ],
+    "total": 102500.0,
+    "seq": 54
+  },
+  {
+    "id": "INV-2025-7355",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7355",
+    "date": "2025-06-28",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 55
+  },
+  {
+    "id": "INV-2025-7356",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7356",
+    "date": "2025-06-30",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1263.75
+      }
+    ],
+    "total": 25275.0,
     "seq": 56
   },
   {
     "id": "INV-2025-7357",
+    "vendor_id": "V-1005",
+    "po_number": "PO-5525",
+    "invoice_number": "1005/25/7357",
+    "date": "2025-07-02",
+    "currency": "INR",
+    "gstin": "29AABCS1005F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1005",
+    "lines": [
+      {
+        "item": "Packaging cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 57
+  },
+  {
+    "id": "INV-2025-7358",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7358",
+    "date": "2025-07-04",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1608.0
+      }
+    ],
+    "total": 32160.0,
+    "seq": 58
+  },
+  {
+    "id": "INV-2025-7359",
+    "vendor_id": "V-1008",
+    "po_number": "PO-5528",
+    "invoice_number": "1008/25/7359",
+    "date": "2025-07-06",
+    "currency": "INR",
+    "gstin": "36AABCN1008F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1008",
+    "lines": [
+      {
+        "item": "Catering services",
+        "qty": 20,
+        "unit_price": 2500.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 59
+  },
+  {
+    "id": "INV-2025-7360",
     "vendor_id": "V-1004",
     "po_number": "PO-5524",
-    "invoice_number": "1004/25/7357",
-    "date": "2025-10-22",
+    "invoice_number": "1004/25/7360",
+    "date": "2025-07-08",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 60
+  },
+  {
+    "id": "INV-2025-7361",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7361",
+    "date": "2025-07-10",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1266.25
+      }
+    ],
+    "total": 25325.0,
+    "seq": 61
+  },
+  {
+    "id": "INV-2025-7362",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7362",
+    "date": "2025-07-12",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 1600.0
+      }
+    ],
+    "total": 32000.0,
+    "seq": 62
+  },
+  {
+    "id": "INV-2025-7363",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7363",
+    "date": "2025-07-14",
     "currency": "INR",
     "gstin": "36ABCDE1234F1Z5",
     "gst_rate": 18,
@@ -1137,14 +1257,74 @@
       }
     ],
     "total": 109000.0,
-    "seq": 57
+    "seq": 63
   },
   {
-    "id": "INV-2025-7358",
+    "id": "INV-2025-7364",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7364",
+    "date": "2025-07-16",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 64
+  },
+  {
+    "id": "INV-2025-7365",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7365",
+    "date": "2025-07-18",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10420.0
+      }
+    ],
+    "total": 104200.0,
+    "seq": 65
+  },
+  {
+    "id": "INV-2025-7366",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7366",
+    "date": "2025-07-20",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 66
+  },
+  {
+    "id": "INV-2025-7367",
     "vendor_id": "V-1002",
     "po_number": "",
-    "invoice_number": "1002/25/7358",
-    "date": "2025-10-26",
+    "invoice_number": "1002/25/7367",
+    "date": "2025-07-22",
     "currency": "INR",
     "gstin": "36AABCG1002F1Z5",
     "gst_rate": 18,
@@ -1153,18 +1333,278 @@
       {
         "item": "Annual software support",
         "qty": 20,
-        "unit_price": 4000.0
+        "unit_price": 1250.0
       }
     ],
-    "total": 80000.0,
-    "seq": 58
+    "total": 25000.0,
+    "seq": 67
   },
   {
-    "id": "INV-2025-7359",
+    "id": "INV-2025-7368",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7368",
+    "date": "2025-07-24",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1500.0
+      }
+    ],
+    "total": 30000.0,
+    "seq": 68
+  },
+  {
+    "id": "INV-2025-7369",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7369",
+    "date": "2025-07-26",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 69
+  },
+  {
+    "id": "INV-2025-7370",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7370",
+    "date": "2025-07-28",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10380.0
+      }
+    ],
+    "total": 103800.0,
+    "seq": 70
+  },
+  {
+    "id": "INV-2025-7371",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7371",
+    "date": "2025-07-30",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1260.0
+      }
+    ],
+    "total": 25200.0,
+    "seq": 71
+  },
+  {
+    "id": "INV-2025-7372",
+    "vendor_id": "V-1002",
+    "po_number": "PO-5522",
+    "invoice_number": "1002/25/7372",
+    "date": "2025-08-01",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2400.0
+      }
+    ],
+    "total": 48000.0,
+    "seq": 72
+  },
+  {
+    "id": "INV-2025-7373",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7373",
+    "date": "2025-08-03",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1582.5
+      }
+    ],
+    "total": 31650.0,
+    "seq": 73
+  },
+  {
+    "id": "INV-2025-7374",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7374",
+    "date": "2025-08-05",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10290.0
+      }
+    ],
+    "total": 102900.0,
+    "seq": 74
+  },
+  {
+    "id": "INV-2025-7375",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7375",
+    "date": "2025-08-07",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 75
+  },
+  {
+    "id": "INV-2025-7376",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7376",
+    "date": "2025-08-09",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 76
+  },
+  {
+    "id": "INV-2025-7377",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7377",
+    "date": "2025-08-11",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 1600.0
+      }
+    ],
+    "total": 32000.0,
+    "seq": 77
+  },
+  {
+    "id": "INV-2025-7378",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7378",
+    "date": "2025-08-13",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 78
+  },
+  {
+    "id": "INV-2025-7379",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7379",
+    "date": "2025-08-15",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10210.0
+      }
+    ],
+    "total": 102100.0,
+    "seq": 79
+  },
+  {
+    "id": "INV-2025-7380",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7380",
+    "date": "2025-08-17",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 80
+  },
+  {
+    "id": "INV-2025-7381",
     "vendor_id": "V-1012",
     "po_number": "PO-5532",
-    "invoice_number": "1012/25/7359",
-    "date": "2025-10-30",
+    "invoice_number": "1012/25/7381",
+    "date": "2025-08-19",
     "currency": "INR",
     "gstin": "36AABCM1012F1Z5",
     "gst_rate": 18,
@@ -1177,14 +1617,714 @@
       }
     ],
     "total": 40000.0,
-    "seq": 59
+    "seq": 81
   },
   {
-    "id": "INV-2025-7360",
+    "id": "INV-2025-7382",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7382",
+    "date": "2025-08-21",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 82
+  },
+  {
+    "id": "INV-2025-7383",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7383",
+    "date": "2025-08-23",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1627.5
+      }
+    ],
+    "total": 32550.0,
+    "seq": 83
+  },
+  {
+    "id": "INV-2025-7384",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7384",
+    "date": "2025-08-25",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 84
+  },
+  {
+    "id": "INV-2025-7385",
     "vendor_id": "V-1004",
     "po_number": "PO-5524",
-    "invoice_number": "1004/25/7360",
-    "date": "2025-11-03",
+    "invoice_number": "1004/25/7385",
+    "date": "2025-08-27",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10470.0
+      }
+    ],
+    "total": 104700.0,
+    "seq": 85
+  },
+  {
+    "id": "INV-2025-7386",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7386",
+    "date": "2025-08-29",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1267.5
+      }
+    ],
+    "total": 25350.0,
+    "seq": 86
+  },
+  {
+    "id": "INV-2025-7387",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7387",
+    "date": "2025-08-31",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 87
+  },
+  {
+    "id": "INV-2025-7388",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7388",
+    "date": "2025-09-02",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1500.0
+      }
+    ],
+    "total": 30000.0,
+    "seq": 88
+  },
+  {
+    "id": "INV-2025-7389",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7389",
+    "date": "2025-09-04",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10150.0
+      }
+    ],
+    "total": 101500.0,
+    "seq": 89
+  },
+  {
+    "id": "INV-2025-7390",
+    "vendor_id": "V-1010",
+    "po_number": "",
+    "invoice_number": "1010/25/7390",
+    "date": "2025-09-06",
+    "currency": "INR",
+    "gstin": "36AABCP1010F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1010",
+    "lines": [
+      {
+        "item": "Marketing print order",
+        "qty": 20,
+        "unit_price": 2250.0
+      }
+    ],
+    "total": 45000.0,
+    "seq": 90
+  },
+  {
+    "id": "INV-2025-7391",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7391",
+    "date": "2025-09-08",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1263.75
+      }
+    ],
+    "total": 25275.0,
+    "seq": 91
+  },
+  {
+    "id": "INV-2025-7392",
+    "vendor_id": "V-1002",
+    "po_number": "PO-5522",
+    "invoice_number": "1002/25/7392",
+    "date": "2025-09-10",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2400.0
+      }
+    ],
+    "total": 48000.0,
+    "seq": 92
+  },
+  {
+    "id": "INV-2025-7393",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7393",
+    "date": "2025-09-12",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 93
+  },
+  {
+    "id": "INV-2025-7394",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7394",
+    "date": "2025-09-14",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10290.0
+      }
+    ],
+    "total": 102900.0,
+    "seq": 94
+  },
+  {
+    "id": "INV-2025-7395",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7395",
+    "date": "2025-09-16",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10320.0
+      }
+    ],
+    "total": 103200.0,
+    "seq": 95
+  },
+  {
+    "id": "INV-2025-7396",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7396",
+    "date": "2025-09-18",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 96
+  },
+  {
+    "id": "INV-2025-7397",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7397",
+    "date": "2025-09-20",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2050.0
+      }
+    ],
+    "total": 41000.0,
+    "seq": 97
+  },
+  {
+    "id": "INV-2025-7398",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7398",
+    "date": "2025-09-22",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1608.0
+      }
+    ],
+    "total": 32160.0,
+    "seq": 98
+  },
+  {
+    "id": "INV-2025-7399",
+    "vendor_id": "V-1008",
+    "po_number": "PO-5528",
+    "invoice_number": "1008/25/7359",
+    "date": "2025-09-24",
+    "currency": "INR",
+    "gstin": "36AABCN1008F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1008",
+    "lines": [
+      {
+        "item": "Catering services",
+        "qty": 20,
+        "unit_price": 2500.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 99
+  },
+  {
+    "id": "INV-2025-7400",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7400",
+    "date": "2025-09-26",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 100
+  },
+  {
+    "id": "INV-2025-7401",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7401",
+    "date": "2025-09-28",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1267.5
+      }
+    ],
+    "total": 25350.0,
+    "seq": 101
+  },
+  {
+    "id": "INV-2025-7402",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7402",
+    "date": "2025-09-30",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 102
+  },
+  {
+    "id": "INV-2025-7403",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7403",
+    "date": "2025-10-02",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1638.0
+      }
+    ],
+    "total": 32760.0,
+    "seq": 103
+  },
+  {
+    "id": "INV-2025-7404",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7404",
+    "date": "2025-10-04",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 104
+  },
+  {
+    "id": "INV-2025-7405",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7405",
+    "date": "2025-10-06",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 105
+  },
+  {
+    "id": "INV-2025-7406",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7406",
+    "date": "2025-10-08",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1263.75
+      }
+    ],
+    "total": 25275.0,
+    "seq": 106
+  },
+  {
+    "id": "INV-2025-7407",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7407",
+    "date": "2025-10-10",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2300.0
+      }
+    ],
+    "total": 46000.0,
+    "seq": 107
+  },
+  {
+    "id": "INV-2025-7408",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7408",
+    "date": "2025-10-12",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1500.0
+      }
+    ],
+    "total": 30000.0,
+    "seq": 108
+  },
+  {
+    "id": "INV-2025-7409",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7409",
+    "date": "2025-10-14",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10210.0
+      }
+    ],
+    "total": 102100.0,
+    "seq": 109
+  },
+  {
+    "id": "INV-2025-7410",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7410",
+    "date": "2025-10-16",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10420.0
+      }
+    ],
+    "total": 104200.0,
+    "seq": 110
+  },
+  {
+    "id": "INV-2025-7411",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7411",
+    "date": "2025-10-18",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 111
+  },
+  {
+    "id": "INV-2025-7412",
+    "vendor_id": "V-1002",
+    "po_number": "PO-5522",
+    "invoice_number": "1002/25/7412",
+    "date": "2025-10-20",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2400.0
+      }
+    ],
+    "total": 48000.0,
+    "seq": 112
+  },
+  {
+    "id": "INV-2025-7413",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7413",
+    "date": "2025-10-22",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1582.5
+      }
+    ],
+    "total": 31650.0,
+    "seq": 113
+  },
+  {
+    "id": "INV-2025-7414",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7414",
+    "date": "2025-10-24",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 114
+  },
+  {
+    "id": "INV-2025-7415",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7415",
+    "date": "2025-10-26",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10380.0
+      }
+    ],
+    "total": 103800.0,
+    "seq": 115
+  },
+  {
+    "id": "INV-2025-7416",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7416",
+    "date": "2025-10-28",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 116
+  },
+  {
+    "id": "INV-2025-7417",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7417",
+    "date": "2025-10-30",
     "currency": "INR",
     "gstin": "29NEWGSTIN0001Z1",
     "gst_rate": 18,
@@ -1197,6 +2337,1266 @@
       }
     ],
     "total": 100000.0,
-    "seq": 60
+    "seq": 117
+  },
+  {
+    "id": "INV-2025-7418",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7418",
+    "date": "2025-11-01",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1582.5
+      }
+    ],
+    "total": 31650.0,
+    "seq": 118
+  },
+  {
+    "id": "INV-2025-7419",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7419",
+    "date": "2025-11-03",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10290.0
+      }
+    ],
+    "total": 102900.0,
+    "seq": 119
+  },
+  {
+    "id": "INV-2025-7420",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7420",
+    "date": "2025-11-05",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 120
+  },
+  {
+    "id": "INV-2025-7421",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7421",
+    "date": "2025-11-07",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1260.0
+      }
+    ],
+    "total": 25200.0,
+    "seq": 121
+  },
+  {
+    "id": "INV-2025-7422",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7422",
+    "date": "2025-11-09",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 1600.0
+      }
+    ],
+    "total": 32000.0,
+    "seq": 122
+  },
+  {
+    "id": "INV-2025-7423",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7423",
+    "date": "2025-11-11",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 123
+  },
+  {
+    "id": "INV-2025-7424",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7424",
+    "date": "2025-11-13",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 124
+  },
+  {
+    "id": "INV-2025-7425",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7425",
+    "date": "2025-11-15",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10380.0
+      }
+    ],
+    "total": 103800.0,
+    "seq": 125
+  },
+  {
+    "id": "INV-2025-7426",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7426",
+    "date": "2025-11-17",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10900.0
+      }
+    ],
+    "total": 109000.0,
+    "seq": 126
+  },
+  {
+    "id": "INV-2025-7427",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7427",
+    "date": "2025-11-19",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2050.0
+      }
+    ],
+    "total": 41000.0,
+    "seq": 127
+  },
+  {
+    "id": "INV-2025-7428",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7428",
+    "date": "2025-11-21",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1500.0
+      }
+    ],
+    "total": 30000.0,
+    "seq": 128
+  },
+  {
+    "id": "INV-2025-7429",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7429",
+    "date": "2025-11-23",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 129
+  },
+  {
+    "id": "INV-2025-7430",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7430",
+    "date": "2025-11-25",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10470.0
+      }
+    ],
+    "total": 104700.0,
+    "seq": 130
+  },
+  {
+    "id": "INV-2025-7431",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7431",
+    "date": "2025-11-27",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1260.0
+      }
+    ],
+    "total": 25200.0,
+    "seq": 131
+  },
+  {
+    "id": "INV-2025-7432",
+    "vendor_id": "V-1002",
+    "po_number": "PO-5522",
+    "invoice_number": "1002/25/7432",
+    "date": "2025-11-29",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2400.0
+      }
+    ],
+    "total": 48000.0,
+    "seq": 132
+  },
+  {
+    "id": "INV-2025-7433",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7433",
+    "date": "2025-12-01",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1638.0
+      }
+    ],
+    "total": 32760.0,
+    "seq": 133
+  },
+  {
+    "id": "INV-2025-7434",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7434",
+    "date": "2025-12-03",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10250.0
+      }
+    ],
+    "total": 102500.0,
+    "seq": 134
+  },
+  {
+    "id": "INV-2025-7435",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7435",
+    "date": "2025-12-05",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 4100.0
+      }
+    ],
+    "total": 82000.0,
+    "seq": 135
+  },
+  {
+    "id": "INV-2025-7436",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7436",
+    "date": "2025-12-07",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 136
+  },
+  {
+    "id": "INV-2025-7437",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7437",
+    "date": "2025-12-09",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 1600.0
+      }
+    ],
+    "total": 32000.0,
+    "seq": 137
+  },
+  {
+    "id": "INV-2025-7438",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7438",
+    "date": "2025-12-11",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 138
+  },
+  {
+    "id": "INV-2025-7439",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7439",
+    "date": "2025-12-13",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10150.0
+      }
+    ],
+    "total": 101500.0,
+    "seq": 139
+  },
+  {
+    "id": "INV-2025-7440",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7440",
+    "date": "2025-12-15",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 140
+  },
+  {
+    "id": "INV-2025-7441",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7441",
+    "date": "2025-12-17",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 141
+  },
+  {
+    "id": "INV-2025-7442",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7442",
+    "date": "2025-12-19",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2300.0
+      }
+    ],
+    "total": 46000.0,
+    "seq": 142
+  },
+  {
+    "id": "INV-2025-7443",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7443",
+    "date": "2025-12-21",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1582.5
+      }
+    ],
+    "total": 31650.0,
+    "seq": 143
+  },
+  {
+    "id": "INV-2025-7444",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7444",
+    "date": "2025-12-23",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 144
+  },
+  {
+    "id": "INV-2025-7445",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7445",
+    "date": "2025-12-25",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10320.0
+      }
+    ],
+    "total": 103200.0,
+    "seq": 145
+  },
+  {
+    "id": "INV-2025-7446",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7446",
+    "date": "2025-12-27",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1266.25
+      }
+    ],
+    "total": 25325.0,
+    "seq": 146
+  },
+  {
+    "id": "INV-2025-7447",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7447",
+    "date": "2025-12-29",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 147
+  },
+  {
+    "id": "INV-2025-7448",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7448",
+    "date": "2025-12-31",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1500.0
+      }
+    ],
+    "total": 30000.0,
+    "seq": 148
+  },
+  {
+    "id": "INV-2025-7449",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7449",
+    "date": "2026-01-02",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10290.0
+      }
+    ],
+    "total": 102900.0,
+    "seq": 149
+  },
+  {
+    "id": "INV-2025-7450",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7450",
+    "date": "2026-01-04",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 150
+  },
+  {
+    "id": "INV-2025-7451",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7451",
+    "date": "2026-01-06",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1260.0
+      }
+    ],
+    "total": 25200.0,
+    "seq": 151
+  },
+  {
+    "id": "INV-2025-7452",
+    "vendor_id": "V-1002",
+    "po_number": "PO-5522",
+    "invoice_number": "1002/25/7452",
+    "date": "2026-01-08",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2400.0
+      }
+    ],
+    "total": 48000.0,
+    "seq": 152
+  },
+  {
+    "id": "INV-2025-7453",
+    "vendor_id": "V-1010",
+    "po_number": "",
+    "invoice_number": "1010/25/7453",
+    "date": "2026-01-10",
+    "currency": "INR",
+    "gstin": "36AABCP1010F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1010",
+    "lines": [
+      {
+        "item": "Marketing print order",
+        "qty": 20,
+        "unit_price": 2250.0
+      }
+    ],
+    "total": 45000.0,
+    "seq": 153
+  },
+  {
+    "id": "INV-2025-7454",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7454",
+    "date": "2026-01-12",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10210.0
+      }
+    ],
+    "total": 102100.0,
+    "seq": 154
+  },
+  {
+    "id": "INV-2025-7455",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7455",
+    "date": "2026-01-14",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10320.0
+      }
+    ],
+    "total": 103200.0,
+    "seq": 155
+  },
+  {
+    "id": "INV-2025-7456",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7456",
+    "date": "2026-01-16",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 156
+  },
+  {
+    "id": "INV-2025-7457",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7457",
+    "date": "2026-01-18",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2300.0
+      }
+    ],
+    "total": 46000.0,
+    "seq": 157
+  },
+  {
+    "id": "INV-2025-7458",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7458",
+    "date": "2026-01-20",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1608.0
+      }
+    ],
+    "total": 32160.0,
+    "seq": 158
+  },
+  {
+    "id": "INV-2025-7459",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7459",
+    "date": "2026-01-22",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 159
+  },
+  {
+    "id": "INV-2025-7460",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7460",
+    "date": "2026-01-24",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 160
+  },
+  {
+    "id": "INV-2025-7461",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7461",
+    "date": "2026-01-26",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1266.25
+      }
+    ],
+    "total": 25325.0,
+    "seq": 161
+  },
+  {
+    "id": "INV-2025-7462",
+    "vendor_id": "V-1008",
+    "po_number": "PO-5528",
+    "invoice_number": "1008/25/7462",
+    "date": "2026-01-28",
+    "currency": "INR",
+    "gstin": "36AABCN1008F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1008",
+    "lines": [
+      {
+        "item": "Catering services",
+        "qty": 20,
+        "unit_price": 2500.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 162
+  },
+  {
+    "id": "INV-2025-7463",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7463",
+    "date": "2026-01-30",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1582.5
+      }
+    ],
+    "total": 31650.0,
+    "seq": 163
+  },
+  {
+    "id": "INV-2025-7464",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7464",
+    "date": "2026-02-01",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 164
+  },
+  {
+    "id": "INV-2025-7465",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7465",
+    "date": "2026-02-03",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 165
+  },
+  {
+    "id": "INV-2025-7466",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7466",
+    "date": "2026-02-05",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1267.5
+      }
+    ],
+    "total": 25350.0,
+    "seq": 166
+  },
+  {
+    "id": "INV-2025-7467",
+    "vendor_id": "V-1002",
+    "po_number": "",
+    "invoice_number": "1002/25/7467",
+    "date": "2026-02-07",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2050.0
+      }
+    ],
+    "total": 41000.0,
+    "seq": 167
+  },
+  {
+    "id": "INV-2025-7468",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7468",
+    "date": "2026-02-09",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1500.0
+      }
+    ],
+    "total": 30000.0,
+    "seq": 168
+  },
+  {
+    "id": "INV-2025-7469",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7469",
+    "date": "2026-02-11",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10250.0
+      }
+    ],
+    "total": 102500.0,
+    "seq": 169
+  },
+  {
+    "id": "INV-2025-7470",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7470",
+    "date": "2026-02-13",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10420.0
+      }
+    ],
+    "total": 104200.0,
+    "seq": 170
+  },
+  {
+    "id": "INV-2025-7471",
+    "vendor_id": "V-1011",
+    "po_number": "PO-5531",
+    "invoice_number": "1011/25/7471",
+    "date": "2026-02-15",
+    "currency": "INR",
+    "gstin": "29OLDGSTIN0001Z1",
+    "gst_rate": 18,
+    "bank_account": "XXXX1011",
+    "lines": [
+      {
+        "item": "Security services",
+        "qty": 20,
+        "unit_price": 2250.0
+      }
+    ],
+    "total": 45000.0,
+    "seq": 171
+  },
+  {
+    "id": "INV-2025-7472",
+    "vendor_id": "V-1002",
+    "po_number": "PO-5522",
+    "invoice_number": "1002/25/7472",
+    "date": "2026-02-17",
+    "currency": "INR",
+    "gstin": "36AABCG1002F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1002",
+    "lines": [
+      {
+        "item": "Annual software support",
+        "qty": 20,
+        "unit_price": 2400.0
+      }
+    ],
+    "total": 48000.0,
+    "seq": 172
+  },
+  {
+    "id": "INV-2025-7473",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7473",
+    "date": "2026-02-19",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1627.5
+      }
+    ],
+    "total": 32550.0,
+    "seq": 173
+  },
+  {
+    "id": "INV-2025-7474",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7474",
+    "date": "2026-02-21",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 174
+  },
+  {
+    "id": "INV-2025-7475",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7475",
+    "date": "2026-02-23",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10420.0
+      }
+    ],
+    "total": 104200.0,
+    "seq": 175
+  },
+  {
+    "id": "INV-2025-7476",
+    "vendor_id": "V-1001",
+    "po_number": "PO-5521",
+    "invoice_number": "1001/25/7476",
+    "date": "2026-02-25",
+    "currency": "INR",
+    "gstin": "36AABCC1001F1Z5",
+    "gst_rate": 5,
+    "bank_account": "XXXX1001",
+    "lines": [
+      {
+        "item": "Office paper cartons",
+        "qty": 20,
+        "unit_price": 1250.0
+      }
+    ],
+    "total": 25000.0,
+    "seq": 176
+  },
+  {
+    "id": "INV-2025-7477",
+    "vendor_id": "V-1003",
+    "po_number": "PO-5523",
+    "invoice_number": "1003/25/7477",
+    "date": "2026-02-27",
+    "currency": "INR",
+    "gstin": "36AABCH1003F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1003",
+    "lines": [
+      {
+        "item": "Facility maintenance",
+        "qty": 10,
+        "unit_price": 5000.0
+      }
+    ],
+    "total": 50000.0,
+    "seq": 177
+  },
+  {
+    "id": "INV-2025-7478",
+    "vendor_id": "V-1007",
+    "po_number": "PO-5527",
+    "invoice_number": "1007/25/7478",
+    "date": "2026-03-01",
+    "currency": "INR",
+    "gstin": "36AABCB1007F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1007",
+    "lines": [
+      {
+        "item": "Cloud hosting usage",
+        "qty": 20,
+        "unit_price": 1582.5
+      }
+    ],
+    "total": 31650.0,
+    "seq": 178
+  },
+  {
+    "id": "INV-2025-7479",
+    "vendor_id": "V-1009",
+    "po_number": "PO-5529",
+    "invoice_number": "1009/25/7479",
+    "date": "2026-03-03",
+    "currency": "INR",
+    "gstin": "36AABCT1009F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX1009",
+    "lines": [
+      {
+        "item": "Steel sheets",
+        "qty": 10,
+        "unit_price": 10290.0
+      }
+    ],
+    "total": 102900.0,
+    "seq": 179
+  },
+  {
+    "id": "INV-2025-7480",
+    "vendor_id": "V-1004",
+    "po_number": "PO-5524",
+    "invoice_number": "1004/25/7480",
+    "date": "2026-03-05",
+    "currency": "INR",
+    "gstin": "36ABCDE1234F1Z5",
+    "gst_rate": 18,
+    "bank_account": "XXXX4821",
+    "lines": [
+      {
+        "item": "Freight HYD-BLR",
+        "qty": 10,
+        "unit_price": 10000.0
+      }
+    ],
+    "total": 100000.0,
+    "seq": 180
   }
 ]
