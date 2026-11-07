@@ -139,10 +139,7 @@ def process_context(
     recalled: list[RecalledMemory] = []
     if memory_enabled:
         first = exceptions[0]
-        try:
-            recalled = memory.recall_for(active_bank, vendor.name, first.type, first.detail)
-        except Exception:
-            recalled = []
+        recalled = memory.recall_for(active_bank, vendor.name, first.type, first.detail)
     facts = {
         "invoice": invoice.model_dump(mode="json"),
         "purchase_order": po.model_dump(mode="json") if po else None,

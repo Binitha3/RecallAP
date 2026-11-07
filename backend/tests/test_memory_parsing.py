@@ -141,13 +141,18 @@ def test_recall_prioritizes_cases_from_broad_query_before_applying_limit(monkeyp
     assert [item.case_id for item in result] == ["CASE-0003", "CASE-0002", "CASE-0001"]
 
 
-def test_recall_fails_soft(monkeypatch: Any) -> None:
+def test_recall_failure_is_not_misreported_as_empty_memory(monkeypatch: Any) -> None:
     class FailingClient:
         def recall(self, **kwargs: Any) -> Any:
             raise TimeoutError("offline")
 
     monkeypatch.setattr(memory, "_get_client", lambda: FailingClient())
-    assert memory.recall_for("bank-a", "Vendor", "PRICE_MISMATCH", "variance") == []
+    try:
+        memory.recall_for("bank-a", "Vendor", "PRICE_MISMATCH", "variance")
+    except memory.HindsightRecallError as exc:
+        assert str(exc) == "Hindsight memory recall failed"
+    else:
+        raise AssertionError("Hindsight recall failure should not look like an empty bank")
 
 
 def test_retain_retries_three_times_and_attaches_case_id(monkeypatch: Any) -> None:

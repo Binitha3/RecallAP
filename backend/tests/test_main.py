@@ -155,6 +155,30 @@ def test_resolve_route_reports_bank_and_retained_state(monkeypatch) -> None:
     assert response.headers["x-recallap-bank-id"] == main_module.resolve_bank_id("recallap-demo")
     assert captured["bank_id"] == main_module.resolve_bank_id("recallap-demo")
 
+    def failed_resolve(invoice_id, action, note, approver, bank_id, *, reusable_precedent):
+        return {"case_id": "CASE-0008", "status": "AUTO_RESOLVED", "retained": False}
+
+    monkeypatch.setattr(main_module, "resolve_invoice", failed_resolve)
+    failed_response = TestClient(app).post(
+        "/api/invoices/INV-2025-7301/resolve?bank=recallap-demo",
+        json={"action": "APPROVE", "note": "test", "approver": "Test"},
+    )
+    assert failed_response.status_code == 200
+    assert failed_response.json()["retained"] is False
+    assert failed_response.headers["x-recallap-retained"] == "false"
+
+
+def test_process_route_surfaces_hindsight_recall_failure(monkeypatch) -> None:
+    from fastapi.testclient import TestClient
+
+    def failed_process(*args, **kwargs):
+        raise main_module.memory.HindsightRecallError("Hindsight memory recall failed")
+
+    monkeypatch.setattr(main_module, "process_invoice", failed_process)
+    response = TestClient(app).post("/api/invoices/INV-2025-7301/process?memory=on")
+    assert response.status_code == 503
+    assert "recall failed" in response.json()["detail"]
+
 
 
 

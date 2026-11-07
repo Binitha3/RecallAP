@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 import re
-import threading
 import time
 from datetime import datetime
 from typing import Any
@@ -20,42 +19,49 @@ class HindsightSearchError(RuntimeError):
     """Raised when Hindsight could not execute a memory search."""
 
 
+class HindsightRecallError(RuntimeError):
+    """Raised when precedent recall fails instead of returning an empty bank."""
+
+
 class HindsightCaseCounterError(RuntimeError):
     """Raised when the bank could not be scanned to avoid reusing a CASE ID."""
 
-_client: Any | None = None
-_client_lock = threading.Lock()
-
-
 def _get_client() -> Any:
-    """Create and reuse a synchronous Hindsight client without fixing a bank ID."""
-    global _client
-    if _client is not None:
-        return _client
-    with _client_lock:
-        if _client is not None:
-            return _client
-        if not settings.hindsight_base_url or not settings.hindsight_api_key:
-            raise RuntimeError("Hindsight Cloud credentials are not configured")
-        from hindsight_client import Hindsight
+    """Create a fresh client per operation; a shared one breaks across threads."""
+    if not settings.hindsight_base_url or not settings.hindsight_api_key:
+        raise RuntimeError("Hindsight Cloud credentials are not configured")
+    from hindsight_client import Hindsight
 
-        _client = Hindsight(
-            base_url=settings.hindsight_base_url,
-            api_key=settings.hindsight_api_key,
-            timeout=15.0,
-        )
-        return _client
+    return Hindsight(
+        base_url=settings.hindsight_base_url,
+        api_key=settings.hindsight_api_key,
+        timeout=15.0,
+    )
+
+
+def _close_client(client: Any) -> None:
+    """Close an SDK client on the same worker thread that used its sync methods."""
+    close = getattr(client, "close", None)
+    if callable(close):
+        try:
+            close()
+        except Exception:
+            logger.debug("Could not close Hindsight client cleanly", exc_info=True)
 
 
 def create_bank(bank_id: str) -> None:
     """Provision an isolated Hindsight bank before the app starts using it."""
     if not bank_id:
         raise ValueError("bank_id is required")
-    _get_client().create_bank(
-        bank_id=bank_id,
-        name="RecallAP experiment",
-        background="Memory for invoice exception decisions and human-approved precedents.",
-    )
+    client = _get_client()
+    try:
+        client.create_bank(
+            bank_id=bank_id,
+            name="RecallAP experiment",
+            background="Memory for invoice exception decisions and human-approved precedents.",
+        )
+    finally:
+        _close_client(client)
 
 
 def _metadata_case_id(record: Any) -> str | None:
@@ -127,6 +133,7 @@ def retain_case(
     if match:
         metadata["case_id"] = match.group(0)
     for attempt in range(3):
+        client = None
         try:
             client = _get_client()
             options: dict[str, Any] = {"bank_id": bank_id, "content": text, "context": context}
@@ -145,6 +152,9 @@ def retain_case(
             logger.warning("Hindsight retain failed (attempt %d/3): %s", attempt + 1, exc)
             if attempt < 2:
                 time.sleep(0.5 * (attempt + 1))
+        finally:
+            if client is not None:
+                _close_client(client)
     return False
 
 
@@ -177,8 +187,11 @@ def highest_case_number(bank_id: str) -> int:
             offset += len(items)
             total = getattr(page, "total", offset)
             if not items or offset >= total:
+                _close_client(client)
                 return highest
     except Exception as exc:
+        if "client" in locals():
+            _close_client(client)
         logger.warning("Could not scan Hindsight bank for existing CASE IDs: %s", exc)
         raise HindsightCaseCounterError("Could not verify existing CASE IDs in Hindsight") from exc
 
@@ -228,8 +241,11 @@ def recall_for(
         output.sort(key=lambda item: priority.get(item.memory_type, 3))
         return output[: max(1, limit)]
     except Exception as exc:
-        logger.warning("Hindsight recall failed: %s", exc)
-        return []
+        logger.warning("Hindsight recall failed: %s", exc, exc_info=True)
+        raise HindsightRecallError("Hindsight memory recall failed") from exc
+    finally:
+        if "client" in locals():
+            _close_client(client)
 
 
 def reflect_vendor(bank_id: str, vendor_name: str) -> str:
@@ -237,7 +253,8 @@ def reflect_vendor(bank_id: str, vendor_name: str) -> str:
     if not bank_id:
         raise ValueError("bank_id is required")
     try:
-        response = _get_client().reflect(
+        client = _get_client()
+        response = client.reflect(
             bank_id=bank_id,
             query=f"What should I know about {vendor_name}?",
         )
@@ -246,6 +263,9 @@ def reflect_vendor(bank_id: str, vendor_name: str) -> str:
     except Exception as exc:
         logger.warning("Hindsight reflect failed: %s", exc)
         return ""
+    finally:
+        if "client" in locals():
+            _close_client(client)
 
 
 def search_memory(bank_id: str, query: str, limit: int = 20) -> list[RecalledMemory]:
@@ -256,7 +276,8 @@ def search_memory(bank_id: str, query: str, limit: int = 20) -> list[RecalledMem
     if not cleaned_query:
         raise ValueError("q must not be empty")
     try:
-        response = _get_client().recall(
+        client = _get_client()
+        response = client.recall(
             bank_id=bank_id,
             query=cleaned_query,
             include_chunks=True,
@@ -277,3 +298,6 @@ def search_memory(bank_id: str, query: str, limit: int = 20) -> list[RecalledMem
     except Exception as exc:
         logger.warning("Hindsight search failed: %s", exc, exc_info=True)
         raise HindsightSearchError("Hindsight memory search failed") from exc
+    finally:
+        if "client" in locals():
+            _close_client(client)

@@ -124,19 +124,24 @@ def get_invoice(invoice_id: str) -> InvoiceDetailResponse:
 def process_invoice_route(
     invoice_id: str,
     response: Response,
-    memory: Literal["on", "off"] = Query("on"),
+    memory_mode: Literal["on", "off"] = Query("on", alias="memory"),
     bank: str | None = Query(None, min_length=1, max_length=100),
 ) -> DecisionResponse:
     """Run detectors, memory recall, LLM proposal, and deterministic guardrails."""
     response.headers["Cache-Control"] = "no-store"
     try:
-        return process_invoice(invoice_id, memory_enabled=memory == "on", bank_id=bank)
+        return process_invoice(invoice_id, memory_enabled=memory_mode == "on", bank_id=bank)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail="Invoice or vendor not found") from exc
     except memory.HindsightCaseCounterError as exc:
         raise HTTPException(
             status_code=503,
             detail="Could not verify bank case IDs; decision was not recorded",
+        ) from exc
+    except memory.HindsightRecallError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Hindsight memory recall failed; check backend logs",
         ) from exc
 
 
