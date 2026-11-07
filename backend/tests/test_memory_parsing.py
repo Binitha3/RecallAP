@@ -71,7 +71,7 @@ def test_parse_uses_context_to_guess_non_case_memory_types() -> None:
     assert all(item.case_id is None for item in memories)
 
 
-def test_recall_runs_three_queries_dedupes_and_caps_results(monkeypatch: Any) -> None:
+def test_recall_runs_four_queries_dedupes_and_caps_results(monkeypatch: Any) -> None:
     case = fake_result("Fact without case identifier", metadata={"case_id": "CASE-0001"})
     profile = fake_result("Deccan Freight Lines is on Net 30 terms.", metadata={}, context="vendor_profile", chunk_id=None)
     preference = fake_result("Priya prefers contract checks.", metadata={}, context="approver_preference", chunk_id=None)
@@ -91,7 +91,8 @@ def test_recall_runs_three_queries_dedupes_and_caps_results(monkeypatch: Any) ->
 
     result = memory.recall_for("bank-a", "Deccan Freight Lines", "PRICE_MISMATCH", "surcharge", limit=6)
 
-    assert len(fake_client.queries) == 3
+    assert len(fake_client.queries) == 4
+    assert "human-approved precedents" in fake_client.queries[1]
     assert len(result) == 3
     assert result[0].case_id == "CASE-0001"
     assert [item.memory_type for item in result] == [
@@ -99,6 +100,45 @@ def test_recall_runs_three_queries_dedupes_and_caps_results(monkeypatch: Any) ->
         "vendor_profile",
         "approver_preference",
     ]
+
+
+def test_recall_prioritizes_cases_from_broad_query_before_applying_limit(monkeypatch: Any) -> None:
+    def case(case_id: str) -> Any:
+        source = CASE_TEXT.replace("CASE-0001", case_id)
+        record = fake_result("approved resolution", metadata={"case_id": case_id})
+        return record, SimpleNamespace(text=source)
+
+    first_cases = [case("CASE-0003"), case("CASE-0002")]
+    late_case = case("CASE-0001")
+    profiles = [
+        (fake_result(f"profile {index}", context="vendor_profile", chunk_id=None), None)
+        for index in range(4)
+    ]
+
+    class FakeClient:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def recall(self, **kwargs: Any) -> Any:
+            self.calls += 1
+            pairs = first_cases + profiles if self.calls == 1 else [late_case] if self.calls == 2 else []
+            records = [record for record, _ in pairs]
+            chunks = {
+                f"chunk-{index}": chunk
+                for index, (_, chunk) in enumerate(pairs)
+                if chunk is not None
+            }
+            for index, (record, chunk) in enumerate(pairs):
+                if chunk is not None:
+                    record.chunk_id = f"chunk-{index}"
+            return SimpleNamespace(results=records, chunks=chunks)
+
+    fake_client = FakeClient()
+    monkeypatch.setattr(memory, "_get_client", lambda: fake_client)
+
+    result = memory.recall_for("bank-a", "Deccan Freight Lines", "PRICE_MISMATCH", "variance", limit=3)
+
+    assert [item.case_id for item in result] == ["CASE-0003", "CASE-0002", "CASE-0001"]
 
 
 def test_recall_fails_soft(monkeypatch: Any) -> None:

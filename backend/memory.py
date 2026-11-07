@@ -147,6 +147,7 @@ def recall_for(
         raise ValueError("bank_id is required")
     queries = (
         f"{vendor_name} {exc_type} {detail}",
+        f"What human-approved precedents and approved tolerance ranges exist for {vendor_name} {exc_type}? Include reusable cases and resolutions.",
         f"What are the known billing quirks and payment terms of {vendor_name}?",
         f"Approver preferences and rules for {exc_type} invoices",
     )
@@ -172,9 +173,12 @@ def recall_for(
                     continue
                 seen_text.add(memory.text)
                 output.append(memory)
-                if len(output) >= limit:
-                    return output
-        return output
+        # Later, broader precedent queries can surface human cases omitted by
+        # the first detailed query. Collect before capping, then reserve slots
+        # for resolution evidence ahead of lower-priority profile context.
+        priority = {"resolution_case": 0, "vendor_profile": 1, "approver_preference": 2}
+        output.sort(key=lambda item: priority.get(item.memory_type, 3))
+        return output[: max(1, limit)]
     except Exception as exc:
         logger.warning("Hindsight recall failed: %s", exc)
         return []
