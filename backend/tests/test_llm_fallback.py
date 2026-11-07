@@ -62,6 +62,17 @@ def test_primary_429_retries_once_then_returns_tool_result(monkeypatch: Any) -> 
     assert client.calls[0]["tool_choice"]["function"]["name"] == "propose_resolution"
 
 
+def test_null_draft_message_is_normalized_to_empty_string(monkeypatch: Any) -> None:
+    client = SequenceClient([tool_response({**GOOD, "draft_message": None})])
+    monkeypatch.setattr(llm, "_get_client", lambda: client)
+
+    result = llm.decide({"invoice": "x"}, [])
+
+    assert result.draft_message == ""
+    schema = client.calls[0]["tools"][0]["function"]["parameters"]
+    assert "draft_message" in schema["required"]
+
+
 def test_fallback_429_honors_retry_hint(monkeypatch: Any) -> None:
     client = SequenceClient([
         ValueError("primary tool unavailable"),

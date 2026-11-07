@@ -73,6 +73,10 @@ def _failure() -> ProposedDecision:
 def _validate_payload(payload: Any) -> ProposedDecision:
     if not isinstance(payload, dict):
         raise ValueError("Model proposal must be a JSON object")
+    # Some OpenAI-compatible providers emit null for an optional text field even
+    # when the schema declares a string. Keep the API contract stable.
+    if payload.get("draft_message") is None:
+        payload = {**payload, "draft_message": ""}
     return ProposedDecision.model_validate(payload)
 
 
