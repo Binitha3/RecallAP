@@ -1,6 +1,6 @@
 """Scaffold smoke checks that do not need external services."""
 
-from fastapi import HTTPException
+from fastapi import HTTPException, Response
 
 from backend import main as main_module
 from backend.main import FRONTEND_DIR, app, get_invoice, health, list_invoices
@@ -52,6 +52,48 @@ def test_invoice_route_filters_and_returns_clean_not_found() -> None:
         raise AssertionError("unknown invoice should raise HTTP 404")
 
 
+def test_process_route_forwards_memory_mode_and_disables_caching(monkeypatch) -> None:
+    from fastapi.testclient import TestClient
+
+    from backend.models import DecisionAction
+
+    captured = {}
+
+    def fake_process(invoice_id, *, memory_enabled, bank_id):
+        captured.update(
+            invoice_id=invoice_id,
+            memory_enabled=memory_enabled,
+            bank_id=bank_id,
+        )
+        return {
+            "invoice_id": invoice_id,
+            "memory_used": memory_enabled,
+            "decision": {
+                "action": DecisionAction.ESCALATE,
+                "confidence": 0.5,
+                "rationale": "Test response.",
+            },
+            "guardrails": {"passed": False, "triggered": []},
+            "final_status": "NEEDS_REVIEW",
+            "latency_ms": 1,
+        }
+
+    monkeypatch.setattr(main_module, "process_invoice", fake_process)
+
+    response = TestClient(app).post(
+        "/api/invoices/INV-2025-7301/process?memory=on&bank=compare-test"
+    )
+
+    assert response.status_code == 200
+    assert captured == {
+        "invoice_id": "INV-2025-7301",
+        "memory_enabled": True,
+        "bank_id": "compare-test",
+    }
+    assert response.json()["memory_used"] is True
+    assert response.headers["cache-control"] == "no-store"
+
+
 def test_memory_routes_metrics_and_demo_reset(monkeypatch) -> None:
     from backend.models import MetricsResponse, RecalledMemory
 
@@ -70,12 +112,14 @@ def test_memory_routes_metrics_and_demo_reset(monkeypatch) -> None:
 
     search = main_module.search_memories("precedent", "bank-a")
     briefing = main_module.vendor_briefing("V-1004")
-    metrics_result = main_module.metrics("off")
+    metrics_response = Response()
+    metrics_result = main_module.metrics(metrics_response, "off")
     reset = main_module.reset_demo(main_module.DemoResetRequest(clear_memory=True), bank=None)
 
     assert search[0].type == "resolution_case"
     assert briefing.vendor_id == "V-1004" and briefing.briefing_text == "Net 30."
     assert metrics_result.points == []
+    assert metrics_response.headers["cache-control"] == "no-store"
     assert reset.ok is True
     assert captured == [("create", "fresh-bank"), (None, "fresh-bank")]
 

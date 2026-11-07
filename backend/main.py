@@ -6,7 +6,7 @@ import logging
 import time
 import uuid
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -122,10 +122,12 @@ def get_invoice(invoice_id: str) -> InvoiceDetailResponse:
 @app.post("/api/invoices/{invoice_id}/process", response_model=DecisionResponse)
 def process_invoice_route(
     invoice_id: str,
+    response: Response,
     memory: Literal["on", "off"] = Query("on"),
     bank: str | None = Query(None, min_length=1, max_length=100),
 ) -> DecisionResponse:
     """Run detectors, memory recall, LLM proposal, and deterministic guardrails."""
+    response.headers["Cache-Control"] = "no-store"
     try:
         return process_invoice(invoice_id, memory_enabled=memory == "on", bank_id=bank)
     except KeyError as exc:
@@ -185,8 +187,9 @@ def vendor_briefing(vendor_id: str) -> VendorBriefingResponse:
 
 
 @app.get("/api/metrics", response_model=MetricsResponse)
-def metrics(memory: Literal["on", "off"] = Query("on")) -> MetricsResponse:
+def metrics(response: Response, memory: Literal["on", "off"] = Query("on")) -> MetricsResponse:
     """Return the selected memory-on/off experiment results, when available."""
+    response.headers["Cache-Control"] = "no-store"
     return get_metrics(memory)
 
 

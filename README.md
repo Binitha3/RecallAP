@@ -82,7 +82,7 @@ The live runner requires both health checks to be green. It reads `data/demo_sto
 
 ### Latest full benchmark (2026-11-07)
 
-Against code commit `6221b11`, the verified 60-invoice synthetic dataset with the simulated approver measured **40.00% correct touchless with memory (24/60)**, with **100% precision across 24 automatic decisions**: 4 clean invoices and 20 correct exception resolutions. It sent 36 invoices to human review and made **0 unsafe touchless decisions**. Memory-off measured **13.33% (8/60)**, including 4 clean invoices and 4 exact-duplicate rejections, with 52 human reviews and 0 unsafe decisions. The apparent difference is **26.67 percentage points** and 16 more correct automatic decisions with memory. Treat this comparison as provisional: the shared Groq daily token limit was reached during the OFF pass, after which model failures were sent safely to human review. This made the two phases unequal in provider availability. Repeat the paired run after quota reset or with sufficient separate capacity before presenting the difference as a controlled result. The denominator is all 60 invoices; precision describes only automatic decisions in this run and is not a population-level guarantee. Benchmark timestamp: 2026-11-07 04:26 UTC. Individual model calls reached about 30 seconds; `/api/health` checks connectivity, not remaining quota.
+In a fresh live run on 2026-11-07, the 60-invoice synthetic dataset with the simulated approver measured **41.67% correct touchless with memory (25/60)**, with **100% precision across 25 automatic decisions**: 4 clean invoices and 21 correct exception resolutions. It sent 35 invoices to human review and made **0 unsafe touchless decisions**. Memory-off measured **13.33% (8/60)**, including 4 clean invoices and 4 exact-duplicate rejections, with 52 human reviews and 0 unsafe decisions. Memory-on produced **28.34 percentage points** more correct touchless decisions (17 additional invoices). Both phases completed against live Groq and Hindsight services without a daily-quota fallback. These are measured results on synthetic invoices with a simulated approver, not real-world accuracy. The denominator is all 60 invoices; precision describes only automatic decisions in this run. Benchmark timestamp: 2026-11-07 09:50 UTC.
 
 To run the test suite:
 
@@ -110,10 +110,10 @@ Invoice JSON → deterministic detectors → Hindsight recall (optional)
 
 - `GET /api/health` reports API liveness plus live Hindsight and Groq connectivity booleans.
 - `GET /api/invoices?status=...` lists invoice summaries; `GET /api/invoices/{id}` returns invoice, PO, GRN, vendor, and detected exceptions.
-- `POST /api/invoices/{id}/process?memory=on|off&bank=...` runs the agent. `memory=off` skips recall while preserving the rest of the pipeline.
+- `POST /api/invoices/{id}/process?memory=on|off&bank=...` runs the agent with `Cache-Control: no-store`. `memory=off` skips recall while preserving the rest of the pipeline.
 - `POST /api/invoices/{id}/resolve?bank=...` accepts `{ "action": "APPROVE", "note": "...", "approver": "..." }`, records the human outcome, and attempts to retain it.
 - `GET /api/memory/search?q=...&bank=...` searches a bank; `GET /api/vendors/{id}/briefing` returns a Hindsight reflect summary.
-- `GET /api/metrics?memory=on|off` reads the corresponding experiment series from `data/experiment_results.json`; it returns empty points and a zeroed summary when that file is absent.
+- `GET /api/metrics?memory=on|off` reads the corresponding experiment series from `data/experiment_results.json`, returns `Cache-Control: no-store`, and returns empty points and a zeroed summary when that file is absent.
 - `POST /api/demo/reset?bank=...` accepts `{ "clear_memory": true|false }`. It clears local state for the selected bank. When `clear_memory` is true, it creates a fresh Hindsight bank before mapping the alias to it, so experiment/live runs remain isolated without relying on a bank-delete API.
 
 Decision responses include the invoice ID, exceptions, recalled memories, model proposal, guardrail result, final status, and latency. Final statuses are `AUTO_RESOLVED`, `VENDOR_QUERY`, `REJECTED`, `NEEDS_REVIEW`, and `CLEAN`.
