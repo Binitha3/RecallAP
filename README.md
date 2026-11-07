@@ -1,4 +1,6 @@
 # RecallAP — Accounts Payable Exception Agent
+Live video demo : https://youtu.be/5Ol9KYPSYzs?si=k41AX3rt-1xIah85
+Website Link : https://recallap.onrender.com
 
 RecallAP compares invoices with purchase orders (POs), goods receipt notes (GRNs), and vendor records. Plain Python detects exceptions. Hindsight retrieves relevant vendor knowledge and past decisions. Groq proposes an action, and deterministic policy checks decide whether it can proceed or must go to a human.
 
@@ -168,6 +170,9 @@ Checked against the official Hindsight documentation on 2026-11-06 and confirmed
 - Two real Cloud smoke runs successfully retained three seed memories without an explicit create-bank call. The latest three retains took 3.516s, 3.691s, and 2.818s (10.025s total). Immediate recall returned 9 facts; recall after 10 seconds returned 13. The precedent was available immediately. Batch retain succeeded.
 - In both recalls, extracted fact text included `up to 5%` but omitted `CASE-0001`. With `metadata={"case_id":"CASE-0001"}`, the ID appeared in result metadata. With `include_chunks=True`, the source chunk preserved the entire case verbatim and untruncated, including both values.
 - `/api/health` checks Hindsight's documented `/health/ready` endpoint and Groq's models-list endpoint, each with a short timeout. [Hindsight API readiness](https://hindsight.vectorize.io/api-reference)
+BAND AI: 
+<img width="1535" height="815" alt="image" src="https://github.com/user-attachments/assets/94f0fba1-0977-4884-bd2a-1ba607d46e14" />
+
 
 ### Hindsight references
 
