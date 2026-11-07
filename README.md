@@ -100,7 +100,7 @@ Invoice JSON → deterministic detectors → Hindsight recall (optional)
 
 - `backend/store.py` loads and validates JSON fixtures, masks bank-account numbers, protects state with a lock, allocates per-bank case IDs, and snapshots local decisions.
 - `backend/detectors.py` checks price, quantity, PO, GSTIN, tax-rate, currency, duplicate-invoice, and bank-detail exceptions.
-- `backend/memory.py` adapts Hindsight retain, recall, search, and reflect calls. External memory failures fail soft where a decision can still be escalated safely.
+- `backend/memory.py` creates a Hindsight client per operation to avoid cross-thread event-loop reuse. Retain and reflect failures remain visible in their result fields; a failed precedent recall returns HTTP 503 instead of masquerading as an empty bank.
 - `backend/llm.py` sends an evidence-only proposal request to Groq, validates the response with Pydantic, and returns an escalation if every model attempt fails.
 - `backend/policy.py` checks citations and precedent applicability after the model. Model output cannot bypass these checks.
 - `backend/agent.py` connects the steps and writes each decision to `logs/decisions.jsonl` (one JSON object per line). Snapshot files and logs are ignored by Git.
@@ -110,7 +110,7 @@ Invoice JSON → deterministic detectors → Hindsight recall (optional)
 
 - `GET /api/health` reports API liveness plus live Hindsight and Groq connectivity booleans.
 - `GET /api/invoices?status=...` lists invoice summaries; `GET /api/invoices/{id}` returns invoice, PO, GRN, vendor, and detected exceptions.
-- `POST /api/invoices/{id}/process?memory=on|off&bank=...` runs the agent with `Cache-Control: no-store`. `memory=off` skips recall while preserving the rest of the pipeline.
+- `POST /api/invoices/{id}/process?memory=on|off&bank=...` runs the agent with `Cache-Control: no-store`. `memory=off` skips recall while preserving the rest of the pipeline. If enabled recall fails, it returns HTTP 503 so a service error cannot be mistaken for no precedents.
 - `POST /api/invoices/{id}/resolve?bank=...` accepts `{ "action": "APPROVE", "note": "...", "approver": "..." }`, records the human outcome, and attempts to retain it.
 - `GET /api/memory/search?q=...&bank=...` searches a bank; `GET /api/vendors/{id}/briefing` returns a Hindsight reflect summary.
 - `GET /api/metrics?memory=on|off` reads the corresponding experiment series from `data/experiment_results.json`, returns `Cache-Control: no-store`, and returns empty points and a zeroed summary when that file is absent.
