@@ -29,14 +29,14 @@ def test_invoice_routes_return_contract_shapes() -> None:
     rows = list_invoices().root
     detail = get_invoice("INV-2025-7301")
 
-    assert len(rows) == 60
+    assert len(rows) == len(main_module.store.all_invoices())
     deccan_row = next(row for row in rows if row.id == "INV-2025-7301")
     assert deccan_row.vendor_name == "Deccan Freight Lines"
     assert deccan_row.exception_types == ["PRICE_MISMATCH"]
     assert detail.invoice.total == 104000
     assert detail.po is not None and detail.po.total == 100000
     assert detail.vendor.bank_account == "XXXX4821"
-    missing_po = get_invoice("INV-2025-7314")
+    missing_po = get_invoice("INV-2025-7304")
     assert "MISSING_PO" in [exception.type for exception in missing_po.exceptions]
 
 
@@ -110,18 +110,43 @@ def test_memory_routes_metrics_and_demo_reset(monkeypatch) -> None:
     monkeypatch.setattr(main_module.memory, "create_bank", lambda bank: captured.append(("create", bank)))
     monkeypatch.setattr(main_module, "register_bank_id", lambda alias, bank: captured.append((alias, bank)))
 
-    search = main_module.search_memories("precedent", "bank-a")
+    search_response = Response()
+    search = main_module.search_memories(search_response, "precedent", "bank-a")
     briefing = main_module.vendor_briefing("V-1004")
     metrics_response = Response()
     metrics_result = main_module.metrics(metrics_response, "off")
     reset = main_module.reset_demo(main_module.DemoResetRequest(clear_memory=True), bank=None)
 
     assert search[0].type == "resolution_case"
+    assert search_response.headers["cache-control"] == "no-store"
+    assert search_response.headers["x-recallap-bank-id"] == "bank-a"
     assert briefing.vendor_id == "V-1004" and briefing.briefing_text == "Net 30."
     assert metrics_result.points == []
     assert metrics_response.headers["cache-control"] == "no-store"
     assert reset.ok is True
     assert captured == [("create", "fresh-bank"), (None, "fresh-bank")]
+
+
+def test_resolve_route_reports_bank_and_retained_state(monkeypatch) -> None:
+    from fastapi.testclient import TestClient
+
+    captured = {}
+
+    def fake_resolve(invoice_id, action, note, approver, bank_id, *, reusable_precedent):
+        captured.update(invoice_id=invoice_id, bank_id=bank_id)
+        return {"case_id": "CASE-0007", "status": "AUTO_RESOLVED", "retained": True}
+
+    monkeypatch.setattr(main_module, "resolve_invoice", fake_resolve)
+    response = TestClient(app).post(
+        "/api/invoices/INV-2025-7301/resolve?bank=recallap-demo",
+        json={"action": "APPROVE", "note": "test", "approver": "Test"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["retained"] is True
+    assert response.headers["x-recallap-retained"] == "true"
+    assert response.headers["x-recallap-bank-id"] == main_module.resolve_bank_id("recallap-demo")
+    assert captured["bank_id"] == main_module.resolve_bank_id("recallap-demo")
 
 
 

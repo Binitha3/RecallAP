@@ -15,6 +15,10 @@ from backend.models import RecalledMemory
 logger = logging.getLogger(__name__)
 CASE_ID_RE = re.compile(r"CASE-\d{4}")
 
+
+class HindsightSearchError(RuntimeError):
+    """Raised when Hindsight could not execute a memory search."""
+
 _client: Any | None = None
 _client_lock = threading.Lock()
 
@@ -126,7 +130,12 @@ def retain_case(
                 options["timestamp"] = timestamp
             if metadata:
                 options["metadata"] = metadata
-            client.retain(**options)
+            response = client.retain(**options)
+            if getattr(response, "success", False) is not True:
+                raise RuntimeError("Hindsight retain response reported success=false")
+            items_count = getattr(response, "items_count", 1)
+            if isinstance(items_count, int) and items_count < 1:
+                raise RuntimeError("Hindsight retain response accepted zero items")
             return True
         except Exception as exc:
             logger.warning("Hindsight retain failed (attempt %d/3): %s", attempt + 1, exc)
@@ -227,5 +236,5 @@ def search_memory(bank_id: str, query: str, limit: int = 20) -> list[RecalledMem
                 break
         return output
     except Exception as exc:
-        logger.warning("Hindsight search failed: %s", exc)
-        return []
+        logger.warning("Hindsight search failed: %s", exc, exc_info=True)
+        raise HindsightSearchError("Hindsight memory search failed") from exc

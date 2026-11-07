@@ -155,10 +155,11 @@ def test_retain_retries_three_times_and_attaches_case_id(monkeypatch: Any) -> No
         def __init__(self) -> None:
             self.calls: list[dict[str, Any]] = []
 
-        def retain(self, **kwargs: Any) -> None:
+        def retain(self, **kwargs: Any) -> Any:
             self.calls.append(kwargs)
             if len(self.calls) < 3:
                 raise TimeoutError("retry")
+            return SimpleNamespace(success=True, items_count=1)
 
     fake_client = RetryClient()
     monkeypatch.setattr(memory, "_get_client", lambda: fake_client)
@@ -177,6 +178,23 @@ def test_retain_returns_false_after_three_failures(monkeypatch: Any) -> None:
     monkeypatch.setattr(memory, "_get_client", lambda: FailingClient())
     monkeypatch.setattr(memory.time, "sleep", lambda _: None)
     assert memory.retain_case("bank-a", CASE_TEXT) is False
+
+
+def test_retain_does_not_report_success_when_hindsight_rejects_it(monkeypatch: Any) -> None:
+    class RejectingClient:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def retain(self, **kwargs: Any) -> Any:
+            self.calls += 1
+            return SimpleNamespace(success=False, items_count=0)
+
+    client = RejectingClient()
+    monkeypatch.setattr(memory, "_get_client", lambda: client)
+    monkeypatch.setattr(memory.time, "sleep", lambda _: None)
+
+    assert memory.retain_case("bank-a", CASE_TEXT) is False
+    assert client.calls == 3
 
 
 def test_reflect_returns_response_text(monkeypatch: Any) -> None:
@@ -203,3 +221,18 @@ def test_search_memory_queries_and_caps_results(monkeypatch: Any) -> None:
     results = memory.search_memory("bank-a", " fuel surcharge ", limit=1)
     assert len(results) == 1
     assert results[0].case_id == "CASE-0001"
+
+
+def test_search_memory_surfaces_hindsight_failures(monkeypatch: Any) -> None:
+    class FailingClient:
+        def recall(self, **kwargs: Any) -> Any:
+            raise TimeoutError("offline")
+
+    monkeypatch.setattr(memory, "_get_client", lambda: FailingClient())
+
+    try:
+        memory.search_memory("bank-a", "Deccan")
+    except memory.HindsightSearchError as exc:
+        assert str(exc) == "Hindsight memory search failed"
+    else:
+        raise AssertionError("Hindsight search failure should not look like an empty result")

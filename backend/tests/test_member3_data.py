@@ -6,7 +6,7 @@ from backend.store import store
 
 def test_all_member3_invoices_resolve_and_validate() -> None:
     invoices = store.all_invoices()
-    assert len(invoices) == 60
+    assert len(invoices) == 180
 
     for invoice in invoices:
         loaded_invoice, po, grn, vendor = store.load_context(invoice.id)

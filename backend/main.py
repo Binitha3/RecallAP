@@ -87,6 +87,7 @@ def health() -> dict[str, str | bool]:
         "status": "ok",
         "hindsight_ok": _check_hindsight(),
         "llm_ok": _check_llm(),
+        "bank_id": get_active_bank_id(),
     }
 
 
@@ -138,18 +139,29 @@ def process_invoice_route(
 def resolve_invoice_route(
     invoice_id: str,
     body: HumanResolutionRequest,
+    response: Response,
     bank: str | None = Query(None, min_length=1, max_length=100),
 ) -> HumanResolutionResponse:
     """Record a human decision and attempt to retain it in Hindsight."""
     try:
-        return HumanResolutionResponse(**resolve_invoice(
+        active_bank = resolve_bank_id(bank)
+        result = resolve_invoice(
             invoice_id,
             body.action,
             body.note,
             body.approver,
-            bank,
+            active_bank,
             reusable_precedent=body.reusable_precedent,
-        ))
+        )
+        response.headers["X-RecallAP-Bank-ID"] = active_bank
+        response.headers["X-RecallAP-Retained"] = str(result["retained"]).lower()
+        logger.info(
+            "Human resolution completed: case_id=%s bank_id=%s retained=%s",
+            result["case_id"],
+            active_bank,
+            result["retained"],
+        )
+        return HumanResolutionResponse(**result)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail="Invoice or vendor not found") from exc
     except ValueError as exc:
@@ -158,15 +170,22 @@ def resolve_invoice_route(
 
 @app.get("/api/memory/search", response_model=list[MemorySearchResult])
 def search_memories(
+    response: Response,
     q: str = Query(..., min_length=1, max_length=500),
     bank: str | None = Query(None, min_length=1, max_length=100),
     limit: int = Query(20, ge=1, le=100),
 ) -> list[MemorySearchResult]:
     """Search a Hindsight bank for retained precedent and profile memories."""
+    response.headers["Cache-Control"] = "no-store"
     if not q.strip():
         raise HTTPException(status_code=422, detail="q must not be empty")
     active_bank = resolve_bank_id(bank)
-    results = memory.search_memory(active_bank, q, limit)
+    response.headers["X-RecallAP-Bank-ID"] = active_bank
+    try:
+        results = memory.search_memory(active_bank, q, limit)
+    except memory.HindsightSearchError as exc:
+        raise HTTPException(status_code=503, detail="Hindsight memory search failed; check backend logs") from exc
+    logger.info("Memory search completed: bank_id=%s result_count=%d", active_bank, len(results))
     return [
         MemorySearchResult(case_id=item.case_id, type=item.memory_type, text=item.text)
         for item in results
