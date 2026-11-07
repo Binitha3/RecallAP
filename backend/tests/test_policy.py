@@ -9,7 +9,7 @@ from backend.models import (
     ProposedDecision,
     RecalledMemory,
 )
-from backend.policy import apply_guardrails, decision_from_precedents
+from backend.policy import apply_guardrails, calibrate_confidence, decision_from_precedents
 
 
 VENDOR = "Deccan Freight Lines (V-1004)"
@@ -155,6 +155,31 @@ def test_reusable_precedents_can_resolve_without_a_model_call() -> None:
     assert decision is not None
     assert decision.action == DecisionAction.AUTO_APPROVE_WITH_NOTE
     assert decision.cited_case_ids == ["CASE-0001", "CASE-0002"]
+
+
+def test_confidence_is_calibrated_from_cited_precedents_not_model_claim() -> None:
+    current = exception(variance=4.0)
+    first = memory(body="Resolution: APPROVED. Applies to: price variance up to 5%.")
+    second = memory(case_id="CASE-0002", body="Resolution: APPROVED. Applies to: price variance up to 5%.")
+    raw = proposal(confidence=0.99, citations=["CASE-0001", "CASE-0002"])
+
+    cold = calibrate_confidence(raw.model_copy(update={"cited_case_ids": []}), [current], [], VENDOR, 10_000)
+    warm_one = calibrate_confidence(raw, [current], [first], VENDOR, 10_000)
+    warm_two = calibrate_confidence(raw, [current], [first, second], VENDOR, 10_000)
+
+    assert cold.confidence == 0.50
+    assert warm_one.confidence == 0.75
+    assert warm_two.confidence == 0.90
+
+
+def test_conflicting_precedents_cannot_raise_confidence() -> None:
+    first = memory(body="Resolution: APPROVED. Applies to: price variance up to 5%.")
+    second = memory(case_id="CASE-0002", body="Resolution: REJECT. Applies to: price variance up to 5%.")
+    raw = proposal(confidence=0.99, citations=["CASE-0001", "CASE-0002"])
+
+    calibrated = calibrate_confidence(raw, [exception(variance=4.0)], [first, second], VENDOR, 10_000)
+
+    assert calibrated.confidence == 0.75
 
 
 def test_duplicate_invoice_can_be_rejected_from_deterministic_detection() -> None:

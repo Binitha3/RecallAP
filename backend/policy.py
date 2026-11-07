@@ -157,6 +157,66 @@ def decision_from_precedents(
     )
 
 
+def calibrate_confidence(
+    decision: ProposedDecision,
+    exceptions: list[InvoiceException],
+    recalled: list[RecalledMemory],
+    vendor: str,
+    invoice_total: float,
+) -> ProposedDecision:
+    """Replace model confidence with a conservative score grounded in cited evidence.
+
+    The score is intentionally deterministic for the demo: no cited precedent caps at
+    0.50, one or conflicting precedents caps at 0.75, and at least two unanimous,
+    in-range human cases per exception can support 0.90. Deterministic policy
+    decisions (including exact duplicate rejection) are produced before this helper.
+    """
+    if not exceptions or decision.action == DecisionAction.ESCALATE:
+        # Keep escalation confidence informative while preventing unsupported model
+        # certainty from appearing in the demo.
+        if not exceptions:
+            return decision
+
+    cited_ids = set(decision.cited_case_ids)
+    parsed = [
+        item for item in (_parse_precedent(memory, vendor) for memory in recalled)
+        if item is not None
+        and item.human_decided
+        and item.reusable
+        and item.case_id in cited_ids
+    ]
+    if not parsed:
+        return decision.model_copy(update={"confidence": min(decision.confidence, 0.50)})
+
+    action_map = {
+        "APPROVED": DecisionAction.AUTO_APPROVE_WITH_NOTE,
+        "AUTO_APPROVE": DecisionAction.AUTO_APPROVE,
+        "AUTO_APPROVE_WITH_NOTE": DecisionAction.AUTO_APPROVE_WITH_NOTE,
+        "REQUEST_VENDOR_INFO": DecisionAction.REQUEST_VENDOR_INFO,
+        "REJECT": DecisionAction.REJECT,
+    }
+    counts: list[int] = []
+    unanimous = True
+    for exception in exceptions:
+        matching: list[DecisionAction] = []
+        for precedent in parsed:
+            if precedent.exception_type != exception.type or _range_violation(precedent, exception, invoice_total):
+                continue
+            resolution = RESOLUTION_RE.search(precedent.memory.text)
+            action = action_map.get(resolution.group(1).upper()) if resolution else None
+            if action is not None:
+                matching.append(action)
+        counts.append(len(matching))
+        if not matching or len(set(matching)) != 1 or matching[0] != decision.action:
+            unanimous = False
+
+    if not any(counts):
+        return decision.model_copy(update={"confidence": min(decision.confidence, 0.50)})
+    if min(counts) < 2 or not unanimous:
+        return decision.model_copy(update={"confidence": min(decision.confidence, 0.75)})
+    return decision.model_copy(update={"confidence": 0.90})
+
+
 def _add(triggered: list[str], message: str) -> None:
     if message not in triggered:
         triggered.append(message)

@@ -63,6 +63,8 @@ python scripts\seed_demo_memory.py
 
 The script creates a fresh bank, stores its ID and seed case IDs in the ignored local manifest `data/snapshots/demo_bank.json`, and prints the bank ID. Put that value in `.env` as `BANK_ID=...` and restart the API. This keeps demo seeds separate from the experiment banks; the seed case uses `CASE-9001` to avoid collisions with runtime case numbers.
 
+The offline `scripts/walking_skeleton.py` walkthrough prints each D1–D7 decision with calibrated confidence, citations, and triggered guardrails. Run it three times before the live demo; its transition is deterministic and does not require Groq or Hindsight.
+
 ### Latest full benchmark (2026-11-07)
 
 On the verified 60-invoice set, the latest memory-on run scored **36.67% correct touchless (22/60)**, with **100% precision across 22 automatic decisions**: 4 clean invoices and 18 correct exception resolutions. It sent 38 invoices to human review and made **0 unsafe touchless decisions**. Memory-off scored **13.33% (8/60)**, including 4 clean invoices and 4 exact-duplicate rejections, with 52 human reviews and 0 unsafe decisions. Memory-on improved correct touchless coverage by **23.34 percentage points** and produced 14 more correct automatic resolutions. The denominator is all 60 invoices; the 100% precision figure describes the 22 memory-on automatic decisions in this run and should not be read as 100% accuracy on all invoices or as a population-level guarantee.
@@ -113,6 +115,8 @@ The model proposes one of `AUTO_APPROVE`, `AUTO_APPROVE_WITH_NOTE`, `REQUEST_VEN
 6. If there is still no valid proposal, return `ESCALATE` with confidence 0 and `Agent unavailable; routed to human review.`
 
 The configured primary is `openai/gpt-oss-120b`. The prior `qwen/qwen3-32b` fallback was shut down for standard developer-tier requests on July 17, 2026, so the default is its current supported Qwen successor, `qwen/qwen3.8-27b`. The fallback is configurable through `GROQ_MODEL_FALLBACK`. Groq supports forced tool choice in its OpenAI-compatible API, and its current model page lists tool use for Qwen 3.8 27B. [Groq tool-use docs](https://console.groq.com/docs/tool-use/local-tool-calling) · [model deprecations](https://console.groq.com/docs/deprecations) · [Qwen 3.8 27B](https://console.groq.com/docs/model/qwen/qwen3.8-27b)
+
+Model confidence is not trusted as a safety signal. Before guardrails, the backend recalibrates it from cited, recalled, human-decided cases: no cited in-range match caps confidence at 0.50; one match, conflicting cases, or partial coverage across exceptions caps it at 0.75; two or more unanimous, in-range cases for every exception set it at 0.90. The deterministic precedent resolver can independently return a supported decision at 0.95. This keeps D1/D2/D3 below the 0.80 auto-resolution threshold, while D5 reaches a repeatable warm resolution citing CASE-0001 and CASE-0003.
 
 ## Deterministic guardrails
 

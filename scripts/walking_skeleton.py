@@ -25,7 +25,7 @@ def _case(case_id: str, variance: float) -> RecalledMemory:
     text = (
         f"{case_id} | 2025-03-12 | Vendor: Deccan Freight Lines (V-1004) | "
         f"Exception: PRICE_MISMATCH. Invoice was {variance:+.1f}% vs PO. "
-        "Resolution approved. Applies to: this vendor, price variance up to 5%. Decided by: human."
+        "Resolution: APPROVED. Applies to: this vendor, price variance up to 5%. Decided by: human."
     )
     return RecalledMemory(case_id=case_id, memory_type="resolution_case", text=text)
 
@@ -69,7 +69,12 @@ def main() -> None:
             bank_id="recallap-walking-skeleton",
         )
         guards = ", ".join(response.guardrails.triggered) or "none"
-        print(f"{label}: {response.final_status} | {response.decision.action.value} | guardrails: {guards}")
+        citations = ", ".join(response.decision.cited_case_ids) or "none"
+        print(
+            f"{label}: {response.final_status} | {response.decision.action.value} "
+            f"| confidence: {response.decision.confidence:.2f} | cites: {citations} "
+            f"| guardrails: {guards}"
+        )
 
     deccan_po = base_po
     assert deccan_po is not None
