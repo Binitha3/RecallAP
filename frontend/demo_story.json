@@ -1,0 +1,37 @@
+[
+  {
+    "step": "D1", "invoice_id": "INV-2025-7301", "title": "Cold start",
+    "narration": "Deccan, +4.0% over PO. No memory yet, so the agent honestly escalates.",
+    "note": "Fuel surcharge up to 5% is covered by the contract amendment."
+  },
+  {
+    "step": "D2", "invoice_id": "INV-2025-7302", "title": "Learning",
+    "narration": "Deccan, +3.2%. The agent recalls CASE-0001 and recommends approval; the human confirms.",
+    "note": "Fuel surcharge up to 5% is covered by the contract amendment."
+  },
+  {
+    "step": "D3", "invoice_id": "INV-2025-7303", "title": "Learning",
+    "narration": "Deccan, +4.5%. Two similar cases recalled; the human confirms again.",
+    "note": "Fuel surcharge up to 5% is covered by the contract amendment."
+  },
+  {
+    "step": "D4", "invoice_id": "INV-2025-7304", "title": "Different vendor",
+    "narration": "Godavari IT, missing PO, Rs. 32,000. No precedent for this vendor, so it escalates.",
+    "note": "Annual renewals below Rs. 50,000 are approved under the master IT contract."
+  },
+  {
+    "step": "D5", "invoice_id": "INV-2025-7305", "title": "Payoff",
+    "narration": "Deccan, +3.8%. Auto-approved, citing the exact past cases. Open the Why panel.",
+    "note": ""
+  },
+  {
+    "step": "D6", "invoice_id": "INV-2025-7306", "title": "Outside range",
+    "narration": "Deccan, +9%. Approved range was up to 5%, so guardrail G3 escalates.",
+    "note": ""
+  },
+  {
+    "step": "D7", "invoice_id": "INV-2025-7307", "title": "Fraud pattern",
+    "narration": "Deccan, bank details changed. Guardrail G1 always escalates, whatever the history.",
+    "note": ""
+  }
+]

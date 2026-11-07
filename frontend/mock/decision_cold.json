@@ -1,16 +1,29 @@
 {
   "invoice_id": "INV-2025-0731",
   "memory_used": false,
-  "exceptions": [{"type": "PRICE_MISMATCH", "detail": "Invoice is 4.0% above the PO total.", "severity": "low", "variance_pct": 4.0}],
+  "exceptions": [
+    {
+      "type": "PRICE_MISMATCH",
+      "detail": "Invoice Rs. 104,000 vs PO Rs. 100,000 (+4.0%)",
+      "severity": "low",
+      "variance_pct": 4.0
+    }
+  ],
   "recalled": [],
   "decision": {
     "action": "ESCALATE",
-    "confidence": 0.0,
-    "rationale": "No precedent was recalled for this vendor and exception. Route the invoice to a human reviewer.",
+    "confidence": 0.35,
+    "rationale": "Invoice is 4.0% above the PO. I have no memory of how this vendor's price differences were handled before, so I cannot judge whether this is acceptable. Routing to a human.",
     "cited_case_ids": [],
     "draft_message": ""
   },
-  "guardrails": {"passed": true, "triggered": [], "downgraded_from": null},
+  "guardrails": {
+    "passed": false,
+    "triggered": [
+      { "code": "G2", "why": "No same-vendor, same-exception precedent" }
+    ],
+    "downgraded_from": null
+  },
   "final_status": "NEEDS_REVIEW",
-  "latency_ms": 84
+  "latency_ms": 1850
 }

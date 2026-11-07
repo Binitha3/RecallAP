@@ -4,7 +4,7 @@
     "vendor_name": "Deccan Freight Lines",
     "amount": 104000,
     "currency": "INR",
-    "status": "NEEDS_REVIEW",
+    "status": "NEW",
     "exception_types": ["PRICE_MISMATCH"]
   },
   {
@@ -16,11 +16,19 @@
     "exception_types": ["PRICE_MISMATCH"]
   },
   {
-    "id": "INV-2025-0801",
-    "vendor_name": "Godavari IT",
-    "amount": 32000,
+    "id": "INV-2025-0733",
+    "vendor_name": "Charminar Office Supplies",
+    "amount": 18450,
     "currency": "INR",
-    "status": "NEEDS_REVIEW",
-    "exception_types": ["MISSING_PO"]
+    "status": "CLEAN",
+    "exception_types": []
+  },
+  {
+    "id": "INV-2025-0736",
+    "vendor_name": "Deccan Freight Lines",
+    "amount": 109000,
+    "currency": "INR",
+    "status": "NEW",
+    "exception_types": ["PRICE_MISMATCH"]
   }
 ]

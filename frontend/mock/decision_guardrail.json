@@ -1,19 +1,45 @@
 {
-  "invoice_id": "INV-2025-0740",
+  "invoice_id": "INV-2025-0736",
   "memory_used": true,
-  "exceptions": [{"type": "PRICE_MISMATCH", "detail": "Invoice is 9.0% above the PO total.", "severity": "medium", "variance_pct": 9.0}],
+  "exceptions": [
+    {
+      "type": "PRICE_MISMATCH",
+      "detail": "Invoice Rs. 109,000 vs PO Rs. 100,000 (+9.0%)",
+      "severity": "medium",
+      "variance_pct": 9.0
+    }
+  ],
   "recalled": [
-    {"case_id": "CASE-0001", "memory_type": "resolution_case", "text": "CASE-0001 | 2025-03-12 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Resolution approved for a price variance up to 5%. Decided by: human."},
-    {"case_id": "CASE-0003", "memory_type": "resolution_case", "text": "CASE-0003 | 2025-03-14 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Resolution approved for a price variance up to 5%. Decided by: human."}
+    {
+      "case_id": "CASE-0001",
+      "memory_type": "resolution_case",
+      "text": "CASE-0001 | 2025-03-12 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Invoice DFL/25/0731 billed Rs. 104,000 against PO-5521 Rs. 100,000 (+4.0%). Resolution: APPROVED by Priya Nair. Reason: 'Fuel surcharge up to 5% is covered by the contract amendment.' Applies to: this vendor, price variance up to 5%. Outcome: paid."
+    },
+    {
+      "case_id": "CASE-0003",
+      "memory_type": "resolution_case",
+      "text": "CASE-0003 | 2025-03-20 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Invoice billed +4.5% over PO. Resolution: APPROVED by Priya Nair. Reason: 'Surcharge up to 5% per contract.' Applies to: this vendor, price variance up to 5%. Outcome: paid."
+    },
+    {
+      "case_id": null,
+      "memory_type": "vendor_profile",
+      "text": "Deccan Freight Lines (V-1004) bills a fuel surcharge of up to 5% above PO on most shipments, per contract amendment."
+    }
   ],
   "decision": {
     "action": "ESCALATE",
-    "confidence": 0.91,
-    "rationale": "The model recommendation was downgraded because the 9.0% variance exceeds the recalled cases' up to 5% allowance.",
+    "confidence": 0.82,
+    "rationale": "This vendor's price differences were approved before (CASE-0001, CASE-0003), but only up to 5%. This invoice is +9.0%, outside the approved range, so a human needs to decide.",
     "cited_case_ids": ["CASE-0001", "CASE-0003"],
     "draft_message": ""
   },
-  "guardrails": {"passed": false, "triggered": ["G3: variance exceeds precedent range"], "downgraded_from": "AUTO_APPROVE_WITH_NOTE"},
+  "guardrails": {
+    "passed": false,
+    "triggered": [
+      { "code": "G3", "why": "Variance outside approved precedent range (approved up to 5%, this invoice is 9.0%)" }
+    ],
+    "downgraded_from": "AUTO_APPROVE_WITH_NOTE"
+  },
   "final_status": "NEEDS_REVIEW",
-  "latency_ms": 298
+  "latency_ms": 2310
 }

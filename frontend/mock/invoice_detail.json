@@ -2,33 +2,49 @@
   "invoice": {
     "id": "INV-2025-0731",
     "vendor_id": "V-1004",
-    "po_number": "PO-2025-0412",
-    "invoice_number": "DFL-0731",
+    "po_number": "PO-5521",
+    "invoice_number": "DFL/25/0731",
     "date": "2025-03-12",
     "currency": "INR",
     "gstin": "36ABCDE1234F1Z5",
     "gst_rate": 18,
     "bank_account": "XXXX4821",
-    "lines": [{"item": "Freight service", "qty": 1, "unit_price": 104000}],
+    "lines": [
+      { "item": "Freight HYD-BLR", "qty": 10, "unit_price": 10400 }
+    ],
     "total": 104000,
     "seq": 1
   },
   "po": {
-    "po_number": "PO-2025-0412",
+    "po_number": "PO-5521",
     "vendor_id": "V-1004",
     "total": 100000,
     "currency": "INR",
-    "lines": [{"item": "Freight service", "qty": 1, "unit_price": 100000}]
+    "lines": [
+      { "item": "Freight HYD-BLR", "qty": 10, "unit_price": 10000 }
+    ]
   },
-  "grn": {"po_number": "PO-2025-0412", "received": [{"item": "Freight service", "qty": 1}]},
+  "grn": {
+    "po_number": "PO-5521",
+    "received": [
+      { "item": "Freight HYD-BLR", "qty": 10 }
+    ]
+  },
   "vendor": {
     "id": "V-1004",
     "name": "Deccan Freight Lines",
     "gstin": "36ABCDE1234F1Z5",
     "bank_account": "XXXX4821",
     "payment_terms": "Net 30",
-    "category": "freight",
+    "category": "Logistics",
     "currency": "INR"
   },
-  "exceptions": [{"type": "PRICE_MISMATCH", "detail": "Invoice is 4.0% above the PO total.", "severity": "low", "variance_pct": 4.0}]
+  "exceptions": [
+    {
+      "type": "PRICE_MISMATCH",
+      "detail": "Invoice Rs. 104,000 vs PO Rs. 100,000 (+4.0%)",
+      "severity": "low",
+      "variance_pct": 4.0
+    }
+  ]
 }

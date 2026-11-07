@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecallAP</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Instrument+Sans:wdth,wght@75..100,400..700&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=2" />
+
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: "#F8E6DD",      // peach page ground
+          panel: "#FAF9F5",   // warm white panels
+          raised: "#F1EFE8",
+          line: "#E6E2D8",
+          ink: "#151615",
+          dim: "#696C64",
+          faint: "#A3A59E",
+          accent: "#FA7F62",  // coral
+          warn: "#D18F1F",
+          danger: "#D2432F",
+          quirk: "#4F7FD9",
+          resolution: "#2E9E6B",
+          pref: "#C98A1B",
+        },
+        fontFamily: {
+          sans: ["Instrument Sans", "system-ui", "sans-serif"],
+          display: ["Instrument Sans", "system-ui", "sans-serif"],
+          mono: ["JetBrains Mono", "ui-monospace", "monospace"],
+        },
+      },
+    },
+  };
+</script>
+</head>
+
+<body class="bg-bg text-ink font-sans h-screen flex flex-col">
+
+<!-- HERO INTRO -->
+<div id="hero">
+  <section class="hero-photo">
+    <video id="hero-video" muted loop playsinline autoplay preload="auto"
+      src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/8c7344a4-d74c-4611-a9f5-bfe0125be0ef.mp4"></video>
+
+    <svg class="hero-dust" viewBox="0 0 400 200" aria-hidden="true">
+      <circle cx="60" cy="40" r="1.6" fill="#fff" opacity=".7"/><circle cx="150" cy="22" r="1.2" fill="#fff" opacity=".6"/>
+      <circle cx="240" cy="58" r="1.8" fill="#fff" opacity=".5"/><circle cx="320" cy="30" r="1.3" fill="#fff" opacity=".7"/>
+      <circle cx="110" cy="90" r="1" fill="#fff" opacity=".5"/><circle cx="360" cy="95" r="1.5" fill="#fff" opacity=".6"/>
+    </svg>
+
+    <!-- card 3: dark (behind) -->
+    <div class="hcard hcard-dark">
+      <div class="hrow"><span>Memory</span><span>Hindsight</span></div>
+      <div class="hmark">RecallAP</div>
+    </div>
+    <!-- card 2: glass list -->
+    <div class="hcard hcard-glass">
+      <div class="hrow big"><span>Deccan Freight Lines</span><b>+4.0%</b></div>
+      <div class="hrow dimrow"><span>Surcharge within precedent</span><i class="chip coral">CASE-0001</i></div>
+      <div class="hrow dimrow"><span>Musi Chemicals bank change</span><i class="chip coral">Escalated</i></div>
+      <div class="hwhite"><span>Invoice #0413 needs review</span><u>OPEN IN WORKSPACE ↗</u></div>
+    </div>
+    <!-- card 1: coral balance -->
+    <div class="hcard hcard-coral">
+      <div class="heyebrow">AUTO-RESOLVED THIS WEEK</div>
+      <div class="hamount">₹4,86,200</div>
+      <div class="hrow"><span class="chip white">+7 invoices today</span><span class="hdot"></span></div>
+      <u class="hview">VIEW DETAIL</u>
+    </div>
+
+    <div class="hero-corner">Hey,<br /><span class="serif">it's RecallAP!</span></div>
+  </section>
+
+  <section class="hero-copy">
+    <div class="hero-head">
+            <div class="hero-pop-wrap left">
+        <button id="hero-menu-btn" class="sqbtn light" aria-label="Menu"><span></span><span></span><span></span></button>
+        <div id="hero-menu" class="hero-pop" hidden>
+          <button data-go="workspace">Workspace</button>
+          <button data-go="compare">Compare ON vs OFF</button>
+          <button data-go="curve">Learning curve</button>
+          <button data-go="explorer">Memory explorer</button>
+        </div>
+      </div>
+
+      <div class="hero-word">Recall<span class="serif">AP</span></div>
+
+      <div class="hero-pop-wrap right">
+                <button id="hero-profile-btn" class="sqbtn dark" aria-label="Profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8.3" r="3.6" fill="#fff"/>
+            <path d="M5.6 18.6c0-2.3 1.5-3.9 3.5-3.9h5.8c2 0 3.5 1.6 3.5 3.9 0 .5-.4.9-.9.9H6.5c-.5 0-.9-.4-.9-.9z" fill="#fff"/>
+          </svg>
+        </button>
+        <div id="hero-profile" class="hero-pop" hidden>
+          <div class="who"><b>Priya Nair</b><span>AP Manager</span></div>
+          <button data-go="workspace">Open workspace</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-mid">
+      <h2 class="hero-h">
+        <span class="hl">Accounts payable</span>
+        <span class="hl">that remembers</span>
+        <span class="hl serif">every exception</span>
+      </h2>
+      <p class="hero-lede">Every exception your team resolves becomes memory. New cases are settled in seconds, with the exact past cases cited.</p>
+      <div class="hero-cta-wrap">
+        <button id="hero-cta" class="hero-cta">Open workspace<span class="cta-arrow">→</span></button>
+      </div>
+    </div>
+
+    <div class="hero-foot">Powered by Hindsight memory · 8 exception types</div>
+  </section>
+</div>
+
+
+  <!-- HEADER -->
+  <header class="h-14 px-5 flex items-center justify-between border-b border-line">
+    <div class="flex items-baseline gap-3">
+      <h1 class="font-display text-[26px] font-semibold tracking-tight leading-none">Recall<span class="serif">AP</span></h1>
+      <span class="text-xs text-faint hidden md:inline">AP exceptions agent</span>
+    </div>
+
+    <div class="flex items-center gap-4 text-[13px]">
+      <!-- memory toggle -->
+      <div class="flex items-center rounded-md border border-line overflow-hidden text-xs">
+        <span id="mem-label" class="px-2.5 py-1 text-faint">Memory</span>
+        <button id="mem-on" class="px-2.5 py-1 bg-accent text-bg font-semibold">ON</button>
+        <button id="mem-off" class="px-2.5 py-1 text-dim hover:text-ink">OFF</button>
+    </div>
+      <button id="demo-next" onclick="demoNext()" class="px-3 py-1.5 rounded-md bg-ink text-white text-xs font-semibold hover:opacity-90 disabled:opacity-50">Start demo (N)</button>
+      <button onclick="showTab('compare')" class="text-dim hover:text-ink">Compare</button>
+      <button onclick="openBriefing()" class="text-dim hover:text-ink">Vendor briefing</button>
+      <button onclick="openReset()" class="text-dim hover:text-ink">Reset</button>
+            <span class="flex items-center gap-1.5 font-mono text-[11px] text-dim">
+        <span class="w-1.5 h-1.5 rounded-full bg-resolution"></span>health ok
+      </span>
+    </div>
+  </header>
+
+  <!-- DEMO BAR -->
+<div id="demo-bar" class="hidden px-5 py-2 border-b border-line bg-raised flex items-center gap-4">
+  <span id="demo-step" class="font-mono text-[11px] text-accent whitespace-nowrap"></span>
+  <span id="demo-title" class="font-display text-[14px] font-semibold whitespace-nowrap"></span>
+  <span id="demo-narration" class="text-[13px] text-dim"></span>
+</div>
+
+  <!-- WORKSPACE: THREE COLUMNS -->
+  <main id="view-workspace" class="flex-1 min-h-0 grid grid-cols-12">
+
+    <!-- INBOX -->
+    <section class="col-span-3 border-r border-line bg-panel overflow-y-auto">
+      <div class="px-4 h-10 flex items-center justify-between border-b border-line">
+        <h2 class="eyebrow">Inbox</h2>
+        <span id="inbox-count" class="font-mono text-[11px] text-faint"></span>
+      </div>
+      <div id="inbox-list"></div>
+    </section>
+
+    <!-- INVOICE DETAIL -->
+    <section class="col-span-5 border-r border-line overflow-y-auto">
+      <div id="detail-panel" class="p-6">
+        <p class="text-sm text-faint">Select an invoice to see it here.</p>
+      </div>
+    </section>
+
+    <!-- DECISION + WHY -->
+    <section class="col-span-4 bg-panel overflow-y-auto flex flex-col">
+      <div class="px-4 h-10 flex items-center border-b border-line">
+        <h2 class="eyebrow">Agent decision</h2>
+      </div>
+      <div id="decision-panel" class="p-4 border-b border-line">
+        <p class="text-sm text-faint">The agent's decision will appear here.</p>
+      </div>
+
+      <div class="px-4 h-10 flex items-center border-b border-line">
+        <h2 class="eyebrow">Why I decided this</h2>
+      </div>
+      <div id="why-panel" class="p-4">
+        <p class="text-sm text-faint">Recalled memories will appear here.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- COMPARE VIEW -->
+  <section id="view-compare" class="hidden flex-1 min-h-0 overflow-y-auto">
+    <div class="px-6 py-3 border-b border-line flex items-center gap-3">
+      <h2 class="eyebrow">Compare</h2>
+      <select id="compare-select"
+        class="bg-raised border border-line rounded-md px-3 py-1.5 text-[13px] font-mono outline-none focus:border-accent"></select>
+      <button id="compare-run"
+        class="px-3 py-1.5 rounded-md bg-accent text-bg text-[13px] font-semibold hover:opacity-90 disabled:opacity-50">Run both</button>
+    </div>
+    <div id="compare-result" class="p-6">
+      <p class="text-sm text-faint">Pick an invoice and run it with memory off and on, side by side.</p>
+    </div>
+  </section>
+
+  <!-- LEARNING CURVE VIEW -->
+  <section id="view-curve" class="hidden flex-1 min-h-0 overflow-y-auto">
+    <div id="curve-content" class="p-6"></div>
+  </section>
+
+  
+  <!-- MEMORY EXPLORER VIEW -->
+  <section id="view-explorer" class="hidden flex-1 min-h-0 overflow-y-auto">
+    <div class="grid grid-cols-12 min-h-full">
+
+    <!-- search -->
+    <div class="col-span-7 border-r border-line p-6">
+      <div class="eyebrow mb-1.5">Memory explorer</div>
+      <h2 class="font-display text-2xl font-semibold tracking-tight mb-4">What the agent remembers</h2>
+
+      <div class="flex gap-2 mb-3">
+        <input id="explorer-q" placeholder="Search memories, e.g. Deccan"
+          class="flex-1 px-3 py-2 rounded-md bg-raised border border-line text-[13px] outline-none focus:border-accent" />
+        <button id="explorer-search"
+          class="px-3 py-2 rounded-md bg-accent text-bg text-[13px] font-semibold hover:opacity-90 disabled:opacity-50">Search</button>
+      </div>
+
+      <div id="explorer-chips" class="flex flex-wrap items-center gap-2 mb-5 text-[12px]">
+        <span class="text-faint">Try:</span>
+        <button data-q="Deccan" class="explorer-chip font-mono px-2 py-0.5 rounded-sm border border-line text-dim hover:text-ink hover:bg-raised">Deccan</button>
+        <button data-q="surcharge" class="explorer-chip font-mono px-2 py-0.5 rounded-sm border border-line text-dim hover:text-ink hover:bg-raised">surcharge</button>
+        <button data-q="Priya" class="explorer-chip font-mono px-2 py-0.5 rounded-sm border border-line text-dim hover:text-ink hover:bg-raised">Priya</button>
+        <button data-q="bank" class="explorer-chip font-mono px-2 py-0.5 rounded-sm border border-line text-dim hover:text-ink hover:bg-raised">bank</button>
+      </div>
+
+      <div id="explorer-results">
+        <p class="text-sm text-faint">Search to see what Hindsight has stored: vendor quirks, past resolutions and approver preferences.</p>
+      </div>
+    </div>
+
+    <!-- vendor briefing -->
+    <div class="col-span-5 p-6 bg-panel">
+      <div class="eyebrow mb-1.5">Vendor briefing</div>
+      <h2 class="font-display text-2xl font-semibold tracking-tight mb-4">What should I know about…</h2>
+
+      <div class="flex gap-2 mb-5">
+        <select id="briefing-select"
+          class="flex-1 bg-raised border border-line rounded-md px-3 py-2 text-[13px] outline-none focus:border-accent"></select>
+        <button id="briefing-run"
+          class="px-3 py-2 rounded-md bg-accent text-bg text-[13px] font-semibold hover:opacity-90 disabled:opacity-50">Get briefing</button>
+      </div>
+
+      <div id="briefing-result">
+        <p class="text-sm text-faint">Pick a vendor to get a briefing from everything remembered about them.</p>
+      </div>
+    </div>
+
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <nav class="border-t border-line px-5 flex gap-7 text-[13px]">
+    <button data-tab="workspace" onclick="showTab('workspace')" class="tab-btn py-3 -mt-px border-t-2 border-accent text-ink">Workspace</button>
+    <button data-tab="compare" onclick="showTab('compare')" class="tab-btn py-3 text-dim hover:text-ink">Compare ON vs OFF</button>
+    <button data-tab="curve" onclick="showTab('curve')" class="tab-btn py-3 text-dim hover:text-ink">Learning curve</button>
+    <button data-tab="explorer" onclick="showTab('explorer')" class="tab-btn py-3 text-dim hover:text-ink">Memory explorer</button>
+  </nav>
+
+  <!-- REVIEW MODAL -->
+  <div id="review-modal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
+    <div class="bg-panel border border-line rounded-md w-[480px] max-w-[92vw] p-5">
+      <div class="eyebrow mb-1">Human review</div>
+      <h3 id="review-invoice" class="font-display text-xl font-semibold tracking-tight mb-4"></h3>
+
+      <label class="eyebrow block mb-1.5">Approver</label>
+      <input id="review-approver" value="Priya Nair"
+        class="w-full mb-4 px-3 py-2 rounded-md bg-raised border border-line text-[13px] outline-none focus:border-accent" />
+
+      <label class="eyebrow block mb-1.5">Note (this is what the agent will learn from)</label>
+      <textarea id="review-note" rows="4"
+        placeholder="e.g. Fuel surcharge up to 5% is covered by the contract amendment."
+        class="w-full mb-1 px-3 py-2 rounded-md bg-raised border border-line text-[13px] outline-none focus:border-accent resize-none"></textarea>
+      <p id="review-error" class="text-[12px] text-danger h-4 mb-3"></p>
+      <label class="flex items-center gap-2 mb-4 text-[13px] text-dim cursor-pointer">
+        <input id="review-precedent" type="checkbox" checked class="accent-[#FA7F62]" />
+        Use as precedent for future cases
+      </label>
+
+      <div class="flex items-center gap-2">
+        <button onclick="submitReview('APPROVE_WITH_NOTE')" class="review-btn px-3 py-2 rounded-md bg-accent text-bg text-[13px] font-semibold hover:opacity-90">Approve with note</button>
+        <button onclick="submitReview('APPROVE')" class="review-btn px-3 py-2 rounded-md border border-line text-[13px] hover:bg-raised">Approve</button>
+        <button onclick="submitReview('REJECT')" class="review-btn px-3 py-2 rounded-md border border-danger/40 text-danger text-[13px] hover:bg-danger/10">Reject</button>
+        <button onclick="closeReview()" class="ml-auto text-[13px] text-dim hover:text-ink">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMORY MODAL -->
+  <div id="memory-modal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center" onclick="if(event.target===this) closeMemory()">
+    <div class="bg-panel border border-line rounded-md w-[560px] max-w-[92vw] p-5">
+      <div class="flex items-center gap-2 mb-3">
+        <span id="memory-type" class="text-[10px] tracking-widest uppercase"></span>
+        <span id="memory-case" class="font-mono text-[12px] px-1.5 rounded-sm border border-line"></span>
+        <span id="memory-cited" class="text-[10px] uppercase tracking-widest text-accent ml-auto"></span>
+      </div>
+      <p id="memory-text" class="text-[13px] leading-relaxed text-ink whitespace-pre-wrap"></p>
+      <div class="mt-5 text-right">
+        <button onclick="closeMemory()" class="text-[13px] text-dim hover:text-ink">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESET MODAL -->
+<div id="reset-modal" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center" onclick="if(event.target===this) closeReset()">
+  <div class="bg-panel border border-line rounded-md w-[440px] max-w-[92vw] p-5">
+    <div class="eyebrow mb-1">Reset demo</div>
+    <h3 class="font-display text-xl font-semibold tracking-tight mb-2">Start from a clean state?</h3>
+    <p class="text-[13px] text-dim mb-5">Every invoice goes back to New. Clear memory too if you want a genuine cold start.</p>
+    <div class="flex flex-col gap-2">
+      <button onclick="doReset(true)" class="reset-btn py-2.5 rounded-md bg-accent text-bg text-[13px] font-semibold hover:opacity-90 disabled:opacity-50">Reset and clear memory (cold start)</button>
+      <button onclick="doReset(false)" class="reset-btn py-2.5 rounded-md border border-line text-[13px] hover:bg-raised disabled:opacity-50">Reset statuses, keep memory</button>
+      <button onclick="closeReset()" class="text-[13px] text-dim hover:text-ink mt-1">Cancel</button>
+    </div>
+    <p id="reset-error" class="text-[12px] text-danger mt-3 h-4"></p>
+  </div>
+</div>
+
+  <!-- TOAST -->
+  <div id="toast" class="hidden fixed bottom-16 right-5 z-50 bg-raised border border-accent/40 px-4 py-2.5 rounded-md font-mono text-[12px]"></div>
+
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

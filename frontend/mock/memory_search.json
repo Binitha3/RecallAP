@@ -1,0 +1,32 @@
+[
+  {
+    "case_id": "CASE-0001",
+    "type": "resolution_case",
+    "text": "CASE-0001 | 2025-03-12 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Invoice DFL/25/0731 billed Rs. 104,000 against PO-5521 Rs. 100,000 (+4.0%). Resolution: APPROVED by Priya Nair. Reason: 'Fuel surcharge up to 5% is covered by the contract amendment.' Applies to: this vendor, price variance up to 5%. Outcome: paid."
+  },
+  {
+    "case_id": "CASE-0003",
+    "type": "resolution_case",
+    "text": "CASE-0003 | 2025-03-20 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Invoice billed +4.5% over PO. Resolution: APPROVED by Priya Nair. Reason: 'Surcharge up to 5% per contract.' Applies to: this vendor, price variance up to 5%. Outcome: paid."
+  },
+  {
+    "case_id": null,
+    "type": "vendor_profile",
+    "text": "Deccan Freight Lines (V-1004) bills a fuel surcharge of up to 5% above PO on most shipments, per contract amendment."
+  },
+  {
+    "case_id": null,
+    "type": "vendor_profile",
+    "text": "Godavari IT Services (V-1002) often leaves the PO number off small renewals. Invoices under Rs. 50,000 reference the master contract instead."
+  },
+  {
+    "case_id": null,
+    "type": "approver_preference",
+    "text": "Priya Nair never auto-approves an invoice above Rs. 2,50,000 and prefers to email the vendor before rejecting an invoice."
+  },
+  {
+    "case_id": null,
+    "type": "approver_preference",
+    "text": "Any change of bank details on a vendor invoice is always escalated. Priya Nair verifies by phone with a known contact before anything is paid."
+  }
+]

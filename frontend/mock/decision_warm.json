@@ -1,19 +1,48 @@
 {
   "invoice_id": "INV-2025-0735",
   "memory_used": true,
-  "exceptions": [{"type": "PRICE_MISMATCH", "detail": "Invoice is 3.8% above the PO total.", "severity": "low", "variance_pct": 3.8}],
+  "exceptions": [
+    {
+      "type": "PRICE_MISMATCH",
+      "detail": "Invoice Rs. 103,800 vs PO Rs. 100,000 (+3.8%)",
+      "severity": "low",
+      "variance_pct": 3.8
+    }
+  ],
   "recalled": [
-    {"case_id": "CASE-0001", "memory_type": "resolution_case", "text": "CASE-0001 | 2025-03-12 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Resolution approved for a price variance up to 5%. Decided by: human."},
-    {"case_id": "CASE-0003", "memory_type": "resolution_case", "text": "CASE-0003 | 2025-03-14 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Resolution approved for a price variance up to 5%. Decided by: human."}
+    {
+      "case_id": "CASE-0001",
+      "memory_type": "resolution_case",
+      "text": "CASE-0001 | 2025-03-12 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Invoice DFL/25/0731 billed Rs. 104,000 against PO-5521 Rs. 100,000 (+4.0%). Resolution: APPROVED by Priya Nair. Reason: 'Fuel surcharge up to 5% is covered by the contract amendment.' Applies to: this vendor, price variance up to 5%. Outcome: paid."
+    },
+    {
+      "case_id": "CASE-0003",
+      "memory_type": "resolution_case",
+      "text": "CASE-0003 | 2025-03-20 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. Invoice billed +4.5% over PO. Resolution: APPROVED by Priya Nair. Reason: 'Surcharge up to 5% per contract.' Applies to: this vendor, price variance up to 5%. Outcome: paid."
+    },
+    {
+      "case_id": null,
+      "memory_type": "vendor_profile",
+      "text": "Deccan Freight Lines (V-1004) bills a fuel surcharge of up to 5% above PO on most shipments, per contract amendment."
+    },
+    {
+      "case_id": null,
+      "memory_type": "approver_preference",
+      "text": "Priya Nair never auto-approves an invoice above Rs. 2,50,000 and prefers to email the vendor before rejecting an invoice."
+    }
   ],
   "decision": {
     "action": "AUTO_APPROVE_WITH_NOTE",
-    "confidence": 0.90,
-    "rationale": "Two human decided cases for Deccan Freight Lines cover PRICE_MISMATCH up to 5%. The current 3.8% variance is within that range; approve with a note citing CASE-0001 and CASE-0003.",
+    "confidence": 0.91,
+    "rationale": "Same vendor, same exception type. Approved twice before at under 5% (CASE-0001, CASE-0003), and this invoice is +3.8%, inside that range. The vendor profile confirms the surcharge is covered by contract.",
     "cited_case_ids": ["CASE-0001", "CASE-0003"],
-    "draft_message": "Approved under the documented freight surcharge allowance."
+    "draft_message": ""
   },
-  "guardrails": {"passed": true, "triggered": [], "downgraded_from": null},
+  "guardrails": {
+    "passed": true,
+    "triggered": [],
+    "downgraded_from": null
+  },
   "final_status": "AUTO_RESOLVED",
-  "latency_ms": 312
+  "latency_ms": 2140
 }
