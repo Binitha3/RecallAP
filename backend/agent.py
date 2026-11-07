@@ -28,7 +28,12 @@ from backend.models import (
     Vendor,
     GuardrailResult,
 )
-from backend.policy import apply_guardrails, calibrate_confidence, decision_from_precedents
+from backend.policy import (
+    apply_guardrails,
+    calibrate_confidence,
+    decision_from_precedents,
+    strip_unrecalled_citations,
+)
 from backend.store import store
 
 TOUCHLESS_STATUSES = {"AUTO_RESOLVED", "VENDOR_QUERY", "REJECTED"}
@@ -143,6 +148,7 @@ def process_context(
     )
     if decision is None:
         decision = llm.decide(facts, [item.model_dump(mode="json") for item in recalled])
+        decision = strip_unrecalled_citations(decision, recalled)
         decision = calibrate_confidence(
             decision, exceptions, recalled, vendor.name, invoice.total
         )

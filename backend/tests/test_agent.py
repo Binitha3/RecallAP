@@ -3,7 +3,7 @@
 from typing import Any
 
 from backend import agent
-from backend.models import DecisionAction
+from backend.models import DecisionAction, ProposedDecision, RecalledMemory
 
 
 def test_clean_invoice_short_circuits_memory_and_llm(monkeypatch: Any) -> None:
@@ -39,6 +39,44 @@ def test_memory_off_skips_recall_but_keeps_pipeline(monkeypatch: Any) -> None:
     assert result.memory_used is False
     assert result.recalled == []
     assert result.final_status == "NEEDS_REVIEW"
+
+
+def test_agent_strips_hallucinated_citation_before_confidence_calibration(monkeypatch: Any) -> None:
+    from backend.policy import calibrate_confidence as real_calibrate
+
+    invoice, po, grn, vendor = agent.store.load_context("INV-2025-7301")
+    recalled = RecalledMemory(
+        case_id="CASE-0001",
+        memory_type="resolution_case",
+        text=(
+            "CASE-0001 | Vendor: Deccan Freight Lines (V-1004) | Exception: PRICE_MISMATCH. "
+            "Resolution: APPROVED. Applies to: price variance up to 5%. Decided by: human."
+        ),
+    )
+    seen_citations: list[list[str]] = []
+    monkeypatch.setattr(agent.memory, "recall_for", lambda *args, **kwargs: [recalled])
+    monkeypatch.setattr(
+        agent.llm,
+        "decide",
+        lambda *args, **kwargs: ProposedDecision(
+            action=DecisionAction.AUTO_APPROVE_WITH_NOTE,
+            confidence=0.99,
+            rationale="Pretend this unsupported case proves confidence.",
+            cited_case_ids=["CASE-9999"],
+        ),
+    )
+    monkeypatch.setattr(agent, "_save_decision", lambda *args, **kwargs: None)
+
+    def capture_and_calibrate(decision, exceptions, memories, current_vendor, total):
+        seen_citations.append(list(decision.cited_case_ids))
+        return real_calibrate(decision, exceptions, memories, current_vendor, total)
+
+    monkeypatch.setattr(agent, "calibrate_confidence", capture_and_calibrate)
+    result = agent.process_context(invoice, po, grn, vendor, memory_enabled=True)
+
+    assert seen_citations == [[]]
+    assert result.decision.confidence == 0.50
+    assert result.decision.action == DecisionAction.ESCALATE
 
 
 def test_human_resolution_retains_human_tag_and_case_id(monkeypatch: Any) -> None:

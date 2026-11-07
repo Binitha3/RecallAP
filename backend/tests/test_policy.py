@@ -9,7 +9,12 @@ from backend.models import (
     ProposedDecision,
     RecalledMemory,
 )
-from backend.policy import apply_guardrails, calibrate_confidence, decision_from_precedents
+from backend.policy import (
+    apply_guardrails,
+    calibrate_confidence,
+    decision_from_precedents,
+    strip_unrecalled_citations,
+)
 
 
 VENDOR = "Deccan Freight Lines (V-1004)"
@@ -180,6 +185,52 @@ def test_conflicting_precedents_cannot_raise_confidence() -> None:
     calibrated = calibrate_confidence(raw, [exception(variance=4.0)], [first, second], VENDOR, 10_000)
 
     assert calibrated.confidence == 0.75
+
+
+def test_hallucinated_citations_are_removed_before_confidence_calibration() -> None:
+    recalled = [memory()]
+    raw = proposal(confidence=0.99, citations=["CASE-9999"])
+
+    sanitized = strip_unrecalled_citations(raw, recalled)
+    calibrated = calibrate_confidence(
+        sanitized, [exception(variance=4.0)], recalled, VENDOR, 10_000
+    )
+
+    assert sanitized.cited_case_ids == []
+    assert calibrated.confidence == 0.50
+
+
+def test_agent_decided_cases_do_not_count_toward_confidence_or_auto_resolution() -> None:
+    human_case = memory(body="Resolution: APPROVED. Applies to: price variance up to 5%.")
+    agent_case = memory(
+        case_id="CASE-0002",
+        body="Resolution: APPROVED. Applies to: price variance up to 5%.",
+        decided="agent",
+    )
+    raw = proposal(confidence=0.99, citations=["CASE-0001", "CASE-0002"])
+
+    calibrated = calibrate_confidence(
+        raw, [exception(variance=4.0)], [human_case, agent_case], VENDOR, 10_000
+    )
+    deterministic = decision_from_precedents(
+        [exception(variance=4.0)], [human_case, agent_case], VENDOR, 10_000
+    )
+
+    assert calibrated.confidence == 0.75
+    assert deterministic is None
+
+
+def test_out_of_range_human_precedent_triggers_guardrail_without_model_citation() -> None:
+    final, result = apply_guardrails(
+        proposal(citations=[]),
+        [exception(variance=9.0)],
+        [memory(body="Resolution: APPROVED. Applies to: price variance up to 5%.")],
+        VENDOR,
+        10_000,
+    )
+
+    assert final.action == DecisionAction.ESCALATE
+    assert any("G3: PRICE_MISMATCH exceeds precedent range" in item for item in result.triggered)
 
 
 def test_duplicate_invoice_can_be_rejected_from_deterministic_detection() -> None:

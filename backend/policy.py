@@ -217,6 +217,20 @@ def calibrate_confidence(
     return decision.model_copy(update={"confidence": 0.90})
 
 
+def strip_unrecalled_citations(
+    decision: ProposedDecision,
+    recalled: list[RecalledMemory],
+) -> ProposedDecision:
+    """Remove any citation ID that was not returned by this recall operation."""
+    valid_ids = {memory.case_id for memory in recalled if memory.case_id}
+    citations = list(dict.fromkeys(
+        case_id for case_id in decision.cited_case_ids if case_id in valid_ids
+    ))
+    if citations == decision.cited_case_ids:
+        return decision
+    return decision.model_copy(update={"cited_case_ids": citations})
+
+
 def _add(triggered: list[str], message: str) -> None:
     if message not in triggered:
         triggered.append(message)
@@ -283,8 +297,13 @@ def apply_guardrails(
         if covered and len(covered) != len({exception.type for exception in exceptions}):
             _add(triggered, "G7: only some exception types have human precedent")
 
+    # A recalled, applicable human precedent can enforce its safety range even when
+    # the model omits that case from its citation list.
+    range_precedents = [
+        item for item in parsed if item.human_decided and item.reusable
+    ]
     for exception in exceptions:
-        matching = [item for item in human_cited if item.exception_type == exception.type]
+        matching = [item for item in range_precedents if item.exception_type == exception.type]
         if matching and any(_range_violation(item, exception, invoice_total) for item in matching):
             _add(triggered, f"G3: {exception.type} exceeds precedent range")
 

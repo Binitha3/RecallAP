@@ -63,7 +63,22 @@ python scripts\seed_demo_memory.py
 
 The script creates a fresh bank, stores its ID and seed case IDs in the ignored local manifest `data/snapshots/demo_bank.json`, and prints the bank ID. Put that value in `.env` as `BANK_ID=...` and restart the API. This keeps demo seeds separate from the experiment banks; the seed case uses `CASE-9001` to avoid collisions with runtime case numbers.
 
-The offline `scripts/walking_skeleton.py` walkthrough prints each D1–D7 decision with calibrated confidence, citations, and triggered guardrails. Run it three times before the live demo; its transition is deterministic and does not require Groq or Hindsight.
+The offline `scripts/walking_skeleton.py` walkthrough uses local invoice fixtures with mocked Groq and Hindsight responses. It checks deterministic policy behavior only; it does not prove either service is connected.
+
+For a real-service rehearsal, start the API on port 8765:
+
+```powershell
+python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8765
+```
+
+In another PowerShell window, check `http://127.0.0.1:8765/api/health`, then run:
+
+```powershell
+$env:RECALLAP_API_URL = "http://127.0.0.1:8765"
+python scripts\live_demo_d1_d7.py --runs 3
+```
+
+The live runner requires both health checks to be green. It creates a fresh Hindsight bank for each run, exercises real API recall and Groq decisions, uses the dataset invoices `INV-2025-7301`, `7315`, `7327`, `7314`, `7341`, `7357`, and `7312`, and records the scripted human approvals through `/resolve`. D2 is retained as manual-only so it cannot count toward D3 confidence. The script verifies the returned source text and fails if the cold/warm confidence, D5 citations, D6 range guardrail, or D7 bank-change guardrail differ from the expected behavior.
 
 ### Latest full benchmark (2026-11-07)
 
