@@ -159,31 +159,31 @@
       },
       {
         "n": 27,
-        "rolling_rate": 0.4,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.6,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 28,
-        "rolling_rate": 0.2,
+        "rolling_rate": 0.4,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 29,
-        "rolling_rate": 0.4,
+        "rolling_rate": 0.6,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 30,
-        "rolling_rate": 0.6,
+        "rolling_rate": 0.8,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 31,
-        "rolling_rate": 0.6,
+        "rolling_rate": 0.8,
         "auto_correct": true,
         "human_touch": false
       },
@@ -267,31 +267,31 @@
       },
       {
         "n": 45,
-        "rolling_rate": 0.4,
-        "auto_correct": false,
-        "human_touch": true
+        "rolling_rate": 0.6,
+        "auto_correct": true,
+        "human_touch": false
       },
       {
         "n": 46,
-        "rolling_rate": 0.4,
+        "rolling_rate": 0.6,
         "auto_correct": false,
         "human_touch": true
       },
       {
         "n": 47,
-        "rolling_rate": 0.6,
+        "rolling_rate": 0.8,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 48,
-        "rolling_rate": 0.6,
+        "rolling_rate": 0.8,
         "auto_correct": true,
         "human_touch": false
       },
       {
         "n": 49,
-        "rolling_rate": 0.6,
+        "rolling_rate": 0.8,
         "auto_correct": true,
         "human_touch": false
       },
@@ -363,12 +363,12 @@
       }
     ],
     "summary": {
-      "final_rate": 0.3667,
-      "touchless_correct": 22,
-      "touchless_decisions": 22,
+      "final_rate": 0.4,
+      "touchless_correct": 24,
+      "touchless_decisions": 24,
       "touchless_precision": 1.0,
       "unsafe": 0,
-      "human_touches": 38,
+      "human_touches": 36,
       "invoices": 60
     }
   },
@@ -745,5 +745,12 @@
       "invoices": 60
     }
   },
-  "generated_at": "2026-11-06T18:37:32.898164+00:00"
+  "generated_at": "2026-11-07T04:26:40.533784+00:00",
+  "benchmark_metadata": {
+    "code_commit": "6221b11",
+    "dataset": "60 synthetic invoices",
+    "approver": "simulated",
+    "completed_at": "2026-11-07T04:26:40.533784+00:00",
+    "qualification": "Groq daily token limit was reached during the memory-off phase. Later model calls fell back to human review, so rerun both phases after quota reset or with separate capacity before treating the ON/OFF delta as controlled."
+  }
 }

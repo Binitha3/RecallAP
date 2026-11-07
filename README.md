@@ -65,24 +65,24 @@ The script creates a fresh bank, stores its ID and seed case IDs in the ignored 
 
 The offline `scripts/walking_skeleton.py` walkthrough uses local invoice fixtures with mocked Groq and Hindsight responses. It checks deterministic policy behavior only; it does not prove either service is connected.
 
-For a real-service rehearsal, start the API on port 8765:
+For a real-service rehearsal, start the API on the single canonical local port 8000:
 
 ```powershell
-python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8765
+python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-In another PowerShell window, check `http://127.0.0.1:8765/api/health`, then run:
+In another PowerShell window, check `http://127.0.0.1:8000/api/health`, then run:
 
 ```powershell
-$env:RECALLAP_API_URL = "http://127.0.0.1:8765"
+$env:RECALLAP_API_URL = "http://127.0.0.1:8000"
 python scripts\live_demo_d1_d7.py --runs 3
 ```
 
-The live runner requires both health checks to be green. It creates a fresh Hindsight bank for each run, exercises real API recall and Groq decisions, uses the dataset invoices `INV-2025-7301`, `7315`, `7327`, `7314`, `7341`, `7357`, and `7312`, and records the scripted human approvals through `/resolve`. D2 is retained as manual-only so it cannot count toward D3 confidence. The script verifies the returned source text and fails if the cold/warm confidence, D5 citations, D6 range guardrail, or D7 bank-change guardrail differ from the expected behavior.
+The live runner requires both health checks to be green. It reads `data/demo_story.json`, maps each step to the closest unused matching invoice in the verified dataset, creates a fresh Hindsight bank for each run, and exercises real API recall and Groq decisions. If the story names a vendor with no matching bank-change fixture, it selects a bank-change invoice from the dataset and preserves the D7 safety shape. It records scripted human approvals through `/resolve`; D2 is retained as manual-only so it cannot count toward D3 confidence. The script verifies returned source text and fails if the cold/warm confidence, D5 citations, D6 range guardrail, or D7 bank-change guardrail differ from the expected behavior.
 
 ### Latest full benchmark (2026-11-07)
 
-On the verified 60-invoice set, the latest memory-on run scored **36.67% correct touchless (22/60)**, with **100% precision across 22 automatic decisions**: 4 clean invoices and 18 correct exception resolutions. It sent 38 invoices to human review and made **0 unsafe touchless decisions**. Memory-off scored **13.33% (8/60)**, including 4 clean invoices and 4 exact-duplicate rejections, with 52 human reviews and 0 unsafe decisions. Memory-on improved correct touchless coverage by **23.34 percentage points** and produced 14 more correct automatic resolutions. The denominator is all 60 invoices; the 100% precision figure describes the 22 memory-on automatic decisions in this run and should not be read as 100% accuracy on all invoices or as a population-level guarantee.
+Against code commit `6221b11`, the verified 60-invoice synthetic dataset with the simulated approver measured **40.00% correct touchless with memory (24/60)**, with **100% precision across 24 automatic decisions**: 4 clean invoices and 20 correct exception resolutions. It sent 36 invoices to human review and made **0 unsafe touchless decisions**. Memory-off measured **13.33% (8/60)**, including 4 clean invoices and 4 exact-duplicate rejections, with 52 human reviews and 0 unsafe decisions. The apparent difference is **26.67 percentage points** and 16 more correct automatic decisions with memory. Treat this comparison as provisional: the shared Groq daily token limit was reached during the OFF pass, after which model failures were sent safely to human review. This made the two phases unequal in provider availability. Repeat the paired run after quota reset or with sufficient separate capacity before presenting the difference as a controlled result. The denominator is all 60 invoices; precision describes only automatic decisions in this run and is not a population-level guarantee. Benchmark timestamp: 2026-11-07 04:26 UTC. Individual model calls reached about 30 seconds; `/api/health` checks connectivity, not remaining quota.
 
 To run the test suite:
 
@@ -131,7 +131,7 @@ The model proposes one of `AUTO_APPROVE`, `AUTO_APPROVE_WITH_NOTE`, `REQUEST_VEN
 
 The configured primary is `openai/gpt-oss-120b`. The prior `qwen/qwen3-32b` fallback was shut down for standard developer-tier requests on July 17, 2026, so the default is its current supported Qwen successor, `qwen/qwen3.8-27b`. The fallback is configurable through `GROQ_MODEL_FALLBACK`. Groq supports forced tool choice in its OpenAI-compatible API, and its current model page lists tool use for Qwen 3.8 27B. [Groq tool-use docs](https://console.groq.com/docs/tool-use/local-tool-calling) · [model deprecations](https://console.groq.com/docs/deprecations) · [Qwen 3.8 27B](https://console.groq.com/docs/model/qwen/qwen3.8-27b)
 
-Model confidence is not trusted as a safety signal. Before guardrails, the backend recalibrates it from cited, recalled, human-decided cases: no cited in-range match caps confidence at 0.50; one match, conflicting cases, or partial coverage across exceptions caps it at 0.75; two or more unanimous, in-range cases for every exception set it at 0.90. The deterministic precedent resolver can independently return a supported decision at 0.95. This keeps D1/D2/D3 below the 0.80 auto-resolution threshold, while D5 reaches a repeatable warm resolution citing CASE-0001 and CASE-0003.
+Model confidence is not trusted as a safety signal. Before guardrails, the backend recalibrates it from cited, recalled, human-decided cases: no cited in-range match maps to 0.50; one match, conflicting cases, or partial coverage across exceptions maps to exactly 0.75; two or more unanimous, in-range cases for every exception map to 0.90. An unavailable model stays at 0.00. The deterministic precedent resolver can independently return a supported decision at 0.95. This keeps D1/D2/D3 below the 0.80 auto-resolution threshold, while D5 reaches a repeatable warm resolution citing CASE-0001 and CASE-0003.
 
 ## Deterministic guardrails
 

@@ -166,7 +166,7 @@ def test_confidence_is_calibrated_from_cited_precedents_not_model_claim() -> Non
     current = exception(variance=4.0)
     first = memory(body="Resolution: APPROVED. Applies to: price variance up to 5%.")
     second = memory(case_id="CASE-0002", body="Resolution: APPROVED. Applies to: price variance up to 5%.")
-    raw = proposal(confidence=0.99, citations=["CASE-0001", "CASE-0002"])
+    raw = proposal(confidence=0.73, citations=["CASE-0001", "CASE-0002"])
 
     cold = calibrate_confidence(raw.model_copy(update={"cited_case_ids": []}), [current], [], VENDOR, 10_000)
     warm_one = calibrate_confidence(raw, [current], [first], VENDOR, 10_000)

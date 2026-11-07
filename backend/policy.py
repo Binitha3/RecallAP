@@ -166,8 +166,8 @@ def calibrate_confidence(
 ) -> ProposedDecision:
     """Replace model confidence with a conservative score grounded in cited evidence.
 
-    The score is intentionally deterministic for the demo: no cited precedent caps at
-    0.50, one or conflicting precedents caps at 0.75, and at least two unanimous,
+    The score is intentionally deterministic for the demo: no cited precedent maps to
+    0.50, one or conflicting precedents maps to 0.75, and at least two unanimous,
     in-range human cases per exception can support 0.90. Deterministic policy
     decisions (including exact duplicate rejection) are produced before this helper.
     """
@@ -186,7 +186,8 @@ def calibrate_confidence(
         and item.case_id in cited_ids
     ]
     if not parsed:
-        return decision.model_copy(update={"confidence": min(decision.confidence, 0.50)})
+        confidence = 0.0 if decision.confidence == 0 and "agent unavailable" in decision.rationale.casefold() else 0.50
+        return decision.model_copy(update={"confidence": confidence})
 
     action_map = {
         "APPROVED": DecisionAction.AUTO_APPROVE_WITH_NOTE,
@@ -211,9 +212,9 @@ def calibrate_confidence(
             unanimous = False
 
     if not any(counts):
-        return decision.model_copy(update={"confidence": min(decision.confidence, 0.50)})
+        return decision.model_copy(update={"confidence": 0.50})
     if min(counts) < 2 or not unanimous:
-        return decision.model_copy(update={"confidence": min(decision.confidence, 0.75)})
+        return decision.model_copy(update={"confidence": 0.75})
     return decision.model_copy(update={"confidence": 0.90})
 
 
