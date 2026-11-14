@@ -271,6 +271,7 @@ async function processSelected() {
     renderDecision(d);
     renderWhy(d);
     renderReviewActions(d);
+    refreshOps();
     return d;
   } catch (err) {
     clearInterval(timer);
@@ -443,6 +444,7 @@ async function submitReview(action) {
       // The backend returns AUTO_RESOLVED for human approvals too; show it as human-approved in the UI
       setStatus(id, res.status === "AUTO_RESOLVED" ? "HUMAN_APPROVED" : res.status);
       showToast(`Retained in Hindsight memory: ${res.case_id}`);
+      refreshOps();
       const box = document.getElementById("review-actions");
       if (box && id === selectedId) {
       box.innerHTML = `
@@ -528,10 +530,15 @@ const VIEWS = {
   workspace: "view-workspace",
   compare: "view-compare",
   curve: "view-curve",
+  ops: "view-ops",
   explorer: "view-explorer",
 };
 
-function showTab(name) {
+function showTab(name, navigate = true) {
+  if (!Object.hasOwn(VIEWS, name)) return;
+  if (navigate && window.location.hash !== `#/${name}`) {
+    window.history.pushState({ tab: name }, "", `#/${name}`);
+  }
   Object.entries(VIEWS).forEach(([key, id]) =>
     document.getElementById(id).classList.toggle("hidden", key !== name)
   );
@@ -542,7 +549,109 @@ function showTab(name) {
   });
   if (name === "compare") initCompare();
   if (name === "curve") renderCurve();
+  if (name === "ops") refreshOps();
   if (name === "explorer") initExplorer();
+}
+
+window.addEventListener("popstate", () => {
+  const tab = window.location.hash.replace(/^#\/?/, "").split(/[/?]/)[0];
+  if (Object.hasOwn(VIEWS, tab)) {
+    document.getElementById("hero")?.remove();
+    showTab(tab, false);
+  }
+});
+
+/* ================= LIVE IMPACT + SAFE SANDBOX ================= */
+
+async function refreshOps() {
+  const error = document.getElementById("ops-error");
+  error.textContent = "";
+  try {
+    const [impact, audit] = await Promise.all([api.getImpact(), api.getAudit()]);
+    document.getElementById("impact-handled").textContent = impact.invoices_handled ?? 0;
+    document.getElementById("impact-handsfree").textContent = impact.hands_free_decisions ?? 0;
+    document.getElementById("impact-hours").textContent = `${Number(impact.estimated_hours_saved || 0).toFixed(2)} h`;
+    document.getElementById("impact-risk").textContent = formatINR(impact.risk_routed_to_review_inr || 0);
+    const records = audit.records || [];
+    document.getElementById("audit-count").textContent = `${records.length} records`;
+    const host = document.getElementById("ops-audit-list");
+    host.replaceChildren();
+    if (!records.length) {
+      const empty = document.createElement("p"); empty.className = "text-[12px] text-faint"; empty.textContent = "No saved decisions in this bank yet."; host.appendChild(empty);
+    }
+    records.slice().reverse().slice(0, 12).forEach((record) => {
+      const row = document.createElement("article"); row.className = "border-b border-line py-2.5";
+      const head = document.createElement("div"); head.className = "flex justify-between gap-3 text-[11px]";
+      const title = document.createElement("strong"); title.className = "font-mono text-ink"; title.textContent = record.invoice_id || record.case_id || "Session";
+      const status = document.createElement("span"); status.className = "text-dim"; status.textContent = String(record.final_status || record.status || record.action || "Saved").replaceAll("_", " ");
+      head.append(title, status); row.appendChild(head);
+      const detail = document.createElement("p"); detail.className = "text-[10px] text-dim mt-1";
+      const action = record.decision?.action || record.action || "Decision recorded";
+      const approver = record.human_approver ? ` · ${record.human_approver}` : "";
+      detail.textContent = `${String(action).replaceAll("_", " ")}${approver}`; row.appendChild(detail);
+      const time = document.createElement("time"); time.className = "text-[9px] text-faint";
+      time.textContent = record.recorded_at ? new Date(record.recorded_at).toLocaleString() : "Recorded this session"; row.appendChild(time);
+      host.appendChild(row);
+    });
+  } catch (err) {
+    error.textContent = `Backend data unavailable: ${err.message}`;
+  }
+}
+
+let sandboxBase = 0;
+async function loadSandboxInvoice(id) {
+  const result = document.getElementById("sandbox-result");
+  if (!id) return;
+  result.textContent = "Loading invoice baseline…";
+  try {
+    const detail = await api.getInvoice(id);
+    sandboxBase = Number(detail.po?.total || detail.invoice.total || 0);
+    const variance = Number(document.getElementById("sandbox-variance").value);
+    document.getElementById("sandbox-amount").value = Math.round(sandboxBase * (1 + variance / 100));
+    document.getElementById("sandbox-variance-label").textContent = `${variance.toFixed(variance % 1 ? 1 : 0)}%`;
+    result.textContent = "Adjust the amount or bank details, then run the isolated challenge.";
+  } catch (err) { result.textContent = `Could not load invoice baseline: ${err.message}`; }
+}
+
+function initSandboxControls() {
+  const select = document.getElementById("sandbox-invoice");
+  select.innerHTML = invoicesCache.map((invoice) => `<option value="${esc(invoice.id)}">${esc(invoice.id)} · ${esc(invoice.vendor_name)}</option>`).join("");
+  if (!invoicesCache.length) return;
+  select.value = invoicesCache.some((i) => i.id === selectedId) ? selectedId : invoicesCache[0].id;
+  select.onchange = () => loadSandboxInvoice(select.value);
+  const slider = document.getElementById("sandbox-variance");
+  slider.oninput = () => {
+    const variance = Number(slider.value);
+    document.getElementById("sandbox-variance-label").textContent = `${variance.toFixed(variance % 1 ? 1 : 0)}%`;
+    if (sandboxBase) document.getElementById("sandbox-amount").value = Math.round(sandboxBase * (1 + variance / 100));
+  };
+  document.getElementById("sandbox-amount").oninput = () => {
+    const amount = Number(document.getElementById("sandbox-amount").value);
+    if (sandboxBase && amount > 0) {
+      const variance = Math.max(0, Math.min(20, (amount / sandboxBase - 1) * 100));
+      slider.value = variance; document.getElementById("sandbox-variance-label").textContent = `${variance.toFixed(1)}%`;
+    }
+  };
+  select.onchange();
+  document.getElementById("sandbox-run").onclick = runSandboxChallenge;
+}
+
+async function runSandboxChallenge() {
+  const button = document.getElementById("sandbox-run"), result = document.getElementById("sandbox-result");
+  const invoiceId = document.getElementById("sandbox-invoice").value;
+  const amount = Number(document.getElementById("sandbox-amount").value);
+  if (!invoiceId || !Number.isFinite(amount) || amount <= 0 || amount > 10000000) { result.textContent = "Enter a valid amount between ₹1 and ₹1,00,00,000."; return; }
+  button.disabled = true; button.textContent = "Running decision pipeline…"; result.textContent = "Evaluating a temporary invoice copy…";
+  try {
+    const decision = await api.runSandbox({ invoice_id: invoiceId, invoice_total: amount, bank_change: document.getElementById("sandbox-bank-change").checked, memory_enabled: memoryOn });
+    result.replaceChildren();
+    const heading = document.createElement("strong"); heading.className = "text-ink"; heading.textContent = `${String(decision.final_status || "UNKNOWN").replaceAll("_", " ")} · ${decision.decision?.action || "No action"}`; result.appendChild(heading);
+    const guardrails = decision.guardrails?.triggered || [];
+    const checks = document.createElement("p"); checks.className = "mt-1"; checks.textContent = guardrails.length ? guardrails.join(" · ") : "No blocking guardrail triggered."; result.appendChild(checks);
+    if (decision.decision?.rationale) { const why = document.createElement("p"); why.className = "mt-1"; why.textContent = decision.decision.rationale; result.appendChild(why); }
+    const note = document.createElement("p"); note.className = "text-[10px] mt-2 text-dim"; note.textContent = "Sandbox run · source invoice, saved audit, and Hindsight memory unchanged."; result.appendChild(note);
+  } catch (err) { result.textContent = `Challenge failed safely: ${err.message}`; }
+  finally { button.disabled = false; button.textContent = "Run challenge →"; }
 }
 
 /* ================= COMPARE ================= */
@@ -1043,6 +1152,11 @@ document.addEventListener("keydown", (e) => {
 (function initHero() {
   const hero = document.getElementById("hero");
   if (!hero) return;
+  const requestedTab = window.location.hash.replace(/^#\/?/, "").split(/[/?]/)[0];
+  if (Object.hasOwn(VIEWS, requestedTab)) {
+    hero.remove();
+    showTab(requestedTab, false);
+  }
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const video = document.getElementById("hero-video");
 
@@ -1053,7 +1167,15 @@ document.addEventListener("keydown", (e) => {
     video.play().catch(() => {});
   }
 
-  document.getElementById("hero-cta").onclick = () => hero.remove();
+  const enterWorkspace = (tab = "workspace") => {
+    const nextTab = Object.hasOwn(VIEWS, tab) ? tab : "workspace";
+    hero.remove();
+    showTab(nextTab);
+    const view = document.getElementById(VIEWS[nextTab]);
+    if (view) view.setAttribute("tabindex", "-1");
+    if (view) view.focus({ preventScroll: true });
+  };
+  document.getElementById("hero-cta").addEventListener("click", () => enterWorkspace("workspace"));
 
   const menu = document.getElementById("hero-menu");
   const profile = document.getElementById("hero-profile");
@@ -1073,8 +1195,7 @@ document.addEventListener("keydown", (e) => {
   hero.addEventListener("click", (e) => {
     const go = e.target.closest("[data-go]");
     if (go) {
-      hero.remove();
-      showTab(go.dataset.go);
+      enterWorkspace(go.dataset.go);
       return;
     }
     if (!e.target.closest(".hero-pop-wrap")) closePops();
@@ -1118,6 +1239,10 @@ async function init() {
     const card = e.target.closest(".invoice-card");
     if (card) selectInvoice(card.dataset.id);
   });
+  initSandboxControls();
+  document.getElementById("ops-refresh").onclick = refreshOps;
+  document.getElementById("ops-export").onclick = () => api.exportAuditCsv();
+  refreshOps();
 }
 
 init();

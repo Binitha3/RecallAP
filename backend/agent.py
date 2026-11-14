@@ -8,7 +8,7 @@ import json
 import logging
 import threading
 import hashlib
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Iterable
 
@@ -44,6 +44,8 @@ logger = logging.getLogger(__name__)
 
 def _save_decision(bank_id: str, decision: dict) -> None:
     """Persist one decision in the snapshot and append one JSONL record."""
+    decision = dict(decision)
+    decision.setdefault("recorded_at", datetime.now(timezone.utc).isoformat())
     store.save_decision(bank_id, decision)
     _append_decision_log(decision)
 
@@ -113,6 +115,8 @@ def process_context(
     *,
     memory_enabled: bool = True,
     bank_id: str | None = None,
+    record_decision: bool = True,
+    allow_agent_retain: bool = True,
 ) -> DecisionResponse:
     """Process already loaded context; exposed for repeatable demo and unit tests."""
     started = time.perf_counter()
@@ -132,7 +136,8 @@ def process_context(
             final_status="CLEAN",
             latency_ms=max(0, round((time.perf_counter() - started) * 1000)),
         )
-        _save_decision(resolve_bank_id(bank_id), result.model_dump(mode="json"))
+        if record_decision:
+            _save_decision(resolve_bank_id(bank_id), result.model_dump(mode="json"))
         return result
 
     active_bank = resolve_bank_id(bank_id)
@@ -159,7 +164,7 @@ def process_context(
     decision, guardrails = apply_guardrails(decision, exceptions, recalled, vendor.name, invoice.total)
     final_status = _status_for(decision.action)
 
-    if settings.retain_agent_decisions and final_status in TOUCHLESS_STATUSES and exceptions:
+    if allow_agent_retain and settings.retain_agent_decisions and final_status in TOUCHLESS_STATUSES and exceptions:
         _sync_case_counter(active_bank)
         case_id = store.next_case_id(active_bank)
         text = _case_text(case_id, invoice, vendor, exceptions[0], decision, "agent")
@@ -175,7 +180,8 @@ def process_context(
         final_status=final_status,
         latency_ms=max(0, round((time.perf_counter() - started) * 1000)),
     )
-    _save_decision(active_bank, result.model_dump(mode="json"))
+    if record_decision:
+        _save_decision(active_bank, result.model_dump(mode="json"))
     return result
 
 
@@ -253,6 +259,7 @@ def resolve_invoice(
             "human_approver": approver.strip(),
             "note": note.strip(),
             "reusable_precedent": reusable_precedent,
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
         },
     )
     if not created:

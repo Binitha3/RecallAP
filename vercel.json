@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "echo Static frontend deployment",
+  "buildCommand": "echo Static frontend ready",
+  "outputDirectory": "frontend",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://recallap.onrender.com/api/:path*"
+    }
+  ]
+}

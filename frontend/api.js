@@ -66,6 +66,22 @@ const api = {
       `/api/metrics?memory=${memoryOn ? "on" : "off"}`
     ),
 
+  getImpact: () => getJSON("", "/api/impact"),
+  getAudit: () => getJSON("", "/api/audit?limit=100"),
+
+  runSandbox: async (payload) => {
+    const res = await fetch("/api/sandbox/decision", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.detail || `Request failed: ${res.status}`);
+    return data;
+  },
+
+  exportAuditCsv: () => { window.location.assign("/api/audit.csv"); },
+
   // -> [{ case_id?, type, text }]
   searchMemory: async (q) => {
     if (USE_MOCK) {

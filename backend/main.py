@@ -2,6 +2,8 @@
 
 from pathlib import Path
 from typing import Literal
+import csv
+import io
 import logging
 import time
 import uuid
@@ -13,7 +15,7 @@ from fastapi.staticfiles import StaticFiles
 import httpx
 
 from backend import memory
-from backend.agent import process_invoice, resolve_invoice
+from backend.agent import process_context, process_invoice, resolve_invoice
 from backend.config import get_active_bank_id, new_bank_id, register_bank_id, resolve_bank_id, settings
 from backend.detectors import run_all
 from backend.metrics import get_metrics
@@ -28,6 +30,8 @@ from backend.models import (
     DecisionResponse,
     MemorySearchResult,
     MetricsResponse,
+    Invoice,
+    SandboxDecisionRequest,
     VendorBriefingResponse,
 )
 from backend.store import store
@@ -183,6 +187,46 @@ def resolve_invoice_route(
         ) from exc
 
 
+@app.post("/api/sandbox/decision", response_model=DecisionResponse)
+def sandbox_decision(body: SandboxDecisionRequest) -> DecisionResponse:
+    """Run real detectors, memory, model, and guardrails on an unpersisted clone.
+
+    Sandbox runs never save decisions or retain agent memories. The caller can
+    vary invoice amount and bank details without mutating the source invoice.
+    """
+    try:
+        invoice, po, grn, vendor = store.load_context(body.invoice_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail="Invoice or vendor not found") from exc
+    scale = body.invoice_total / invoice.total if invoice.total else 1.0
+    payload = invoice.model_dump(mode="python")
+    simulation_id = uuid.uuid4().hex[:10].upper()
+    payload["id"] = "SANDBOX-" + simulation_id
+    payload["invoice_number"] = "SANDBOX-" + simulation_id
+    payload["total"] = body.invoice_total
+    payload["bank_account"] = "XXXX0000" if body.bank_change else vendor.bank_account
+    payload["lines"] = [
+        line.model_copy(update={"unit_price": round(line.unit_price * scale, 2)}).model_dump()
+        for line in invoice.lines
+    ]
+    simulated_invoice = Invoice.model_validate(payload)
+    try:
+        return process_context(
+            simulated_invoice,
+            po,
+            grn,
+            vendor,
+            store.all_invoices(),
+            memory_enabled=body.memory_enabled,
+            record_decision=False,
+            allow_agent_retain=False,
+        )
+    except memory.HindsightRecallError as exc:
+        raise HTTPException(status_code=503, detail="Hindsight recall failed during sandbox run") from exc
+    except memory.HindsightCaseCounterError as exc:
+        raise HTTPException(status_code=503, detail="Could not verify Hindsight state for sandbox run") from exc
+
+
 @app.get("/api/memory/search", response_model=list[MemorySearchResult])
 def search_memories(
     response: Response,
@@ -225,6 +269,97 @@ def metrics(response: Response, memory: Literal["on", "off"] = Query("on")) -> M
     """Return the selected memory-on/off experiment results, when available."""
     response.headers["Cache-Control"] = "no-store"
     return get_metrics(memory)
+
+
+@app.get("/api/audit")
+def audit_log(response: Response, limit: int = Query(500, ge=1, le=2000)) -> dict[str, object]:
+    """Return recent persisted decisions from the active local demo bank."""
+    response.headers["Cache-Control"] = "no-store"
+    bank_id = get_active_bank_id()
+    records = store.decisions(bank_id)
+    return {"bank_id": bank_id, "records": records[-limit:]}
+
+
+@app.get("/api/audit.csv")
+def audit_csv() -> Response:
+    """Download an audit-safe CSV for the active demo bank."""
+    bank_id = get_active_bank_id()
+    output = io.StringIO(newline="")
+    writer = csv.writer(output)
+    writer.writerow([
+        "recorded_at", "invoice_id", "final_status", "action", "confidence",
+        "memory_used", "cited_case_ids", "guardrails_triggered", "case_id",
+        "human_approver", "reusable_precedent", "retained", "note",
+    ])
+    for record in store.decisions(bank_id):
+        decision = record.get("decision") if isinstance(record.get("decision"), dict) else {}
+        guardrails = record.get("guardrails") if isinstance(record.get("guardrails"), dict) else {}
+        values = [
+            record.get("recorded_at", ""), record.get("invoice_id", ""),
+            record.get("final_status", ""), decision.get("action", record.get("action", "")),
+            decision.get("confidence", ""), record.get("memory_used", ""),
+            " | ".join(map(str, decision.get("cited_case_ids", []))),
+            " | ".join(map(str, guardrails.get("triggered", []))),
+            record.get("case_id", ""), record.get("human_approver", ""),
+            record.get("reusable_precedent", ""), record.get("retained", ""),
+            record.get("note", decision.get("rationale", "")),
+        ]
+        # Prevent spreadsheet applications from evaluating user-controlled text as a formula.
+        safe_values = [
+            "'" + value if isinstance(value, str) and value.lstrip().startswith(("=", "+", "-", "@")) else value
+            for value in values
+        ]
+        writer.writerow(safe_values)
+    return Response(
+        output.getvalue(), media_type="text/csv; charset=utf-8",
+        headers={
+            "Cache-Control": "no-store",
+            "Content-Disposition": f'attachment; filename="recallap-audit-{bank_id}.csv"',
+        },
+    )
+
+
+@app.get("/api/impact")
+def impact_ledger(response: Response) -> dict[str, object]:
+    """Summarize observed decisions and clearly labeled review estimates."""
+    response.headers["Cache-Control"] = "no-store"
+    bank_id = get_active_bank_id()
+    latest: dict[str, dict[str, object]] = {}
+    for record in store.decisions(bank_id):
+        invoice_id = record.get("invoice_id")
+        if invoice_id and "memory_used" in record:
+            latest[str(invoice_id)] = record
+
+    touchless_statuses = {"AUTO_RESOLVED", "VENDOR_QUERY", "REJECTED", "CLEAN"}
+    hands_free = {
+        invoice_id for invoice_id, record in latest.items()
+        if record.get("final_status") in touchless_statuses
+    }
+    invoice_amounts = {
+        invoice.id: invoice.total
+        for invoice in store.all_invoices()
+        if invoice.currency.upper() == "INR"
+    }
+    review_ids = {
+        invoice_id for invoice_id, record in latest.items()
+        if record.get("final_status") == "NEEDS_REVIEW"
+        and any(
+            str(item).split(":", 1)[0] in {"G1", "G3", "G4"}
+            for item in (record.get("guardrails", {}).get("triggered", [])
+                         if isinstance(record.get("guardrails"), dict) else [])
+        )
+    }
+    hours_saved = len(hands_free) * 5 / 60
+    return {
+        "bank_id": bank_id,
+        "invoices_handled": len(latest),
+        "hands_free_decisions": len(hands_free),
+        "estimated_hours_saved": round(hours_saved, 2),
+        "estimate_minutes_per_hands_free_invoice": 5,
+        "risk_routed_to_review_inr": round(sum(invoice_amounts.get(i, 0) for i in review_ids), 2),
+        "review_estimate_invoice_count": len(review_ids),
+        "risk_label": "INR value routed to review; not a payment-blocked amount",
+    }
 
 
 @app.post("/api/demo/reset", response_model=DemoResetResponse)

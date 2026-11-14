@@ -40,9 +40,7 @@ header { background: rgba(255, 255, 255, 0.45); border-radius: 20px; margin-bott
 }
 .hero-photo {
   position: relative; flex: 0 0 46%; border-radius: calc(32 * var(--u)); overflow: hidden;
-  background:
-    radial-gradient(120% 60% at 70% 12%, #FFD9A0 0%, #F7A27A 38%, transparent 70%),
-    linear-gradient(180deg, #F3B88C 0%, #E98B6A 40%, #5E7F76 62%, #3E5B52 78%, #7C9A4E 100%);
+  background: #E8A17D url("hero-lighthouse.svg") center / cover no-repeat;
 }
 .hero-photo video {
   position: absolute; inset: 0; width: 100%; height: 100%;

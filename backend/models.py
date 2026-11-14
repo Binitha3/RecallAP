@@ -138,6 +138,13 @@ class DemoResetResponse(APIModel):
     ok: bool
 
 
+class SandboxDecisionRequest(APIModel):
+    invoice_id: str
+    invoice_total: float = Field(gt=0, le=10_000_000)
+    bank_change: bool = False
+    memory_enabled: bool = True
+
+
 class MemorySearchResult(APIModel):
     case_id: str | None = None
     type: str
