@@ -4,7 +4,7 @@ Website Link : https://recallap.onrender.com
 
 RecallAP compares invoices with purchase orders (POs), goods receipt notes (GRNs), and vendor records. Plain Python detects exceptions. Hindsight retrieves relevant vendor knowledge and past decisions. Groq proposes an action, and deterministic policy checks decide whether it can proceed or must go to a human.
 
-This repository contains Member 1's backend and agent work plus Member 3's verified 60-invoice dataset and ON/OFF experiment runner. It does not include the teammate-owned frontend UI or dataset generator. OCR, login, ERP integration, payments, and email sending are out of scope.
+This repository contains Member 1's backend and agent work plus Member 3's verified 180-invoice dataset and ON/OFF experiment runner. It does not include the teammate-owned frontend UI or dataset generator. OCR, login, ERP integration, payments, and email sending are out of scope.
 
 ## Setup and run
 
