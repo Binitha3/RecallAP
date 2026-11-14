@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Instrument+Sans:wdth,wght@75..100,400..700&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261114-3" />
+  <link rel="stylesheet" href="styles.css?v=20261114-4" />
 
   <script>
   tailwind.config = {
@@ -103,6 +103,7 @@
         </button>
         <div id="hero-profile" class="hero-pop" hidden>
           <div class="who"><b>Priya Nair</b><span>AP Manager</span></div>
+          <button data-go="signin">Sign in to demo</button>
           <button data-go="workspace">Open workspace</button>
         </div>
       </div>
@@ -155,6 +156,41 @@
   <span id="demo-title" class="font-display text-[14px] font-semibold whitespace-nowrap"></span>
   <span id="demo-narration" class="text-[13px] text-dim"></span>
 </div>
+
+  <!-- DEMO SIGN-IN: local presentation flow; no credentials are transmitted or stored -->
+  <section id="view-signin" class="hidden flex-1 min-h-0">
+    <div class="signin-page">
+      <div class="signin-card">
+        <section class="signin-brand" aria-label="RecallAP demo overview">
+          <div class="signin-wordmark">Recall<span>AP</span></div>
+          <div class="signin-kicker">DEMO ACCESS</div>
+          <h2>Welcome back.</h2>
+          <p>Continue to a workspace where familiar invoice exceptions come with their history.</p>
+          <div class="signin-proof"><span aria-hidden="true">✓</span> Human decisions remembered. Risky changes reviewed.</div>
+        </section>
+        <section class="signin-form-panel" aria-labelledby="signin-title">
+          <button id="signin-back" type="button" class="signin-back">← Back to workspace</button>
+          <div class="signin-form-heading">
+            <h1 id="signin-title">Sign in</h1>
+            <p id="signin-description">Use demo details to preview the sign-in flow.</p>
+          </div>
+          <div class="signin-notice">Demo only · Use a sample email and password. Nothing is sent or saved.</div>
+          <form id="signin-form" novalidate>
+            <label class="signin-label" for="signin-email">Email address</label>
+            <input id="signin-email" name="email" type="email" autocomplete="off" inputmode="email" placeholder="you@company.com" required />
+            <div id="signin-password-wrap">
+              <label class="signin-label" for="signin-password">Password</label>
+              <input id="signin-password" name="password" type="password" autocomplete="new-password" placeholder="Enter any demo password" required />
+            </div>
+            <p id="signin-message" class="signin-message" role="status" aria-live="polite"></p>
+            <button id="signin-submit" type="submit" class="signin-submit">Continue to workspace <span aria-hidden="true">→</span></button>
+            <button id="signin-forgot" type="button" class="signin-link">Forgot password?</button>
+          </form>
+          <p class="signin-footnote">Demo presentation only. No account is verified and no password is retained.</p>
+        </section>
+      </div>
+    </div>
+  </section>
 
   <!-- WORKSPACE: THREE COLUMNS -->
   <main id="view-workspace" class="flex-1 min-h-0 grid grid-cols-12">
@@ -367,7 +403,7 @@
   <!-- TOAST -->
   <div id="toast" class="hidden fixed bottom-16 right-5 z-50 bg-raised border border-accent/40 px-4 py-2.5 rounded-md font-mono text-[12px]"></div>
 
-  <script src="api.js?v=20261114-3"></script>
-  <script src="app.js?v=20261114-3"></script>
+  <script src="api.js?v=20261114-4"></script>
+  <script src="app.js?v=20261114-4"></script>
 </body>
 </html>

@@ -531,6 +531,7 @@ const VIEWS = {
   compare: "view-compare",
   curve: "view-curve",
   ops: "view-ops",
+  signin: "view-signin",
   explorer: "view-explorer",
 };
 
@@ -542,6 +543,12 @@ function showTab(name, navigate = true) {
   Object.entries(VIEWS).forEach(([key, id]) =>
     document.getElementById(id).classList.toggle("hidden", key !== name)
   );
+  const authPage = name === "signin";
+  if (authPage) setSigninMode("signin");
+  else document.getElementById("signin-password").value = "";
+  document.querySelector("header").classList.toggle("hidden", authPage);
+  document.querySelector("nav").classList.toggle("hidden", authPage);
+  document.getElementById("demo-bar").classList.toggle("hidden", authPage || demoIdx < 0);
   document.querySelectorAll(".tab-btn").forEach((b) => {
     const active = b.dataset.tab === name;
     b.className =
@@ -551,6 +558,56 @@ function showTab(name, navigate = true) {
   if (name === "curve") renderCurve();
   if (name === "ops") refreshOps();
   if (name === "explorer") initExplorer();
+}
+
+/* ================= DEMO SIGN-IN ================= */
+
+let signinMode = "signin";
+
+function setSigninMode(mode) {
+  signinMode = mode;
+  const resetMode = mode === "reset";
+  document.getElementById("signin-title").textContent = resetMode ? "Reset password" : "Sign in";
+  document.getElementById("signin-description").textContent = resetMode
+    ? "Preview the password reset flow for this demo."
+    : "Use demo details to preview the sign-in flow.";
+  document.getElementById("signin-password-wrap").hidden = resetMode;
+  document.getElementById("signin-password").required = !resetMode;
+  if (resetMode) document.getElementById("signin-password").value = "";
+  document.getElementById("signin-submit").innerHTML = resetMode
+    ? "Preview reset message <span aria-hidden=\"true\">→</span>"
+    : "Continue to workspace <span aria-hidden=\"true\">→</span>";
+  document.getElementById("signin-forgot").textContent = resetMode ? "Back to sign in" : "Forgot password?";
+  document.getElementById("signin-message").textContent = "";
+}
+
+function initSigninDemo() {
+  const form = document.getElementById("signin-form");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const email = document.getElementById("signin-email");
+    const password = document.getElementById("signin-password");
+    const message = document.getElementById("signin-message");
+    if (!email.checkValidity()) {
+      email.reportValidity();
+      return;
+    }
+    if (signinMode === "reset") {
+      message.textContent = "Demo only: no reset email was sent.";
+      return;
+    }
+    if (!password.value) {
+      password.reportValidity();
+      return;
+    }
+    password.value = "";
+    message.textContent = "Demo sign-in complete. Opening workspace…";
+    window.setTimeout(() => showTab("workspace"), 450);
+  });
+  document.getElementById("signin-forgot").addEventListener("click", () => {
+    setSigninMode(signinMode === "reset" ? "signin" : "reset");
+  });
+  document.getElementById("signin-back").addEventListener("click", () => showTab("workspace"));
 }
 
 window.addEventListener("popstate", () => {
@@ -1225,6 +1282,7 @@ document.addEventListener("keydown", (e) => {
 /* ================= STARTUP ================= */
 
 async function init() {
+  initSigninDemo();
   const list = document.getElementById("inbox-list");
   list.innerHTML = `<p class="p-4 text-sm text-faint">Loading…</p>`;
   try {
